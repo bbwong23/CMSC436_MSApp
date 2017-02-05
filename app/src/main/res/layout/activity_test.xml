@@ -38,6 +38,7 @@
         android:layout_marginTop="13dp"
         android:id="@+id/textView3" />
 
+
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -67,6 +68,34 @@
         android:layout_alignLeft="@+id/tapCount"
         android:layout_alignStart="@+id/tapCount" />
 
+    <TextView
+        android:text="Judy Fan"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/textView3"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="13dp"
+        android:id="@+id/textView4" />
 
+    <TextView
+        android:text="Emma Holmes"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="13dp"
+        android:id="@+id/textView5"
+        android:layout_below="@+id/textView4"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+    <TextView
+        android:text="Samantha Koy"
+        android:id="@+id/textView6"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="13dp"
+        android:layout_below="@+id/textView5"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
 </RelativeLayout>
 
