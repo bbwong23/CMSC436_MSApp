@@ -97,5 +97,23 @@
         android:layout_below="@+id/textView5"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
+
+    <Button
+        android:text="Start Timer"
+        android:id="@+id/startButton"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:layout_below="@+id/timeTextView"
+        android:onClick="runTimer"
+        android:layout_marginTop="13dp"/>
+
+    <TextView
+        android:id="@+id/timeTextView"
+        android:text="00:30"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/textView6"
+        android:layout_marginTop="20dp"/>
+
 </RelativeLayout>
 
