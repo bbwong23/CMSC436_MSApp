@@ -20,6 +20,10 @@ public class test extends AppCompatActivity {
         }
     };
 
+    private int count;
+    Button tap, reset;
+    TextView txtCount;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -31,5 +35,17 @@ public class test extends AppCompatActivity {
 
     public void runTimer(View view) {
         timer.start();
+        txtCount = (TextView) findViewById(R.id.textView5);
+        tap = (Button)findViewById(R.id.tapCount);
+        reset = (Button)findViewById(R.id.reset);
+        count = 0;
+    }
+    public void tapped(View view){
+        count++;
+        txtCount.setText(String.valueOf(count));
+    }
+    public void resetCount(View view){
+        count = 0;
+        txtCount.setText(R.string.maintxt);
     }
 }

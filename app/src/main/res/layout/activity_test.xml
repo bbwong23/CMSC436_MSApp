@@ -39,6 +39,35 @@
         android:id="@+id/textView3" />
 
 
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="114dp"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:text="Tap"
+        android:id = "@+id/tapCount"
+        android:onClick="tapped"/>
+
+    <TextView
+        android:text="@string/maintxt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/textView5"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="53dp"
+        android:text="reset"
+        android:id = "@+id/reset"
+        android:onClick="resetCount"
+        android:layout_alignParentBottom="true"
+        android:layout_alignLeft="@+id/tapCount"
+        android:layout_alignStart="@+id/tapCount" />
+
     <TextView
         android:text="Judy Fan"
         android:layout_width="wrap_content"
@@ -87,3 +116,4 @@
         android:layout_marginTop="20dp"/>
 
 </RelativeLayout>
+
