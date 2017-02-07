@@ -10,7 +10,7 @@ import android.widget.TextView;
 public class test extends AppCompatActivity {
     Button startButton;
     TextView timeTextView;
-    CountDownTimer timer = new CountDownTimer(30000, 1000) {
+    CountDownTimer timer = new CountDownTimer(10000, 1000) {
         public void onTick(long millisUntilFinished) {
             timeTextView.setText("seconds remaining: " + millisUntilFinished / 1000);
         }
@@ -47,7 +47,7 @@ public class test extends AppCompatActivity {
     public void resetCount(View view){
         count = 0;
         timer.cancel();
-        timer = new CountDownTimer(30000, 1000) {
+        timer = new CountDownTimer(10000, 1000) {
             public void onTick(long millisUntilFinished) {
                 timeTextView.setText("seconds remaining: " + millisUntilFinished / 1000);
             }
@@ -58,7 +58,7 @@ public class test extends AppCompatActivity {
             }
         };
         txtCount.setText(R.string.maintxt);
-        timeTextView.setText("00:30");
+        timeTextView.setText("00:10");
 
     }
 }
