@@ -4,6 +4,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -47,6 +49,7 @@ public class test extends AppCompatActivity {
     int round;
     String hand;
     private int[] countHistory = new int[4];
+    Animation wiggle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,6 +59,7 @@ public class test extends AppCompatActivity {
         roundView = (TextView) findViewById(R.id.roundNumber);
         round = 1;
         hand = "right";
+        wiggle = AnimationUtils.loadAnimation(this, R.anim.wiggle);
     }
 
     public void runTimer(View view) {
@@ -64,6 +68,7 @@ public class test extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 count++;
+                v.startAnimation(wiggle);
             }
         });
         timer.start();
