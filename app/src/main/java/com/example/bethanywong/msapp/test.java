@@ -5,60 +5,93 @@ import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 public class test extends AppCompatActivity {
-    Button startButton;
-    TextView timeTextView;
-    CountDownTimer timer = new CountDownTimer(30000, 1000) {
+    CountDownTimer timer = new CountDownTimer(10000, 1000) {
         public void onTick(long millisUntilFinished) {
-            timeTextView.setText("seconds remaining: " + millisUntilFinished / 1000);
+            timeTextView.setText(millisUntilFinished / 1000 + "");
         }
 
         public void onFinish() {
-            timeTextView.setText("TIME'S UP");
-            txtCount.setText(String.valueOf(count));
+            countHistory[round-1] = count;
+            count=0;
+            round++;
+
+            if (round > 2) {
+                hand = "left";
+            }
+
+            if (round <= 4) {
+                setNewRound();
+            } else {
+                displayResults();
+            }
+
+            tap.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    runTimer(v);
+                }
+            });
         }
     };
 
     private int count;
-    Button tap, reset;
+    ImageView tap;
     TextView txtCount;
+    TextView instructions;
+    TextView roundView;
+    TextView timeTextView;
+    int round;
+    String hand;
+    private int[] countHistory = new int[4];
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_test);
         timeTextView = (TextView) findViewById(R.id.timeTextView);
-        startButton = (Button) findViewById(R.id.startButton);
+        roundView = (TextView) findViewById(R.id.roundNumber);
+        round = 1;
+        hand = "right";
     }
 
     public void runTimer(View view) {
+        tap = (ImageView)findViewById(R.id.tapCount);
+        tap.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                count++;
+            }
+        });
         timer.start();
-        txtCount = (TextView) findViewById(R.id.textView5);
-        tap = (Button)findViewById(R.id.tapCount);
-        reset = (Button)findViewById(R.id.reset);
+        instructions = (TextView) findViewById(R.id.instructions);
+        txtCount = (TextView) findViewById(R.id.tapBegin);
         count = 0;
         txtCount.setText("Tap!");
-    }
-    public void tapped(View view){
-        count++;
-    }
-    public void resetCount(View view){
-        count = 0;
-        timer.cancel();
-        timer = new CountDownTimer(30000, 1000) {
-            public void onTick(long millisUntilFinished) {
-                timeTextView.setText("seconds remaining: " + millisUntilFinished / 1000);
-            }
+        instructions.setText("Keep your hand in place!");
 
-            public void onFinish() {
-                timeTextView.setText("TIME'S UP");
-                txtCount.setText(String.valueOf(count));
-            }
-        };
-        txtCount.setText(R.string.maintxt);
-        timeTextView.setText("00:30");
+    }
 
+    public void setNewRound() {
+        timeTextView.setText("TIME'S UP");
+        txtCount.setText("Tap to begin!");
+        instructions.setText("Place " + hand + " hand on phone with index finger on the corgi!");
+        roundView.setText("Round " + round);
+
+        if (round == 3) {
+            txtCount.setText("Right hand results: " + ((countHistory[0] + countHistory[1]) / 2));
+        }
+    }
+
+    public void displayResults() {
+        hand = "right";
+        round = 1;
+        timeTextView.setText("TIME'S UP");
+        instructions.setText("Tap the corgi to restart!");
+        roundView.setText("Test Completed!");
+        txtCount.setText("Left hand results: " + ((countHistory[2] + countHistory[3]) / 2));
     }
 }
