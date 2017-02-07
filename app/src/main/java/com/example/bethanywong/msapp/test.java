@@ -17,6 +17,7 @@ public class test extends AppCompatActivity {
 
         public void onFinish() {
             timeTextView.setText("TIME'S UP");
+            txtCount.setText(String.valueOf(count));
         }
     };
 
@@ -30,7 +31,6 @@ public class test extends AppCompatActivity {
         setContentView(R.layout.activity_test);
         timeTextView = (TextView) findViewById(R.id.timeTextView);
         startButton = (Button) findViewById(R.id.startButton);
-
     }
 
     public void runTimer(View view) {
@@ -39,13 +39,26 @@ public class test extends AppCompatActivity {
         tap = (Button)findViewById(R.id.tapCount);
         reset = (Button)findViewById(R.id.reset);
         count = 0;
+        txtCount.setText("Tap!");
     }
     public void tapped(View view){
         count++;
-        txtCount.setText(String.valueOf(count));
     }
     public void resetCount(View view){
         count = 0;
+        timer.cancel();
+        timer = new CountDownTimer(30000, 1000) {
+            public void onTick(long millisUntilFinished) {
+                timeTextView.setText("seconds remaining: " + millisUntilFinished / 1000);
+            }
+
+            public void onFinish() {
+                timeTextView.setText("TIME'S UP");
+                txtCount.setText(String.valueOf(count));
+            }
+        };
         txtCount.setText(R.string.maintxt);
+        timeTextView.setText("00:30");
+
     }
 }
