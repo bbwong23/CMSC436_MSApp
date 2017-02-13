@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.bethanywong.msapp">
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application
         android:allowBackup="true"
@@ -17,7 +18,7 @@
         </activity>
         <activity android:name=".test">
             <intent-filter>
-                <action android:name="com.example.bethanywong.msapp.test" />
+                <action android:name="com.example.bethanywong.msapp.TapTest" />
 
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
@@ -25,6 +26,13 @@
         <activity android:name=".DeveloperInfo">
             <intent-filter>
                 <action android:name="com.example.bethanywong.msapp.DeveloperInfo" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".SpiralTest">
+            <intent-filter>
+                <action android:name="com.example.bethanywong.msapp.SpiralTest" />
 
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
