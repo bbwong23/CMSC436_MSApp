@@ -21,6 +21,7 @@ public class SpiralTest extends AppCompatActivity {
     private static final int PERMISSION_REQUEST_CODE = 1;
     private DrawingView drawView;
     private String hand;
+    private int trials;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,6 +29,7 @@ public class SpiralTest extends AppCompatActivity {
         setContentView(R.layout.activity_spiral_test);
         drawView = (DrawingView)findViewById(R.id.drawing);
         hand = "right";
+        trials = 0;
     }
     @Override
     public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
@@ -68,7 +70,12 @@ public class SpiralTest extends AppCompatActivity {
         if (hand == "right") {
             hand = "left";
         } else {
+            trials++;
             hand = "right";
+        }
+
+        if (trials >= 2) {
+            // display ending screen
         }
 
         TextView instructions = (TextView) findViewById(R.id.instructions);
