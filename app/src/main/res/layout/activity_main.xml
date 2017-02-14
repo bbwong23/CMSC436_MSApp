@@ -18,6 +18,23 @@
         android:layout_width="match_parent"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true" />
+    <Button
+        android:text="Spiral Test"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/spiral_button"
+        android:layout_marginTop="23dp"
+        android:layout_below="@+id/tap_button"
+        android:layout_centerHorizontal="true" />
+
+    <Button
+        android:text="View Past Results"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/results_button"
+        android:layout_marginTop="23dp"
+        android:layout_below="@+id/spiral_button"
+        android:layout_centerHorizontal="true" />
 
     <Button
         android:text="Developers Info"
@@ -28,12 +45,5 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
 
-    <Button
-        android:text="View Past Results"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/results_button"
-        android:layout_marginTop="23dp"
-        android:layout_below="@+id/tap_button"
-        android:layout_centerHorizontal="true" />
+
 </RelativeLayout>
