@@ -1,6 +1,7 @@
 package com.example.bethanywong.msapp;
 
 import android.content.Context;
+import android.graphics.PorterDuff;
 import android.view.View;
 import android.util.AttributeSet;
 import android.graphics.Bitmap;
@@ -67,4 +68,7 @@ public class DrawingView extends View {
         return true;
     }
 
+    public void clear() {
+        drawCanvas.drawColor(0, PorterDuff.Mode.CLEAR);
+    }
 }
