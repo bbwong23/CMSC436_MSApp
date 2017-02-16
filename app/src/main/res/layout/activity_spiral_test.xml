@@ -11,6 +11,12 @@
     android:screenOrientation="portrait"
     tools:context="com.example.bethanywong.msapp.SpiralTest">
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="score"
+        android:id="@+id/score"
+        android:layout_centerHorizontal="true"/>
     <com.example.bethanywong.msapp.DrawingView
         android:id="@+id/drawing"
         android:layout_width="fill_parent"
@@ -22,23 +28,20 @@
         android:layout_alignStart="@+id/spiral"
         android:layout_alignEnd="@+id/spiral"
          />
-
     <ImageView
-        android:layout_width="600px"
-        android:layout_height="600px"
+        android:layout_width="600dp"
+        android:layout_height="600dp"
         android:alpha = "0.5"
         android:src="@drawable/ic_black_bold_spiral"
         android:id = "@+id/spiral"
         android:layout_centerVertical="true"
         android:layout_centerHorizontal="true" />
-
     <Button
-        android:text="Save"
+        android:text="Finish"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:id="@+id/save"
-        android:onClick="saveDrawing"/>
-
+        android:id="@+id/finish"
+        android:onClick="onFinish"/>
 </RelativeLayout>
