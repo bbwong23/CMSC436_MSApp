@@ -2,6 +2,8 @@ package com.example.bethanywong.msapp;
 
 import android.Manifest;
 import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.util.Config;
 import android.view.View;
 import android.content.pm.PackageManager;
 import android.provider.MediaStore;
@@ -20,14 +22,17 @@ public class SpiralTest extends AppCompatActivity {
     private static final int PERMISSION_REQUEST_CODE = 1;
     private DrawingView drawView;
     private ImageView original;
+    private String hand;
+    private int trials;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_spiral_test);
         drawView = (DrawingView)findViewById(R.id.drawing);
         original = (ImageView)findViewById(R.id.spiral);
+        hand = "right";
+        trials = 0;
     }
     @Override
     public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
@@ -84,12 +89,12 @@ public class SpiralTest extends AppCompatActivity {
 
     public void saveDrawing(View v){
         view = v;
+        View screen = findViewById(R.id.activity_spiral_test);
         if (ActivityCompat.checkSelfPermission(getApplicationContext(),Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED){
                 ActivityCompat.requestPermissions(this,new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},PERMISSION_REQUEST_CODE);
         } else {
-            drawView.setDrawingCacheEnabled(true);
             String imgSaved = MediaStore.Images.Media.insertImage(
-                    getContentResolver(), drawView.getDrawingCache(),
+                    getContentResolver(), screenShot(screen),
                     UUID.randomUUID().toString() + ".png", "drawing");
             if (imgSaved != null) {
                 Toast savedToast = Toast.makeText(getApplicationContext(),
@@ -102,5 +107,30 @@ public class SpiralTest extends AppCompatActivity {
             }
             drawView.destroyDrawingCache();
         }
+
+        drawView.clear();
+
+        if (hand == "right") {
+            hand = "left";
+        } else {
+            trials++;
+            hand = "right";
+        }
+
+        if (trials >= 2) {
+            // display ending screen
+        }
+
+        TextView instructions = (TextView) findViewById(R.id.instructions);
+        instructions.setText("Trace the spiral with your " + hand + " hand.");
     }
+
+    public Bitmap screenShot(View view) {
+        Bitmap bitmap = Bitmap.createBitmap(view.getWidth(),
+                view.getHeight(), Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(bitmap);
+        view.draw(canvas);
+        return bitmap;
+    }
+
 }
