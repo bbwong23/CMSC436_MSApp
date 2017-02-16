@@ -53,7 +53,7 @@ public class test extends AppCompatActivity {
     int round;
     String hand;
     private int[] countHistory = new int[4];
-    Animation wiggle;
+    Animation shrink;
     boolean isCountingDown;
 
     @Override
@@ -64,7 +64,7 @@ public class test extends AppCompatActivity {
         roundView = (TextView) findViewById(R.id.roundNumber);
         round = 1;
         hand = "right";
-        wiggle = AnimationUtils.loadAnimation(this, R.anim.wiggle);
+        shrink = AnimationUtils.loadAnimation(this, R.anim.shrink);
         isCountingDown = false;
     }
 
@@ -77,7 +77,7 @@ public class test extends AppCompatActivity {
             public void onClick(View v) {
                 count++;
                 //Log.d("runTimer",String.valueOf(count));
-                v.startAnimation(wiggle);
+                v.startAnimation(shrink);
             }
         });
         if (!isCountingDown){
@@ -125,12 +125,8 @@ public class test extends AppCompatActivity {
         coolDown();
         timeTextView.setText("TIME'S UP");
         txtCount.setText("Tap to begin!");
-        instructions.setText("Place " + hand + " hand on phone with index finger on the corgi!");
+        instructions.setText("Place " + hand + " hand on phone with index finger on the green circle!");
         roundView.setText("Round " + round);
-
-        if (round == 3) {
-            txtCount.setText("Right hand results: " + ((countHistory[0] + countHistory[1]) / 2));
-        }
     }
 
     public void displayResults() {
@@ -138,8 +134,9 @@ public class test extends AppCompatActivity {
         hand = "right";
         round = 1;
         timeTextView.setText("TIME'S UP");
-        instructions.setText("Tap the corgi to restart!");
+        instructions.setText("Tap the circle to restart!");
         roundView.setText("Test Completed!");
-        txtCount.setText("Left hand results: " + ((countHistory[2] + countHistory[3]) / 2));
+        txtCount.setText("Right hand results: " + ((countHistory[0] + countHistory[1]) / 2) +
+                "\r\nLeft hand results: " + ((countHistory[2] + countHistory[3]) / 2));
     }
 }
