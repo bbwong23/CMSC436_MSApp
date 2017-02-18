@@ -1,6 +1,8 @@
 package com.example.bethanywong.msapp;
 
 import android.Manifest;
+import android.app.ActionBar;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.util.Config;
@@ -10,7 +12,10 @@ import android.provider.MediaStore;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.RelativeLayout.LayoutParams;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -24,6 +29,7 @@ public class SpiralTest extends AppCompatActivity {
     private ImageView original;
     private String hand;
     private int trials;
+    private int lScore, rScore;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,6 +40,7 @@ public class SpiralTest extends AppCompatActivity {
         hand = "right";
         trials = 0;
     }
+
     @Override
     public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
       if (requestCode == PERMISSION_REQUEST_CODE){
@@ -48,7 +55,8 @@ public class SpiralTest extends AppCompatActivity {
     }
 
     public void onFinish(View v){
-        TextView output = (TextView)findViewById(R.id.score);
+//        TextView output = (TextView)findViewById(R.id.score);
+        Button finish = (Button)findViewById(R.id.finish);
 
         // convert original ImageView into a Bitmap
         original.setDrawingCacheEnabled(true);
@@ -83,8 +91,52 @@ public class SpiralTest extends AppCompatActivity {
             score = Math.round(totalAccurate*100/totalDrawn);
         }
 
-        output.setText("Score: %" + score);
+
+        if (trials == 0) {
+            lScore = score;
+            System.out.println("l trial: " + trials);
+        } else if (trials == 1) {
+            rScore = score;
+            System.out.println("r trial: " + trials);
+        }
         saveDrawing(v);
+
+    }
+
+    public void displayScores(View v) {
+        Button finish = (Button)findViewById(R.id.finish);
+        ViewGroup layout = (ViewGroup) finish.getParent();
+        if (null != layout) {
+            layout.removeView(finish);
+        }
+
+        TextView scoreTextView = new TextView(this);
+        ImageView spiralView = (ImageView)findViewById(R.id.spiral);
+        DrawingView drawingView = (DrawingView)findViewById(R.id.drawing);
+        TextView instructions = (TextView) findViewById(R.id.instructions);
+        scoreTextView.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
+        scoreTextView.setText("Left Hand Score: " + lScore + "%\nRight Hand Score: " + rScore + "%");
+        if (null != layout) {
+            layout.removeView(finish);
+            layout.removeView(spiralView);
+            layout.removeView(instructions);
+            layout.removeView(drawingView);
+        }
+        Button doneButton = new Button(this);
+        doneButton.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
+        doneButton.setText("Done");
+        doneButton.setOnClickListener(
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent intent = new Intent("com.example.bethanywong.msapp.MainActivity");
+                        startActivity(intent);
+                    }
+                }
+        );
+
+        layout.addView(scoreTextView);
+        layout.addView(doneButton);
     }
 
     public void saveDrawing(View v){
@@ -110,19 +162,18 @@ public class SpiralTest extends AppCompatActivity {
 
         drawView.clear();
 
-        if (hand == "right") {
-            hand = "left";
-        } else {
+        Button finish = (Button)findViewById(R.id.finish);
+        if (trials < 1) {
+            if (trials == 0) {
+                hand = "left";
+                finish.setText("View Results");
+            }
+            TextView instructions = (TextView) findViewById(R.id.instructions);
+            instructions.setText("Trace the spiral with your " + hand + " hand.");
             trials++;
-            hand = "right";
+        } else {
+            displayScores(v);
         }
-
-        if (trials >= 2) {
-            // display ending screen
-        }
-
-        TextView instructions = (TextView) findViewById(R.id.instructions);
-        instructions.setText("Trace the spiral with your " + hand + " hand.");
     }
 
     public Bitmap screenShot(View view) {
