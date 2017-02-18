@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.bethanywong.msapp">
+
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application
@@ -33,6 +34,13 @@
         <activity android:name=".SpiralTest">
             <intent-filter>
                 <action android:name="com.example.bethanywong.msapp.SpiralTest" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".SpiralScore">
+            <intent-filter>
+                <action android:name="com.example.bethanywong.msapp.SpiralScore" />
 
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>

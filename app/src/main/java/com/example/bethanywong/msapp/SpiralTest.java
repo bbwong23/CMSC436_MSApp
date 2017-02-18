@@ -1,35 +1,35 @@
 package com.example.bethanywong.msapp;
 
 import android.Manifest;
-import android.app.ActionBar;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
-import android.util.Config;
 import android.view.View;
 import android.content.pm.PackageManager;
 import android.provider.MediaStore;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.RelativeLayout.LayoutParams;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.UUID;
 
 public class SpiralTest extends AppCompatActivity {
-
-    private View view;
+    protected static final String L_SCORE_KEY = "L_SCORE_KEY";
+    protected static final String R_SCORE_KEY = "R_SCORE_KEY";
     private static final int PERMISSION_REQUEST_CODE = 1;
+    private View view;
     private DrawingView drawView;
     private ImageView original;
     private String hand;
     private int trials;
     private int lScore, rScore;
+    private Button finishButton;
+    private View screen;
+    private TextView instructions;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,6 +39,9 @@ public class SpiralTest extends AppCompatActivity {
         original = (ImageView)findViewById(R.id.spiral);
         hand = "right";
         trials = 0;
+        finishButton = (Button)findViewById(R.id.finish);
+        screen = findViewById(R.id.activity_spiral_test);
+        instructions = (TextView) findViewById(R.id.instructions);
     }
 
     @Override
@@ -54,9 +57,7 @@ public class SpiralTest extends AppCompatActivity {
         }
     }
 
-    public void onFinish(View v){
-//        TextView output = (TextView)findViewById(R.id.score);
-        Button finish = (Button)findViewById(R.id.finish);
+    public int computeScore() {
 
         // convert original ImageView into a Bitmap
         original.setDrawingCacheEnabled(true);
@@ -91,57 +92,18 @@ public class SpiralTest extends AppCompatActivity {
             score = Math.round(totalAccurate*100/totalDrawn);
         }
 
-
-        if (trials == 0) {
-            lScore = score;
-            System.out.println("l trial: " + trials);
-        } else if (trials == 1) {
-            rScore = score;
-            System.out.println("r trial: " + trials);
-        }
-        saveDrawing(v);
-
+        return score;
     }
 
-    public void displayScores(View v) {
-        Button finish = (Button)findViewById(R.id.finish);
-        ViewGroup layout = (ViewGroup) finish.getParent();
-        if (null != layout) {
-            layout.removeView(finish);
+    public void onFinish(View v){
+        if (trials == 0) {
+            lScore = computeScore();
         }
-
-        TextView scoreTextView = new TextView(this);
-        ImageView spiralView = (ImageView)findViewById(R.id.spiral);
-        DrawingView drawingView = (DrawingView)findViewById(R.id.drawing);
-        TextView instructions = (TextView) findViewById(R.id.instructions);
-        scoreTextView.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
-        scoreTextView.setText("Left Hand Score: " + lScore + "%\nRight Hand Score: " + rScore + "%");
-        if (null != layout) {
-            layout.removeView(finish);
-            layout.removeView(spiralView);
-            layout.removeView(instructions);
-            layout.removeView(drawingView);
-        }
-        Button doneButton = new Button(this);
-        doneButton.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
-        doneButton.setText("Done");
-        doneButton.setOnClickListener(
-                new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Intent intent = new Intent("com.example.bethanywong.msapp.MainActivity");
-                        startActivity(intent);
-                    }
-                }
-        );
-
-        layout.addView(scoreTextView);
-        layout.addView(doneButton);
+        saveDrawing(v);
     }
 
     public void saveDrawing(View v){
         view = v;
-        View screen = findViewById(R.id.activity_spiral_test);
         if (ActivityCompat.checkSelfPermission(getApplicationContext(),Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED){
                 ActivityCompat.requestPermissions(this,new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},PERMISSION_REQUEST_CODE);
         } else {
@@ -162,17 +124,26 @@ public class SpiralTest extends AppCompatActivity {
 
         drawView.clear();
 
-        Button finish = (Button)findViewById(R.id.finish);
         if (trials < 1) {
             if (trials == 0) {
                 hand = "left";
-                finish.setText("View Results");
+                finishButton.setText("View Results");
+                finishButton.setOnClickListener(
+                        new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                rScore = computeScore();
+                                Intent intent = new Intent("com.example.bethanywong.msapp.SpiralScore");
+                                intent.putExtra(L_SCORE_KEY, lScore);
+                                intent.putExtra(R_SCORE_KEY, rScore);
+                                startActivity(intent);
+                            }
+                        }
+                );
             }
-            TextView instructions = (TextView) findViewById(R.id.instructions);
+
             instructions.setText("Trace the spiral with your " + hand + " hand.");
             trials++;
-        } else {
-            displayScores(v);
         }
     }
 
