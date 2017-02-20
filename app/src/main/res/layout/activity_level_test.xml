@@ -10,5 +10,24 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     android:screenOrientation="portrait"
     tools:context="com.example.bethanywong.msapp.LevelTest">
+    <ImageView
+        android:layout_width="600px"
+        android:layout_height="600px"
+        android:alpha = "0.5"
+        android:src="@drawable/ic_green_button"
+        android:id = "@+id/green"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true" />
 
+    <com.example.bethanywong.msapp.BallView
+        android:id="@+id/ball"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_alignTop="@+id/green"
+        android:layout_alignBottom="@+id/green"
+        android:layout_alignRight="@+id/green"
+        android:layout_alignLeft="@+id/green"
+        android:layout_alignStart="@+id/green"
+        android:layout_alignEnd="@+id/green"
+        />
 </RelativeLayout>
