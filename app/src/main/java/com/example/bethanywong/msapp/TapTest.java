@@ -13,7 +13,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.graphics.Color;
 
-public class test extends AppCompatActivity {
+public class TapTest extends AppCompatActivity {
     CountDownTimer timer = new CountDownTimer(10000, 1000) {
         public void onTick(long millisUntilFinished) {
             timeTextView.setText(millisUntilFinished / 1000 + "");
