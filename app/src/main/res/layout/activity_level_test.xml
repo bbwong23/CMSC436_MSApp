@@ -11,11 +11,11 @@
     android:screenOrientation="portrait"
     tools:context="com.example.bethanywong.msapp.LevelTest">
     <ImageView
-        android:layout_width="600px"
-        android:layout_height="600px"
-        android:alpha = "0.5"
-        android:src="@drawable/ic_green_button"
-        android:id = "@+id/green"
+        android:layout_width="650px"
+        android:layout_height="650px"
+        android:alpha = "0.75"
+        android:src="@drawable/level_background"
+        android:id = "@+id/circles"
         android:layout_centerVertical="true"
         android:layout_centerHorizontal="true" />
 
@@ -23,11 +23,12 @@
         android:id="@+id/ball"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:layout_alignTop="@+id/green"
-        android:layout_alignBottom="@+id/green"
-        android:layout_alignRight="@+id/green"
-        android:layout_alignLeft="@+id/green"
-        android:layout_alignStart="@+id/green"
-        android:layout_alignEnd="@+id/green"
+        android:layout_alignTop="@+id/circles"
+        android:layout_alignBottom="@+id/circles"
+        android:layout_alignRight="@+id/circles"
+        android:layout_alignLeft="@+id/circles"
+        android:layout_alignStart="@+id/circles"
+        android:layout_alignEnd="@+id/circles"
         />
+
 </RelativeLayout>
