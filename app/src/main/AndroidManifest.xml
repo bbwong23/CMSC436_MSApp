@@ -44,6 +44,7 @@
         <activity android:name=".LevelTest">
             <intent-filter>
                 <action android:name="com.example.bethanywong.msapp.LevelTest" />
+                <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
         
