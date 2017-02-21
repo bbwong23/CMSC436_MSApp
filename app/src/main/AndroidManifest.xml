@@ -44,7 +44,9 @@
         <activity android:name=".LevelTest">
             <intent-filter>
                 <action android:name="com.example.bethanywong.msapp.LevelTest" />
-
+            </intent-filter>
+        </activity>
+        
         <activity android:name=".SpiralScore">
             <intent-filter>
                 <action android:name="com.example.bethanywong.msapp.SpiralScore" />
