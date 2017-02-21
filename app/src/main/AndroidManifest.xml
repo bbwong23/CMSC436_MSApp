@@ -17,7 +17,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".test">
+        <activity android:name=".TapTest">
             <intent-filter>
                 <action android:name="com.example.bethanywong.msapp.TapTest" />
 
