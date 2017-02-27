@@ -92,7 +92,9 @@ public class LevelTestNewView extends View{
         drawPaint.setStrokeJoin(Paint.Join.ROUND);
         drawPaint.setStrokeCap(Paint.Cap.ROUND);
         canvasPaint = new Paint(Paint.DITHER_FLAG);
-        canvasBitmap = Bitmap.createBitmap(getMeasuredWidth(),getMeasuredHeight(), Bitmap.Config.ARGB_8888);
+        // TEMP FIX: hardcoded size of bitmap.
+        // originally used getMeasuredWidth() and getMeasuredHeight(), but they returned 0
+        canvasBitmap = Bitmap.createBitmap(1000,1000, Bitmap.Config.ARGB_8888);
         drawCanvas = new Canvas(canvasBitmap);
     }
 

@@ -97,7 +97,7 @@ public class SpiralTest extends AppCompatActivity {
 
     public void onFinish(View v){
         if (trials == 0) {
-            lScore = computeScore();
+            rScore = computeScore();
         }
         saveDrawing(v);
     }
@@ -132,7 +132,7 @@ public class SpiralTest extends AppCompatActivity {
                         new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                rScore = computeScore();
+                                lScore = computeScore();
                                 Intent intent = new Intent("com.example.bethanywong.msapp.SpiralScore");
                                 intent.putExtra(L_SCORE_KEY, lScore);
                                 intent.putExtra(R_SCORE_KEY, rScore);
