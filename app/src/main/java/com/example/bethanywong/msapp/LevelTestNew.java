@@ -35,8 +35,10 @@ public class LevelTestNew extends Activity{
             isCountingDown = false;
             round++;
 
-            if (round == 0) {
+            if (round == 1) {
                 results[0] = "Right hand result: " + computeResult();
+                instructions.setText("Hold your phone level to the ground in your left hand and press start.");
+                timeTextView.setText("Time's up!");
             }
 
             else {
