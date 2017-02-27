@@ -6,9 +6,11 @@ package com.example.bethanywong.msapp;
 
 import android.content.Context;
 import android.content.res.Resources;
+import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.Path;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
@@ -26,6 +28,11 @@ public class LevelTestNewView extends View{
     private Paint paintInner;
     private Paint paintDot;
 
+    private Path drawPath;
+    private Paint drawPaint, canvasPaint;
+    private Canvas drawCanvas;
+    private Bitmap canvasBitmap;
+
     float pointX, pointY;
     float dotX, dotY;
     int radiusInner, radiusMiddle, radiusOuter;
@@ -33,16 +40,19 @@ public class LevelTestNewView extends View{
     public LevelTestNewView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
         initCompassView();
+        setupDrawing();
     }
 
     public LevelTestNewView(Context context, AttributeSet attrs) {
         super(context, attrs);
         initCompassView();
+        setupDrawing();
     }
 
     public LevelTestNewView(Context context) {
         super(context);
         initCompassView();
+        setupDrawing();
     }
 
     protected void initCompassView() {
@@ -72,6 +82,20 @@ public class LevelTestNewView extends View{
 
     }
 
+    private void setupDrawing(){
+        drawPath = new Path();
+        drawPaint = new Paint();
+        drawPaint.setColor(Color.BLACK);
+        drawPaint.setAntiAlias(true);
+        drawPaint.setStrokeWidth(10);
+        drawPaint.setStyle(Paint.Style.STROKE);
+        drawPaint.setStrokeJoin(Paint.Join.ROUND);
+        drawPaint.setStrokeCap(Paint.Cap.ROUND);
+        canvasPaint = new Paint(Paint.DITHER_FLAG);
+        canvasBitmap = Bitmap.createBitmap(getMeasuredWidth(),getMeasuredHeight(), Bitmap.Config.ARGB_8888);
+        drawCanvas = new Canvas(canvasBitmap);
+    }
+
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
@@ -89,11 +113,14 @@ public class LevelTestNewView extends View{
         canvas.drawCircle(pointX, pointY, radiusMiddle, paintMiddle);
         canvas.drawCircle(pointX, pointY, radiusInner, paintInner);
         canvas.drawCircle(dotX, dotY, 20, paintDot);
+        canvas.drawBitmap(canvasBitmap, 0, 0, canvasPaint);
+        canvas.drawPath(drawPath, drawPaint);
 
     }
 
     void update(float z, float yy, float xx) {
-
+        float oldX = dotX;
+        float oldY = dotY;
 
         dotY = pointY + 50 * yy;
         if (xx > 0) {
@@ -101,6 +128,12 @@ public class LevelTestNewView extends View{
         } else {
             dotX = pointX - 10*((1 - xx) * z);
         }
+
+        drawPath.moveTo(oldX, oldY);
+        drawPath.lineTo(dotX, dotY);
+        drawCanvas.drawPath(drawPath, drawPaint);
+        drawPath.reset();
+
         invalidate();
     }
 }
