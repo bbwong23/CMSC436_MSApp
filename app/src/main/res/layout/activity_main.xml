@@ -45,6 +45,15 @@
         android:layout_centerHorizontal="true" />
 
     <Button
+        android:text="Level Test (Emma)"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/level_button_new"
+        android:layout_marginTop="23dp"
+        android:layout_below="@+id/results_button"
+        android:layout_centerHorizontal="true" />
+
+    <Button
         android:text="Developers Info"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
