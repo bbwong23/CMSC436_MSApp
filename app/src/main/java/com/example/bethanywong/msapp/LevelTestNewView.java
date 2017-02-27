@@ -34,6 +34,8 @@ public class LevelTestNewView extends View{
     private Canvas drawCanvas;
     private Bitmap canvasBitmap;
 
+    private boolean timerStarted;
+
     float pointX, pointY;
     float dotX, dotY;
     int radiusInner, radiusMiddle, radiusOuter;
@@ -42,18 +44,21 @@ public class LevelTestNewView extends View{
         super(context, attrs, defStyle);
         initCompassView();
         setupDrawing();
+        timerStarted = false;
     }
 
     public LevelTestNewView(Context context, AttributeSet attrs) {
         super(context, attrs);
         initCompassView();
         setupDrawing();
+        timerStarted = false;
     }
 
     public LevelTestNewView(Context context) {
         super(context);
         initCompassView();
         setupDrawing();
+        timerStarted = false;
     }
 
     protected void initCompassView() {
@@ -116,13 +121,19 @@ public class LevelTestNewView extends View{
         canvas.drawCircle(pointX, pointY, radiusMiddle, paintMiddle);
         canvas.drawCircle(pointX, pointY, radiusInner, paintInner);
         canvas.drawCircle(dotX, dotY, 20, paintDot);
-        canvas.drawBitmap(canvasBitmap, 0, 0, canvasPaint);
-        canvas.drawPath(drawPath, drawPaint);
-
+        if (timerStarted) {
+            canvas.drawBitmap(canvasBitmap, 0, 0, canvasPaint);
+            canvas.drawPath(drawPath, drawPaint);
+        }
     }
 
     void clearPathTrace() {
         drawCanvas.drawColor(0, PorterDuff.Mode.CLEAR);
+        timerStarted = false;
+    }
+
+    void startTrace() {
+        timerStarted = true;
     }
 
     void update(float z, float yy, float xx) {
@@ -136,11 +147,12 @@ public class LevelTestNewView extends View{
             dotX = pointX - 10*((1 - xx) * z);
         }
 
-        drawPath.moveTo(oldX, oldY);
-        drawPath.lineTo(dotX, dotY);
-        drawCanvas.drawPath(drawPath, drawPaint);
-        drawPath.reset();
-
+        if (timerStarted) {
+            drawPath.moveTo(oldX, oldY);
+            drawPath.lineTo(dotX, dotY);
+            drawCanvas.drawPath(drawPath, drawPaint);
+            drawPath.reset();
+        }
         invalidate();
     }
 }

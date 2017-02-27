@@ -6,8 +6,6 @@ import android.content.Context;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.PorterDuff;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -26,7 +24,6 @@ public class LevelTestNew extends Activity{
 
     LevelTestNewView gyroscopeView;
     SensorManager sensorManager;
-    Sensor sensorGyroscope;
     TextView timeTextView;
     boolean isCountingDown;
     private String[] results = new String[2];
@@ -109,8 +106,8 @@ public class LevelTestNew extends Activity{
     @Override
     protected void onResume() {
         super.onResume();
-        sensorGyroscope = sensorManager.getDefaultSensor(Sensor.TYPE_GRAVITY);
-
+        Sensor sensorGyroscope = sensorManager.getDefaultSensor(Sensor.TYPE_GRAVITY);
+        sensorManager.registerListener(sensorGyroListener, sensorGyroscope, SensorManager.SENSOR_DELAY_UI);
     }
 
     @Override
@@ -156,7 +153,7 @@ public class LevelTestNew extends Activity{
                 @Override
                 public void onFinish() {
                     instructions.setText("Hold steady!");
-                    sensorManager.registerListener(sensorGyroListener, sensorGyroscope, SensorManager.SENSOR_DELAY_UI);
+                    gyroscopeView.startTrace();
                     timer.start();
                 }
             };
