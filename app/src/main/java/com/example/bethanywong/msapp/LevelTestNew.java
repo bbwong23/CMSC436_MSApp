@@ -1,7 +1,11 @@
 package com.example.bethanywong.msapp;
 
+import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
+import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.hardware.Sensor;
@@ -10,17 +14,25 @@ import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.provider.MediaStore;
+import android.support.v4.app.ActivityCompat;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import java.util.UUID;
 
 public class LevelTestNew extends Activity{
 
     LevelTestNewView gyroscopeView;
     SensorManager sensorManager;
+    Sensor sensorGyroscope;
     TextView timeTextView;
     boolean isCountingDown;
     private String[] results = new String[2];
     int round;
+
+    private static final int PERMISSION_REQUEST_CODE = 1;
 
     protected TextView instructions;
 
@@ -34,6 +46,7 @@ public class LevelTestNew extends Activity{
         public void onFinish() {
             isCountingDown = false;
             round++;
+            saveDrawing();
 
             if (round == 1) {
                 results[0] = "Right hand result: " + computeResult();
@@ -48,6 +61,36 @@ public class LevelTestNew extends Activity{
 
         }
     };
+
+    public void saveDrawing() {
+        if (ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, PERMISSION_REQUEST_CODE);
+        } else {
+            String imgSaved = MediaStore.Images.Media.insertImage(
+                    getContentResolver(), screenShot(findViewById(R.id.activity_level_test_new)),
+                    UUID.randomUUID().toString() + ".png", "drawing");
+            if (imgSaved != null) {
+                Toast savedToast = Toast.makeText(getApplicationContext(),
+                        "Drawing saved to Gallery!", Toast.LENGTH_SHORT);
+                savedToast.show();
+            } else {
+                Toast unsavedToast = Toast.makeText(getApplicationContext(),
+                        "Oops! Image could not be saved.", Toast.LENGTH_SHORT);
+                unsavedToast.show();
+            }
+
+        }
+
+        gyroscopeView.clearPathTrace();
+    }
+
+    public Bitmap screenShot(View view) {
+        Bitmap bitmap = Bitmap.createBitmap(view.getWidth(),
+                view.getHeight(), Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(bitmap);
+        view.draw(canvas);
+        return bitmap;
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -66,8 +109,8 @@ public class LevelTestNew extends Activity{
     @Override
     protected void onResume() {
         super.onResume();
-        Sensor sensorGyroscope = sensorManager.getDefaultSensor(Sensor.TYPE_GRAVITY);
-        sensorManager.registerListener(sensorGyroListener, sensorGyroscope, SensorManager.SENSOR_DELAY_UI);
+        sensorGyroscope = sensorManager.getDefaultSensor(Sensor.TYPE_GRAVITY);
+
     }
 
     @Override
@@ -113,6 +156,7 @@ public class LevelTestNew extends Activity{
                 @Override
                 public void onFinish() {
                     instructions.setText("Hold steady!");
+                    sensorManager.registerListener(sensorGyroListener, sensorGyroscope, SensorManager.SENSOR_DELAY_UI);
                     timer.start();
                 }
             };
@@ -121,4 +165,6 @@ public class LevelTestNew extends Activity{
         }
         isCountingDown = true;
     }
+
+
 }
