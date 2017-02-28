@@ -43,7 +43,6 @@ public class LevelTestNew extends Activity{
         public void onFinish() {
             isCountingDown = false;
             round++;
-            saveDrawing();
 
             if (round == 1) {
                 results[0] = "Right hand result: " + computeResult();
@@ -56,6 +55,7 @@ public class LevelTestNew extends Activity{
                 displayResults();
             }
 
+            saveDrawing();
         }
     };
 
@@ -116,10 +116,8 @@ public class LevelTestNew extends Activity{
         sensorManager.unregisterListener(sensorGyroListener);
     }
 
-
-
-    public int computeResult() {
-        return 0;
+    public double computeResult() {
+        return gyroscopeView.computeResults();
     }
 
     public void displayResults() {

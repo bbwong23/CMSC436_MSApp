@@ -40,6 +40,11 @@ public class LevelTestNewView extends View{
     float dotX, dotY;
     int radiusInner, radiusMiddle, radiusOuter;
 
+
+    double numGreen;
+    double numYellow;
+    double numRed;
+
     public LevelTestNewView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
         initCompassView();
@@ -67,17 +72,17 @@ public class LevelTestNewView extends View{
         Resources r = this.getResources();
 
         paintOuter = new Paint(Paint.ANTI_ALIAS_FLAG);
-        paintOuter.setColor(Color.RED);
+        paintOuter.setColor(Color.parseColor("#E57373"));
         paintOuter.setStrokeWidth(1);
         paintOuter.setStyle(Paint.Style.FILL_AND_STROKE);
 
         paintMiddle = new Paint(Paint.ANTI_ALIAS_FLAG);
-        paintMiddle.setColor(Color.YELLOW);
+        paintMiddle.setColor(Color.parseColor("#FFF59D"));
         paintMiddle.setStrokeWidth(1);
         paintMiddle.setStyle(Paint.Style.FILL_AND_STROKE);
 
         paintInner = new Paint(Paint.ANTI_ALIAS_FLAG);
-        paintInner.setColor(Color.GREEN);
+        paintInner.setColor(Color.parseColor("#81C784"));
         paintInner.setStrokeWidth(1);
         paintInner.setStyle(Paint.Style.FILL_AND_STROKE);
 
@@ -117,10 +122,9 @@ public class LevelTestNewView extends View{
         pointX = px;
         pointY = py;
 
-        canvas.drawCircle(pointX, pointY, radiusOuter, paintOuter);
-        canvas.drawCircle(pointX, pointY, radiusMiddle, paintMiddle);
-        canvas.drawCircle(pointX, pointY, radiusInner, paintInner);
-        canvas.drawCircle(dotX, dotY, 20, paintDot);
+        drawCircles(canvas);
+        drawCircles(drawCanvas);
+
         if (timerStarted) {
             canvas.drawBitmap(canvasBitmap, 0, 0, canvasPaint);
             canvas.drawPath(drawPath, drawPaint);
@@ -129,10 +133,15 @@ public class LevelTestNewView extends View{
 
     void clearPathTrace() {
         drawCanvas.drawColor(0, PorterDuff.Mode.CLEAR);
+
+        drawCircles(drawCanvas);
+
         timerStarted = false;
     }
 
     void startTrace() {
+        countColors();
+
         timerStarted = true;
     }
 
@@ -155,4 +164,68 @@ public class LevelTestNewView extends View{
         }
         invalidate();
     }
+
+    protected double computeResults() {
+
+        double testedRed = 0;
+        double testedYellow = 0;
+        double testedGreen = 0;
+        double totalDrawn = 0;
+
+        int width = canvasBitmap.getWidth();
+        int height = canvasBitmap.getHeight();
+        int[] canvasPixels = new int[width*height];
+
+        canvasBitmap.getPixels(canvasPixels,0,width,1,1,width-1,height-1);
+
+        //count the number of pixels of each color after the test.
+        for(int i = 0; i < width*height; i+=5) {
+            if (canvasPixels[i] == Color.parseColor("#E57373")) { //red
+                testedRed++;
+            } else if (canvasPixels[i] == Color.parseColor("#FFF59D")) { //yellow
+                testedYellow++;
+            } else if (canvasPixels[i] == Color.parseColor("#81C784")) { //green
+                testedGreen++;
+            } else if (canvasPixels[i] == Color.BLACK) {
+                totalDrawn++;
+            }
+        }
+
+        double score = (numRed - testedRed) * 1 + (numYellow - testedYellow) * 2;
+        score += (numGreen - testedGreen) * 3;
+        score /= totalDrawn * 3;
+
+        return (int) score;
+    }
+
+    private void countColors() {
+        int width = canvasBitmap.getWidth();
+        int height = canvasBitmap.getHeight();
+        int[] canvasPixels = new int[width*height];
+        numRed = 0;
+        numYellow = 0;
+        numGreen = 0;
+
+        canvasBitmap.getPixels(canvasPixels,0,width,1,1,width-1,height-1);
+
+        //count the number of pixels of each color after the test.
+        for(int i = 0; i < width*height; i+=5) {
+            if (canvasPixels[i] == Color.parseColor("#E57373")) { //red
+                numRed++;
+            } else if (canvasPixels[i] == Color.parseColor("#FFF59D")) { //yellow
+                numYellow++;
+            } else if (canvasPixels[i] == Color.parseColor("#81C784")) { //green
+                numGreen++;
+            }
+        }
+    }
+
+    private void drawCircles(Canvas c) {
+        c.drawCircle(pointX, pointY, radiusOuter, paintOuter);
+        c.drawCircle(pointX, pointY, radiusMiddle, paintMiddle);
+        c.drawCircle(pointX, pointY, radiusInner, paintInner);
+        c.drawCircle(dotX, dotY, 20, paintDot);
+    }
+
+
 }
