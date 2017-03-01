@@ -14,8 +14,11 @@ import android.graphics.Path;
 import android.graphics.PorterDuff;
 import android.util.AttributeSet;
 import android.util.Log;
+import android.util.Pair;
 import android.view.View;
 import android.widget.TextView;
+
+import java.util.ArrayList;
 
 public class LevelTestNewView extends View{
     private final static String TAG = "LevelTestNewView";
@@ -40,10 +43,7 @@ public class LevelTestNewView extends View{
     float dotX, dotY;
     int radiusInner, radiusMiddle, radiusOuter;
 
-
-    double numGreen;
-    double numYellow;
-    double numRed;
+    ArrayList<Pair<Float, Float>> positions = new ArrayList<Pair<Float,Float>>();
 
     public LevelTestNewView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
@@ -140,8 +140,7 @@ public class LevelTestNewView extends View{
     }
 
     void startTrace() {
-        countColors();
-
+        positions = new ArrayList<Pair<Float, Float>>();
         timerStarted = true;
     }
 
@@ -162,10 +161,12 @@ public class LevelTestNewView extends View{
             drawCanvas.drawPath(drawPath, drawPaint);
             drawPath.reset();
         }
+
+        positions.add(new Pair<Float,Float>(dotX,dotY));
         invalidate();
     }
 
-    protected double computeResults() {
+    protected int computeResults() {
 
         double testedRed = 0;
         double testedYellow = 0;
@@ -175,49 +176,29 @@ public class LevelTestNewView extends View{
         int width = canvasBitmap.getWidth();
         int height = canvasBitmap.getHeight();
         int[] canvasPixels = new int[width*height];
+        double score = 0;
 
         canvasBitmap.getPixels(canvasPixels,0,width,1,1,width-1,height-1);
 
         //count the number of pixels of each color after the test.
-        for(int i = 0; i < width*height; i+=5) {
-            if (canvasPixels[i] == Color.parseColor("#E57373")) { //red
-                testedRed++;
-            } else if (canvasPixels[i] == Color.parseColor("#FFF59D")) { //yellow
-                testedYellow++;
-            } else if (canvasPixels[i] == Color.parseColor("#81C784")) { //green
-                testedGreen++;
-            } else if (canvasPixels[i] == Color.BLACK) {
-                totalDrawn++;
+        for(Pair<Float,Float> p: positions) {
+            double xSquare = (p.first - pointX);
+            double ySquare = (p.second-pointY);
+            double distance = xSquare * xSquare + ySquare * ySquare;
+            distance = Math.sqrt(distance);
+            if (distance < radiusInner) { //green
+                score += 3;
+            } else if (distance < radiusMiddle) { //yellow
+                score += 2;
+            } else if (distance < radiusOuter) { //red
+                score += 1;
             }
+
+            totalDrawn++;
         }
+        score /= (totalDrawn * 3);
 
-        double score = (numRed - testedRed) * 1 + (numYellow - testedYellow) * 2;
-        score += (numGreen - testedGreen) * 3;
-        score /= totalDrawn * 3;
-
-        return (int) score;
-    }
-
-    private void countColors() {
-        int width = canvasBitmap.getWidth();
-        int height = canvasBitmap.getHeight();
-        int[] canvasPixels = new int[width*height];
-        numRed = 0;
-        numYellow = 0;
-        numGreen = 0;
-
-        canvasBitmap.getPixels(canvasPixels,0,width,1,1,width-1,height-1);
-
-        //count the number of pixels of each color after the test.
-        for(int i = 0; i < width*height; i+=5) {
-            if (canvasPixels[i] == Color.parseColor("#E57373")) { //red
-                numRed++;
-            } else if (canvasPixels[i] == Color.parseColor("#FFF59D")) { //yellow
-                numYellow++;
-            } else if (canvasPixels[i] == Color.parseColor("#81C784")) { //green
-                numGreen++;
-            }
-        }
+        return (int) Math.ceil(score*100);
     }
 
     private void drawCircles(Canvas c) {

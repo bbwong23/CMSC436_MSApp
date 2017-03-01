@@ -18,6 +18,7 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.ArrayList;
 import java.util.UUID;
 
 public class LevelTestNew extends Activity{
@@ -116,7 +117,7 @@ public class LevelTestNew extends Activity{
         sensorManager.unregisterListener(sensorGyroListener);
     }
 
-    public double computeResult() {
+    public int computeResult() {
         return gyroscopeView.computeResults();
     }
 
