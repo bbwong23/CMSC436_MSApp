@@ -1,17 +1,25 @@
 package com.example.bethanywong.msapp;
 
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.PorterDuff;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.text.format.DateFormat;
 import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.text.format.Time;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.graphics.Color;
+
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
 
 public class TapTest extends AppCompatActivity {
     CountDownTimer timer = new CountDownTimer(10000, 1000) {
@@ -66,6 +74,22 @@ public class TapTest extends AppCompatActivity {
         hand = "right";
         shrink = AnimationUtils.loadAnimation(this, R.anim.shrink);
         isCountingDown = false;
+
+        //send data to sheets
+        SharedPreferences prefs = getSharedPreferences("PrefsFile", MODE_PRIVATE);
+        int userID = prefs.getInt("user",0);
+        if (userID == 0) {
+            Log.d("Tag","Missing userID!");
+        }
+        Intent sheets = new Intent(this, Sheets.class);
+        ArrayList<String> row = new ArrayList<>();
+        row.add("T8P" + userID);//Name
+        SimpleDateFormat sdf = new SimpleDateFormat(" dd/MM/yyyy, HH:mm:ss");
+        String currentDateandTime = sdf.format(new Date());//datetime
+        row.add(currentDateandTime);
+        row.add("1");//day??
+        sheets.putStringArrayListExtra(Sheets.EXTRA_SHEETS, row);
+        startActivity(sheets);
     }
 
     public void runTimer(View view) {
@@ -138,5 +162,25 @@ public class TapTest extends AppCompatActivity {
         roundView.setText("Test Completed!");
         txtCount.setText("Right hand results: " + ((countHistory[0] + countHistory[1]) / 2) +
                 "\r\nLeft hand results: " + ((countHistory[2] + countHistory[3]) / 2));
+
+        //send data to sheets
+        SharedPreferences prefs = getSharedPreferences("PrefsFile", MODE_PRIVATE);
+        int userID = prefs.getInt("user",0);
+        if (userID == 0) {
+            Log.d("Tag","Missing userID!");
+        }
+        Intent sheets = new Intent(this, Sheets.class);
+        ArrayList<String> row = new ArrayList<>();
+        row.add("T8P" + userID);//Name
+        SimpleDateFormat sdf = new SimpleDateFormat(" dd/MM/yyyy, HH:mm:ss");
+        String currentDateandTime = sdf.format(new Date());//datetime
+        row.add(currentDateandTime);
+        row.add("1");//day??
+        row.add(String.valueOf(countHistory[0]));
+        row.add(String.valueOf(countHistory[1]));
+        row.add(String.valueOf(countHistory[2]));
+        row.add(String.valueOf(countHistory[3]));
+        sheets.putStringArrayListExtra(Sheets.EXTRA_SHEETS, row);
+        startActivity(sheets);
     }
 }
