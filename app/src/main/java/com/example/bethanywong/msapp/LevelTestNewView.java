@@ -6,6 +6,7 @@ package com.example.bethanywong.msapp;
 
 import android.content.Context;
 import android.content.res.Resources;
+
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -17,8 +18,14 @@ import android.util.Log;
 import android.util.Pair;
 import android.view.View;
 import android.widget.TextView;
-
 import java.util.ArrayList;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
+import android.util.AttributeSet;
+import android.util.Log;
+import android.view.View;
+import android.widget.TextView;
 
 public class LevelTestNewView extends View{
     private final static String TAG = "LevelTestNewView";
@@ -38,7 +45,6 @@ public class LevelTestNewView extends View{
     private Bitmap canvasBitmap;
 
     private boolean timerStarted;
-
     float pointX, pointY;
     float dotX, dotY;
     int radiusInner, radiusMiddle, radiusOuter;
@@ -77,6 +83,7 @@ public class LevelTestNewView extends View{
         paintOuter.setStyle(Paint.Style.FILL_AND_STROKE);
 
         paintMiddle = new Paint(Paint.ANTI_ALIAS_FLAG);
+
         paintMiddle.setColor(Color.parseColor("#FFF59D"));
         paintMiddle.setStrokeWidth(1);
         paintMiddle.setStyle(Paint.Style.FILL_AND_STROKE);
@@ -109,6 +116,7 @@ public class LevelTestNewView extends View{
         drawCanvas = new Canvas(canvasBitmap);
     }
 
+
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
@@ -121,7 +129,7 @@ public class LevelTestNewView extends View{
 
         pointX = px;
         pointY = py;
-
+      
         drawCircles(canvas);
         drawCircles(drawCanvas);
 
@@ -147,6 +155,11 @@ public class LevelTestNewView extends View{
     void update(float z, float yy, float xx) {
         float oldX = dotX;
         float oldY = dotY;
+
+        canvas.drawCircle(pointX, pointY, radiusOuter, paintOuter);
+        canvas.drawCircle(pointX, pointY, radiusMiddle, paintMiddle);
+        canvas.drawCircle(pointX, pointY, radiusInner, paintInner);
+        canvas.drawCircle(dotX, dotY, 20, paintDot);
 
         dotY = pointY + 50 * yy;
         if (xx > 0) {
@@ -210,3 +223,4 @@ public class LevelTestNewView extends View{
 
 
 }
+

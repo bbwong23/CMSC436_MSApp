@@ -1,11 +1,14 @@
 package com.example.bethanywong.msapp;
 
+
 import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -21,6 +24,7 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.UUID;
 
+
 public class LevelTestNew extends Activity{
 
     LevelTestNewView gyroscopeView;
@@ -30,7 +34,9 @@ public class LevelTestNew extends Activity{
     private String[] results = new String[2];
     int round;
 
+
     private static final int PERMISSION_REQUEST_CODE = 1;
+
 
     protected TextView instructions;
 
@@ -55,7 +61,6 @@ public class LevelTestNew extends Activity{
                 results[1] = "Left hand result: " + computeResult();
                 displayResults();
             }
-
             saveDrawing();
         }
     };
@@ -89,6 +94,8 @@ public class LevelTestNew extends Activity{
         view.draw(canvas);
         return bitmap;
     }
+
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -153,6 +160,7 @@ public class LevelTestNew extends Activity{
                 public void onFinish() {
                     instructions.setText("Hold steady!");
                     gyroscopeView.startTrace();
+
                     timer.start();
                 }
             };
@@ -161,6 +169,4 @@ public class LevelTestNew extends Activity{
         }
         isCountingDown = true;
     }
-
-
 }
