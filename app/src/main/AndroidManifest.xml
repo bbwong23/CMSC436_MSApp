@@ -5,9 +5,9 @@
     <uses-sdk android:minSdkVersion="19" />
 
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
-    <android:uses-permission android:name="android.permission.READ_PHONE_STATE" />
-    <android:uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
     <application
         android:allowBackup="true"
@@ -43,7 +43,6 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
-
         <activity android:name=".SpiralScore">
             <intent-filter>
                 <action android:name="com.example.bethanywong.msapp.SpiralScore" />
@@ -58,10 +57,16 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
+
+        <activity android:name=".BalloonTest">
+            <intent-filter>
+                <action android:name="com.example.bethanywong.msapp.BalloonTest" />
+                <category android:name="android.intent.category.DEFAULT" />
+             </intent-filter>
+        </activity>
         <activity android:name=".LevelTestNew">
             <intent-filter>
                 <action android:name="com.example.bethanywong.msapp.LevelTestNew" />
-
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
