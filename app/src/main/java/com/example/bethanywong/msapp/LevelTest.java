@@ -1,7 +1,11 @@
 package com.example.bethanywong.msapp;
 
+import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
+import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.hardware.Sensor;
@@ -10,8 +14,13 @@ import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.provider.MediaStore;
+import android.support.v4.app.ActivityCompat;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import java.util.UUID;
 
 public class LevelTest extends Activity{
 
@@ -21,6 +30,8 @@ public class LevelTest extends Activity{
     boolean isCountingDown;
     private String[] results = new String[2];
     int round;
+
+    private static final int PERMISSION_REQUEST_CODE = 1;
 
     protected TextView instructions;
 
@@ -34,6 +45,7 @@ public class LevelTest extends Activity{
         public void onFinish() {
             isCountingDown = false;
             round++;
+            saveDrawing();
 
             if (round == 1) {
                 results[0] = "Right hand result: " + computeResult();
@@ -48,6 +60,36 @@ public class LevelTest extends Activity{
 
         }
     };
+
+    public void saveDrawing() {
+        if (ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, PERMISSION_REQUEST_CODE);
+        } else {
+            String imgSaved = MediaStore.Images.Media.insertImage(
+                    getContentResolver(), screenShot(findViewById(R.id.activity_level_test_new)),
+                    UUID.randomUUID().toString() + ".png", "drawing");
+            if (imgSaved != null) {
+                Toast savedToast = Toast.makeText(getApplicationContext(),
+                        "Drawing saved to Gallery!", Toast.LENGTH_SHORT);
+                savedToast.show();
+            } else {
+                Toast unsavedToast = Toast.makeText(getApplicationContext(),
+                        "Oops! Image could not be saved.", Toast.LENGTH_SHORT);
+                unsavedToast.show();
+            }
+
+        }
+
+        gyroscopeView.clearPathTrace();
+    }
+
+    public Bitmap screenShot(View view) {
+        Bitmap bitmap = Bitmap.createBitmap(view.getWidth(),
+                view.getHeight(), Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(bitmap);
+        view.draw(canvas);
+        return bitmap;
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -77,9 +119,8 @@ public class LevelTest extends Activity{
     }
 
 
-
     public int computeResult() {
-        return 0;
+        return gyroscopeView.computeResults();
     }
 
     public void displayResults() {
@@ -117,6 +158,7 @@ public class LevelTest extends Activity{
                 }
             };
             timeTextView.setText("10");
+            gyroscopeView.startTrace();
             warmUp.start();
         }
         isCountingDown = true;

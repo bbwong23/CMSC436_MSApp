@@ -12,6 +12,7 @@
 
     <com.example.bethanywong.msapp.LevelTestView
         android:id="@+id/gyroscope_view"
+        android:alpha = "0.7"
         android:layout_width="1000px"
         android:layout_height="1000px"
         android:layout_below="@+id/instructions" />
