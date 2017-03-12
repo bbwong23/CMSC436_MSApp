@@ -70,7 +70,7 @@ public class BalloonTest extends AppCompatActivity {
             public void onTick(long millisUntilFinished) {}
             @Override
             public void onFinish() {
-                if (rounds > 2) {
+                if (rounds > 10) {
                     complete();
                     return;
                 }
@@ -95,7 +95,7 @@ public class BalloonTest extends AppCompatActivity {
     }
 
     public void complete() {
-        averages[trialNumber] = totalTime / 2000000000.0;
+        averages[trialNumber] = totalTime / 10000000000.0;
         NumberFormat formatter = new DecimalFormat("#0.00");
         totalTime = 0;
 
