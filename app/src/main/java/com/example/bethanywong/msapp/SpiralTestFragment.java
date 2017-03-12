@@ -28,11 +28,9 @@ import org.w3c.dom.Text;
 
 import java.util.UUID;
 
-import static com.example.bethanywong.msapp.R.id.instructions;
 import static com.example.bethanywong.msapp.SpiralTest.HAND_KEY;
-import static com.example.bethanywong.msapp.SpiralTest.L_SCORE_KEY;
 import static com.example.bethanywong.msapp.SpiralTest.R_HAND;
-import static com.example.bethanywong.msapp.SpiralTest.R_SCORE_KEY;
+
 
 /**
  * Created by Samantha on 3/11/17.
@@ -50,7 +48,7 @@ public class SpiralTestFragment extends Fragment {
     private String hand;
 
     public interface OnFinishListener {
-        public void onFinish(String hand);
+        public void onFinish(String hand, int score);
     }
 
     @Override
@@ -75,12 +73,9 @@ public class SpiralTestFragment extends Fragment {
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.i("info", "1");
                 int score = computeScore();
-                Log.i("info", "2");
                 saveDrawing(v);
-                Log.i("info", "3");
-                callback.onFinish(hand);
+                callback.onFinish(hand, score);
             }
         });
         return view;

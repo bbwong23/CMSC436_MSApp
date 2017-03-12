@@ -21,9 +21,8 @@ import android.widget.Toast;
 
 import java.util.UUID;
 
-public class SpiralTest extends FragmentActivity implements SpiralTestFragment.OnFinishListener {
-    protected static final String L_SCORE_KEY = "L_SCORE_KEY";
-    protected static final String R_SCORE_KEY = "R_SCORE_KEY";
+public class SpiralTest extends FragmentActivity implements SpiralTestFragment.OnFinishListener, SpiralScoreFragment.FinishSpiralTestListener {
+    protected static final String SCORE_KEY = "SCORE_KEY";
     protected static final String R_HAND = "right";
     protected static final String L_HAND = "left";
     protected static final String HAND_KEY = "hand";
@@ -41,9 +40,16 @@ public class SpiralTest extends FragmentActivity implements SpiralTestFragment.O
 
     public static SpiralTestFragment newInstance(String hand) {
         SpiralTestFragment fragment = new SpiralTestFragment();
-
         Bundle args = new Bundle();
         args.putString(HAND_KEY, hand);
+        fragment.setArguments(args);
+        return fragment;
+    }
+
+    public static SpiralScoreFragment newInstance(int rScore, int lScore) {
+        SpiralScoreFragment fragment = new SpiralScoreFragment();
+        Bundle args = new Bundle();
+        args.putIntArray(SCORE_KEY, new int[]{rScore, lScore});
         fragment.setArguments(args);
         return fragment;
     }
@@ -65,17 +71,27 @@ public class SpiralTest extends FragmentActivity implements SpiralTestFragment.O
         transaction.add(R.id.fragmentContainer, rFragment).addToBackStack(null).commit();
     }
 
-    public void onFinish(String hand) {
+    public void onFinish(String hand, int score) {
         Log.i("info", "onFinish()");
         if (hand.equals(R_HAND)) {
+            rScore = score;
             SpiralTestFragment lFragment = newInstance(L_HAND);
             transaction = fragmentManager.beginTransaction();
             transaction.replace(R.id.fragmentContainer, lFragment);
             transaction.addToBackStack(null);
             transaction.commit();
         } else {
-            //score fragment
+            lScore = score;
+            SpiralScoreFragment scoreFragment = newInstance(rScore, lScore);
+            transaction = fragmentManager.beginTransaction();
+            transaction.replace(R.id.fragmentContainer, scoreFragment);
+            transaction.addToBackStack(null);
+            transaction.commit();
         }
+    }
+
+    public void goHome() {
+        finish();
     }
 //    @Override
 //    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
