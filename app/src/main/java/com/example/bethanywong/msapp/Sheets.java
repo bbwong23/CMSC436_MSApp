@@ -65,6 +65,8 @@ public class Sheets extends Activity
     private static final String[] SCOPES = { SheetsScopes.SPREADSHEETS };
 
     private List<Object> rowToAdd;
+    //mode should be depending on test type("Tap", "Level", "Spiral",etc)
+    private String mode;
 
     final public static String EXTRA_SHEETS = "com.example.tapp.SHEETS";
 
@@ -116,7 +118,12 @@ public class Sheets extends Activity
 
         Intent intent = getIntent();
         ArrayList<String> msg = intent.getStringArrayListExtra(EXTRA_SHEETS);
-
+        /*initially, msg should include {PID,DateTime, mode, day, then trial data
+        *We set the mode flag to whatever the msg was, which is handled later.
+        * Then pop out from the msg(We don't actually need it in the response)
+        */
+        mode = msg.get(2);
+        msg.remove(2);
         rowToAdd = new ArrayList<>();
         rowToAdd.addAll(msg);
 
@@ -360,8 +367,7 @@ public class Sheets extends Activity
         }
 
         /**
-         * Fetch a list of names and majors of students in a sample spreadsheet:
-         * https://docs.google.com/spreadsheets/d/1BxiMVs0XRA5nFMdKvBdBZjgmUUqptlbs74OgvE2upms/edit
+         * The juicy shit. sends to a specific spreadsheet based on test and mode
          * @return List of names and majors
          * @throws IOException
          */
@@ -369,6 +375,16 @@ public class Sheets extends Activity
             String spreadsheetId = "15e8fzzCQcYV3WxwV79g_CSyg-yeTyCrA1Z2e0uwpAiw";
             String range = "!A2:F";
 
+            switch(mode){
+                case "Tap":
+                    String leftSheetId = "";
+
+                    String rightSheetId = "";
+                    break;
+                case "Level":
+                    //not implemented yet
+                    break;
+            }
             List<List<Object>> values = new ArrayList<>();
             values.add(rowToAdd);
 
@@ -379,7 +395,7 @@ public class Sheets extends Activity
                     .append(spreadsheetId, range, valueRange)
                     .setValueInputOption("RAW")
                     .execute();
-            System.out.println("TEST" + response.getUpdates());
+
             return null;
         }
 

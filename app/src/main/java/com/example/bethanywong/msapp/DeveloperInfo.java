@@ -1,5 +1,6 @@
 package com.example.bethanywong.msapp;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -7,6 +8,10 @@ import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
 
 public class DeveloperInfo extends AppCompatActivity {
 
@@ -28,10 +33,10 @@ public class DeveloperInfo extends AppCompatActivity {
                 userId = 2;
                 break;
             case R.id.user_judy:
-                userId = 3;
+                userId = 4;
                 break;
             case R.id.user_emma:
-                userId = 4;
+                userId = 3;
                 break;
             case R.id.user_samantha:
                 userId = 5;

@@ -22,7 +22,7 @@ import java.util.ArrayList;
 import java.util.Date;
 
 public class TapTest extends AppCompatActivity {
-    CountDownTimer timer = new CountDownTimer(10000, 1000) {
+    CountDownTimer timer = new CountDownTimer(3000, 1000) {
         public void onTick(long millisUntilFinished) {
             timeTextView.setText(millisUntilFinished / 1000 + "");
         }
@@ -33,11 +33,11 @@ public class TapTest extends AppCompatActivity {
             count=0;
             round++;
 
-            if (round > 2) {
+            if (round > 3) {
                 hand = "left";
             }
 
-            if (round <= 4) {
+            if (round <= 6) {
                 setNewRound();
             } else {
                 displayResults();
@@ -60,7 +60,7 @@ public class TapTest extends AppCompatActivity {
     TextView timeTextView;
     int round;
     String hand;
-    private int[] countHistory = new int[4];
+    private int[] countHistory = new int[6];
     Animation shrink;
     boolean isCountingDown;
 
@@ -75,6 +75,10 @@ public class TapTest extends AppCompatActivity {
         shrink = AnimationUtils.loadAnimation(this, R.anim.shrink);
         isCountingDown = false;
 
+
+        //just for now to get response
+        SimpleDateFormat sdf = new SimpleDateFormat(" dd/MM/yyyy, HH:mm:ss");
+        String currentDateandTime = sdf.format(new Date());
         //send data to sheets
         SharedPreferences prefs = getSharedPreferences("PrefsFile", MODE_PRIVATE);
         int userID = prefs.getInt("user",0);
@@ -83,11 +87,17 @@ public class TapTest extends AppCompatActivity {
         }
         Intent sheets = new Intent(this, Sheets.class);
         ArrayList<String> row = new ArrayList<>();
+
         row.add("T8P" + userID);//Name
-        SimpleDateFormat sdf = new SimpleDateFormat(" dd/MM/yyyy, HH:mm:ss");
-        String currentDateandTime = sdf.format(new Date());//datetime
-        row.add(currentDateandTime);
+        row.add(currentDateandTime);//datetime
+        row.add("Tap");//mode
         row.add("1");//day??
+        row.add(String.valueOf(20));
+        row.add(String.valueOf(20));
+        row.add(String.valueOf(20));
+        row.add(String.valueOf(30));
+        row.add(String.valueOf(30));
+        row.add(String.valueOf(30));
         sheets.putStringArrayListExtra(Sheets.EXTRA_SHEETS, row);
         startActivity(sheets);
     }
@@ -107,7 +117,7 @@ public class TapTest extends AppCompatActivity {
         if (!isCountingDown){
             tap.setEnabled(false);
             tap.setColorFilter(Color.rgb(123,123,123), PorterDuff.Mode.MULTIPLY);
-            CountDownTimer warmUp = new CountDownTimer(3000,1000) {
+            CountDownTimer warmUp = new CountDownTimer(10000,1000) {
                 @Override
                 public void onTick(long millisUntilFinished) {
                     if (millisUntilFinished/1000 == 2){
@@ -160,9 +170,10 @@ public class TapTest extends AppCompatActivity {
         timeTextView.setText("TIME'S UP");
         instructions.setText("Tap the circle to restart!");
         roundView.setText("Test Completed!");
-        txtCount.setText("Right hand results: " + ((countHistory[0] + countHistory[1]) / 2) +
-                "\r\nLeft hand results: " + ((countHistory[2] + countHistory[3]) / 2));
-
+        txtCount.setText("Right hand results: " + ((countHistory[0] + countHistory[1] + countHistory[2]) / 3) +
+                "\r\nLeft hand results: " + ((countHistory[3] + countHistory[4] + countHistory[5]) / 3));
+        SimpleDateFormat sdf = new SimpleDateFormat(" dd/MM/yyyy, HH:mm:ss");
+        String currentDateandTime = sdf.format(new Date());
         //send data to sheets
         SharedPreferences prefs = getSharedPreferences("PrefsFile", MODE_PRIVATE);
         int userID = prefs.getInt("user",0);
@@ -171,15 +182,17 @@ public class TapTest extends AppCompatActivity {
         }
         Intent sheets = new Intent(this, Sheets.class);
         ArrayList<String> row = new ArrayList<>();
+
         row.add("T8P" + userID);//Name
-        SimpleDateFormat sdf = new SimpleDateFormat(" dd/MM/yyyy, HH:mm:ss");
-        String currentDateandTime = sdf.format(new Date());//datetime
-        row.add(currentDateandTime);
+        row.add(currentDateandTime);//datetime
+        row.add("Tap");//mode
         row.add("1");//day??
         row.add(String.valueOf(countHistory[0]));
         row.add(String.valueOf(countHistory[1]));
         row.add(String.valueOf(countHistory[2]));
         row.add(String.valueOf(countHistory[3]));
+        row.add(String.valueOf(countHistory[4]));
+        row.add(String.valueOf(countHistory[5]));
         sheets.putStringArrayListExtra(Sheets.EXTRA_SHEETS, row);
         startActivity(sheets);
     }
