@@ -23,24 +23,16 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/spiral_button"
-        android:layout_marginTop="23dp"
+        android:layout_marginTop="10dp"
         android:layout_below="@+id/tap_button"
-        android:layout_centerHorizontal="true" />
-    <Button
-        android:text="Level Test"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/level_button"
-        android:layout_marginTop="23dp"
-        android:layout_below="@+id/spiral_button"
         android:layout_centerHorizontal="true" />
     <Button
         android:text="Balloon Test"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/balloon_button"
-        android:layout_marginTop="23dp"
-        android:layout_below="@+id/level_button"
+        android:layout_marginTop="10dp"
+        android:layout_below="@+id/spiral_button"
         android:layout_centerHorizontal="true" />
 
     <Button
@@ -48,8 +40,17 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/level_button_new"
-        android:layout_marginTop="23dp"
+        android:layout_marginTop="10dp"
         android:layout_below="@+id/results_button"
+        android:layout_centerHorizontal="true" />
+
+    <Button
+        android:text="Curl Test"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/curl_button"
+        android:layout_marginTop="10dp"
+        android:layout_below="@+id/balloon_button"
         android:layout_centerHorizontal="true" />
 
     <Button
@@ -66,8 +67,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/results_button"
-        android:layout_marginTop="23dp"
-        android:layout_below="@+id/balloon_button"
+        android:layout_marginTop="10dp"
+        android:layout_below="@+id/curl_button"
         android:layout_alignParentStart="true" />
 
 

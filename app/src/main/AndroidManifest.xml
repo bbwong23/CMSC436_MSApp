@@ -8,7 +8,6 @@
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
-
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -50,17 +49,26 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
-
         <activity android:name=".BalloonTest">
             <intent-filter>
                 <action android:name="com.example.bethanywong.msapp.BalloonTest" />
+
                 <category android:name="android.intent.category.DEFAULT" />
-             </intent-filter>
+            </intent-filter>
         </activity>
         <activity android:name=".LevelTestNew">
             <intent-filter>
                 <action android:name="com.example.bethanywong.msapp.LevelTestNew" />
+
                 <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".CurlActivity">
+            <intent-filter>
+                <action android:name="com.example.bethanywong.msapp.CurlActivity" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <uses-permission android:name="android.permission.VIBRATE" />
             </intent-filter>
         </activity>
     </application>
