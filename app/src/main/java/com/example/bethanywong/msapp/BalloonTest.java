@@ -96,13 +96,7 @@ public class BalloonTest extends AppCompatActivity {
 
     public void complete() {
         averages[trialNumber] = totalTime / 10000000000.0;
-        NumberFormat formatter = new DecimalFormat("#0.00");
         totalTime = 0;
-
-        score.setText(formatter.format(averages[trialNumber]) + " seconds");
-
-        sd.setVisibility(View.VISIBLE);
-        score.setVisibility(View.VISIBLE);
 
         trialNumber++;
 
@@ -114,6 +108,7 @@ public class BalloonTest extends AppCompatActivity {
             t.setText("Perform the test again with your left hand!");
         } else {
             t.setText("You're done! Go back to the menu.");
+            completeAll();
 
             return;
         }
@@ -130,5 +125,15 @@ public class BalloonTest extends AppCompatActivity {
 
     public float averageTimes() {
         return 0;
+    }
+
+    public void completeAll() {
+        NumberFormat formatter = new DecimalFormat("#0.00");
+        double leftHand = (averages[0] + averages[1] + averages[2])/3;
+        double rightHand = (averages[2] + averages[3] + averages[4])/3;
+
+        score.setText("Left hand score: " + formatter.format(leftHand) +
+                " seconds \n Right hand score: " + formatter.format(rightHand) + " seconds");
+        score.setVisibility(View.VISIBLE);
     }
 }
