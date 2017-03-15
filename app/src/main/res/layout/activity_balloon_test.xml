@@ -16,7 +16,7 @@
         android:layout_height="wrap_content"
         android:id="@+id/test"
         android:textSize="14pt"/>
-
+  
     <Button
         android:text="Tap to Start"
         android:layout_width="0.75in"
@@ -48,3 +48,4 @@
 
 
 </AbsoluteLayout>
+

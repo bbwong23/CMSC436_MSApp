@@ -19,7 +19,7 @@ public class MainActivity extends AppCompatActivity {
     public void OnClickButtonListener() {
         Button test1_button = (Button)findViewById(R.id.tap_button);
         Button test2_button = (Button)findViewById(R.id.spiral_button);
-        Button test3_button = (Button)findViewById(R.id.level_button_new);
+        Button test3_button = (Button)findViewById(R.id.level_button);
         Button test4_button = (Button)findViewById(R.id.balloon_button);
         Button devinfo_button = (Button)findViewById(R.id.devinfo_button);
       
@@ -45,7 +45,7 @@ public class MainActivity extends AppCompatActivity {
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Intent intent = new Intent("com.example.bethanywong.msapp.LevelTestNew");
+                        Intent intent = new Intent("com.example.bethanywong.msapp.LevelTest");
                         startActivity(intent);
                     }
                 }
@@ -56,6 +56,15 @@ public class MainActivity extends AppCompatActivity {
                     public void onClick(View v) {
                         Intent intent = new Intent("com.example.bethanywong.msapp.BalloonTest");
 
+                        startActivity(intent);
+                    }
+                }
+        );
+        test4_button.setOnClickListener(
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent intent = new Intent("com.example.bethanywong.msapp.BalloonTest");
                         startActivity(intent);
                     }
                 }
