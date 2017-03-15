@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.os.CountDownTimer;
 import android.provider.MediaStore;
 import android.content.pm.PackageManager;
 import android.provider.MediaStore;
@@ -17,6 +18,7 @@ import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -26,6 +28,7 @@ import android.widget.Toast;
 
 import org.w3c.dom.Text;
 
+import java.util.Timer;
 import java.util.UUID;
 
 import static com.example.bethanywong.msapp.SpiralTest.HAND_KEY;
@@ -46,9 +49,12 @@ public class SpiralTestFragment extends Fragment {
     private TextView instructions;
     private View view;
     private String hand;
+    private CountDownTimer timer;
+    private long duration;
+    private boolean started;
 
     public interface OnFinishListener {
-        public void onFinish(String hand, int score);
+        public void onFinish(String hand, int score, long time);
     }
 
     @Override
@@ -60,20 +66,48 @@ public class SpiralTestFragment extends Fragment {
         drawView = (DrawingView)view.findViewById(R.id.drawing);
         original = (ImageView)view.findViewById(R.id.spiral);
         instructions = (TextView)view.findViewById(R.id.instructions);
+        started = false;
+        duration = 0;
+        timer = new CountDownTimer(10000,1000) {
+            @Override
+            public void onTick(long millisUntilFinished) {
+                instructions.setText("Timer: " + millisUntilFinished/1000);
+                duration = millisUntilFinished;
+            }
+
+            // once timer is completed, user should not be able to draw anymore
+            @Override
+            public void onFinish() {
+                instructions.setText("Times up! Please click Next.");
+                drawView.pause();
+            }
+        };
 
         // set text for appropriate hand
         hand = getArguments().getString(HAND_KEY);
         instructions.setText("Trace the spiral with your " + hand + " hand");
         button.setText("Next");
 
-
+        // starts timer when user begins drawing
+        drawView.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if(!started) {
+                    started = true;
+                    timer.start();
+                }
+                return false;
+            }
+        });
 
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 int score = computeScore();
                 saveDrawing(v);
-                callback.onFinish(hand, score);
+                drawView.setEnabled(true);
+                started = false;
+                callback.onFinish(hand, score, 10000-duration);
             }
         });
         return view;
@@ -104,26 +138,36 @@ public class SpiralTestFragment extends Fragment {
         origbit.getPixels(origpixels,0,width,1,1,width-1,height-1);
         drawbit.getPixels(drawpixels,0,width,1,1,width-1,height-1);
 
-        // Compute score
         int totalDrawn = 0;
         int totalAccurate = 0;
+        int missed = 0;
+        int totalOrig = 0;
         int score;
+
+        // calculates accuracy and penalizes for any non-traced parts of original
         for(int i = 0; i < width*height; i++) {
             if(drawpixels[i] != 0) {
                 if(origpixels[i] != 0) {
+                    totalOrig++;
                     totalAccurate++;
                 }
                 totalDrawn++;
+            } else if (origpixels[i] != 0) {
+                missed++;
+                totalOrig++;
             }
         }
 
+        // Final score: 80% = (accuracy - missed/2) && 20% = remaining time
         if (totalDrawn == 0) {
             score = 0;
         } else {
-            score = Math.round(totalAccurate*100/totalDrawn);
+            score = totalAccurate*100/totalDrawn;
+            score -= missed*50/totalOrig;
+            score =(int)(score * .8 + (duration/10000)*.2);
         }
 
-        return score;
+        return score < 0 ? 0:score;
     }
 
     public void saveDrawing(View v){

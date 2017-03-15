@@ -75,11 +75,12 @@ public class SpiralTest extends FragmentActivity implements SpiralTestFragment.O
         transaction.add(R.id.fragmentContainer, rFragment).addToBackStack(null).commit();
     }
 
-    public void onFinish(String hand, int score) {
+    public void onFinish(String hand, int score, long duration) {
         Log.i("info", "onFinish()");
         String testHand;
+        scores[trial] = score;
+        durations[trial] = duration;
         if (trial < 5){
-            scores[trial] = score;
             testHand = trial < 2 ? R_HAND:L_HAND;
             SpiralTestFragment nextTrialFragment = newInstance(testHand);
             transaction = fragmentManager.beginTransaction();
@@ -88,7 +89,6 @@ public class SpiralTest extends FragmentActivity implements SpiralTestFragment.O
             transaction.commit();
             trial++;
         } else {
-            scores[trial] = score;
             SpiralScoreFragment scoreFragment = newInstance(scores);
             transaction = fragmentManager.beginTransaction();
             transaction.replace(R.id.fragmentContainer, scoreFragment);
