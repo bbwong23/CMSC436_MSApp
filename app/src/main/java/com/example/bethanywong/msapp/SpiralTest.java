@@ -30,13 +30,15 @@ public class SpiralTest extends FragmentActivity implements SpiralTestFragment.O
     private View view;
     private DrawingView drawView;
     private ImageView original;
-    private int trials;
     private int lScore, rScore;
     private Button finishButton;
     private View screen;
     private TextView instructions;
     private FragmentManager fragmentManager;
     private FragmentTransaction transaction;
+    private int trial;
+    private int[] scores;
+    private double[] durations;
 
     public static SpiralTestFragment newInstance(String hand) {
         SpiralTestFragment fragment = new SpiralTestFragment();
@@ -60,28 +62,33 @@ public class SpiralTest extends FragmentActivity implements SpiralTestFragment.O
         setContentView(R.layout.activity_spiral_test);
         drawView = (DrawingView)findViewById(R.id.drawing);
         original = (ImageView)findViewById(R.id.spiral);
-        trials = 0;
         finishButton = (Button)findViewById(R.id.finish);
         screen = findViewById(R.id.activity_spiral_test);
         instructions = (TextView) findViewById(R.id.instructions);
         fragmentManager = getSupportFragmentManager();
         transaction = fragmentManager.beginTransaction();
         SpiralTestFragment rFragment = newInstance(R_HAND);
+        trial = 0;
+        scores = new int[6];
+        durations = new double[6];
         // place initial test in view automatically
         transaction.add(R.id.fragmentContainer, rFragment).addToBackStack(null).commit();
     }
 
     public void onFinish(String hand, int score) {
         Log.i("info", "onFinish()");
-        if (hand.equals(R_HAND)) {
-            rScore = score;
-            SpiralTestFragment lFragment = newInstance(L_HAND);
+        String testHand;
+        if (trial < 5){
+            scores[trial] = score;
+            testHand = trial < 2 ? R_HAND:L_HAND;
+            SpiralTestFragment nextTrialFragment = newInstance(testHand);
             transaction = fragmentManager.beginTransaction();
-            transaction.replace(R.id.fragmentContainer, lFragment);
+            transaction.replace(R.id.fragmentContainer, nextTrialFragment);
             transaction.addToBackStack(null);
             transaction.commit();
+            trial++;
         } else {
-            lScore = score;
+            scores[trial] = score;
             SpiralScoreFragment scoreFragment = newInstance(rScore, lScore);
             transaction = fragmentManager.beginTransaction();
             transaction.replace(R.id.fragmentContainer, scoreFragment);
