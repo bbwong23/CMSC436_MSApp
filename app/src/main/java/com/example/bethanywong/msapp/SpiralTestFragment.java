@@ -60,14 +60,12 @@ public class SpiralTestFragment extends Fragment {
         drawView = (DrawingView)view.findViewById(R.id.drawing);
         original = (ImageView)view.findViewById(R.id.spiral);
         instructions = (TextView)view.findViewById(R.id.instructions);
+
         // set text for appropriate hand
         hand = getArguments().getString(HAND_KEY);
         instructions.setText("Trace the spiral with your " + hand + " hand");
-        if (hand.equals(R_HAND)) {
-            button.setText("Next Trial");
-        } else {
-            button.setText("Finish");
-        }
+        button.setText("Next");
+
 
 
         button.setOnClickListener(new View.OnClickListener() {

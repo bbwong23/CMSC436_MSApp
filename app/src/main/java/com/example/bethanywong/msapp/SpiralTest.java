@@ -37,7 +37,7 @@ public class SpiralTest extends FragmentActivity implements SpiralTestFragment.O
     private FragmentManager fragmentManager;
     private FragmentTransaction transaction;
     private int trial;
-    private int[] scores;
+    private static int[] scores;
     private double[] durations;
 
     public static SpiralTestFragment newInstance(String hand) {
@@ -48,10 +48,10 @@ public class SpiralTest extends FragmentActivity implements SpiralTestFragment.O
         return fragment;
     }
 
-    public static SpiralScoreFragment newInstance(int rScore, int lScore) {
+    public static SpiralScoreFragment newInstance(int[] score) {
         SpiralScoreFragment fragment = new SpiralScoreFragment();
         Bundle args = new Bundle();
-        args.putIntArray(SCORE_KEY, new int[]{rScore, lScore});
+        args.putIntArray(SCORE_KEY, score);
         fragment.setArguments(args);
         return fragment;
     }
@@ -89,7 +89,7 @@ public class SpiralTest extends FragmentActivity implements SpiralTestFragment.O
             trial++;
         } else {
             scores[trial] = score;
-            SpiralScoreFragment scoreFragment = newInstance(rScore, lScore);
+            SpiralScoreFragment scoreFragment = newInstance(scores);
             transaction = fragmentManager.beginTransaction();
             transaction.replace(R.id.fragmentContainer, scoreFragment);
             transaction.addToBackStack(null);
