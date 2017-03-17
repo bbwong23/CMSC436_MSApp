@@ -4,6 +4,7 @@ import android.os.CountDownTimer;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.AbsoluteLayout;
 import android.widget.Button;
@@ -130,6 +131,9 @@ public class BalloonTest extends AppCompatActivity {
         NumberFormat formatter = new DecimalFormat("#0.00");
         double leftHand = (averages[0] + averages[1] + averages[2])/3;
         double rightHand = (averages[2] + averages[3] + averages[4])/3;
+
+        t.setVisibility(View.VISIBLE);
+        t.setText("Test Completed!");
 
         score.setText("Left hand score: " + formatter.format(leftHand) +
                 " seconds \n Right hand score: " + formatter.format(rightHand) + " seconds");
