@@ -22,6 +22,7 @@ public class MainActivity extends AppCompatActivity {
         Button test3_button = (Button)findViewById(R.id.level_button);
         Button test4_button = (Button)findViewById(R.id.balloon_button);
         Button devinfo_button = (Button)findViewById(R.id.devinfo_button);
+      
         test1_button.setOnClickListener(
                 new View.OnClickListener() {
                     @Override
@@ -45,6 +46,16 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onClick(View v) {
                         Intent intent = new Intent("com.example.bethanywong.msapp.LevelTest");
+                        startActivity(intent);
+                    }
+                }
+        );
+        test4_button.setOnClickListener(
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent intent = new Intent("com.example.bethanywong.msapp.BalloonTest");
+
                         startActivity(intent);
                     }
                 }

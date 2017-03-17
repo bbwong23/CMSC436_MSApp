@@ -76,6 +76,7 @@ public class SpiralTest extends FragmentActivity implements SpiralTestFragment.O
     }
 
     public void onFinish(String hand, int score, long duration) {
+
         Log.i("info", "onFinish()");
         String testHand;
         scores[trial] = score;
