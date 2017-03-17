@@ -8,11 +8,10 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="com.example.bethanywong.msapp.LevelTest">
-  
-    <com.example.bethanywong.msapp.LevelTestView
+    tools:context="com.example.bethanywong.msapp.LevelTestNew">
+
+    <com.example.bethanywong.msapp.LevelTestNewView
         android:id="@+id/gyroscope_view"
-        android:alpha = "0.7"
         android:layout_width="1000px"
         android:layout_height="1000px"
         android:layout_below="@+id/instructions" />
@@ -45,4 +44,5 @@
         android:layout_centerHorizontal="true"
         android:layout_below="@+id/gyroscope_view"
         android:layout_marginTop="20dp"/>
+
 </RelativeLayout>

@@ -40,7 +40,6 @@
         android:layout_height="wrap_content"
         android:id="@+id/balloon_button"
         android:layout_weight="0.05" />
-
     <Button
         android:text="View Past Results"
         android:textSize="10pt"
@@ -48,7 +47,6 @@
         android:layout_height="wrap_content"
         android:id="@+id/results_button"
         android:layout_weight="0.05" />
-
     <Button
         android:text="Developers Info"
         android:textSize="10pt"
@@ -56,6 +54,4 @@
         android:layout_height="wrap_content"
         android:id="@+id/devinfo_button"
         android:layout_weight="0.05" />
-
-
 </LinearLayout>

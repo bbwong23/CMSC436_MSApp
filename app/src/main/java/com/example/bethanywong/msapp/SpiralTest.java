@@ -70,7 +70,7 @@ public class SpiralTest extends FragmentActivity implements SpiralTestFragment.O
         // place initial test in view automatically
         transaction.add(R.id.fragmentContainer, rFragment).addToBackStack(null).commit();
     }
-
+  
     public void onFinish(String hand, int score) {
         Log.i("info", "onFinish()");
         if (hand.equals(R_HAND)) {
