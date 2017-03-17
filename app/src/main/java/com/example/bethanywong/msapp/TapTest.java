@@ -25,11 +25,29 @@ public class TapTest extends AppCompatActivity {
             count=0;
             round++;
 
-            if (round > 2) {
-                hand = "left";
+            switch (round) {
+                case 4:
+                case 5:
+                case 6:
+                    side = "left";
+                    break;
+                case 7:
+                case 8:
+                case 9:
+                    side = "right";
+                    body = "big toe";
+                    break;
+                case 10:
+                case 11:
+                case 12:
+                    side = "left";
+                    break;
+                default:
+                    break;
+
             }
 
-            if (round <= 4) {
+            if (round <= 12) {
                 setNewRound();
             } else {
                 displayResults();
@@ -51,8 +69,9 @@ public class TapTest extends AppCompatActivity {
     TextView roundView;
     TextView timeTextView;
     int round;
-    String hand;
-    private int[] countHistory = new int[4];
+    String side;
+    String body;
+    private int[] countHistory = new int[12];
     Animation shrink;
     boolean isCountingDown;
 
@@ -63,7 +82,8 @@ public class TapTest extends AppCompatActivity {
         timeTextView = (TextView) findViewById(R.id.timeTextView);
         roundView = (TextView) findViewById(R.id.roundNumber);
         round = 1;
-        hand = "right";
+        side = "right";
+        body = "index finger";
         shrink = AnimationUtils.loadAnimation(this, R.anim.shrink);
         isCountingDown = false;
     }
@@ -105,7 +125,7 @@ public class TapTest extends AppCompatActivity {
         }
         isCountingDown = true;
         count = 0;
-        instructions.setText("Keep your hand in place!");
+        instructions.setText("Keep your " + body + " in place!");
     }
     public void coolDown(){
         tap.setEnabled(false);
@@ -125,18 +145,19 @@ public class TapTest extends AppCompatActivity {
         coolDown();
         timeTextView.setText("TIME'S UP");
         txtCount.setText("Tap to begin!");
-        instructions.setText("Place " + hand + " hand on phone with index finger on the green circle!");
+        instructions.setText("Tap the green circle as many times as you can with your " + side + " " + body);
         roundView.setText("Round " + round);
     }
 
     public void displayResults() {
         coolDown();
-        hand = "right";
-        round = 1;
-        timeTextView.setText("TIME'S UP");
-        instructions.setText("Tap the circle to restart!");
+        timeTextView.setVisibility(View.GONE);
+        instructions.setVisibility(View.GONE);
+        tap.setVisibility(View.GONE);
         roundView.setText("Test Completed!");
-        txtCount.setText("Right hand results: " + ((countHistory[0] + countHistory[1]) / 2) +
-                "\r\nLeft hand results: " + ((countHistory[2] + countHistory[3]) / 2));
+        txtCount.setText("Right hand results: " + ((countHistory[0] + countHistory[1]+ countHistory[2]) / 3) +
+                "\r\nLeft hand results: " + ((countHistory[3] + countHistory[4] + countHistory[5]) / 3) +
+                "\r\nRight Foot results: " + ((countHistory[6] + countHistory[7] + countHistory[8]) / 3) +
+                "\r\nLeft Foot results: " + ((countHistory[9] + countHistory[10] + countHistory[11]) / 3));
     }
 }
