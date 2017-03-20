@@ -26,19 +26,13 @@ public class TapTest extends AppCompatActivity {
             round++;
 
             switch (round) {
-                case 4:
-                case 5:
                 case 6:
                     side = "left";
                     break;
-                case 7:
-                case 8:
                 case 9:
                     side = "right";
                     body = "big toe";
                     break;
-                case 10:
-                case 11:
                 case 12:
                     side = "left";
                     break;
