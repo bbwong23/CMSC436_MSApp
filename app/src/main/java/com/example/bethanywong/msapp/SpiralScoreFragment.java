@@ -31,7 +31,9 @@ public class SpiralScoreFragment extends Fragment {
         button = (Button)view.findViewById(R.id.homeButton);
         scores = (TextView)view.findViewById(R.id.finalScore);
         int[] allScores = getArguments().getIntArray(SCORE_KEY);
-        scores.setText("Right Hand Score: " + allScores[0] + "\nLeft Hand Score: " + allScores[1]);
+        int rHandScore = (allScores[0] + allScores[1] + allScores[2]) / 3;
+        int lHandScore = (allScores[3] + allScores[4] + allScores[5]) / 3;
+        scores.setText("Right Hand Score: " + rHandScore + "\nLeft Hand Score: " + lHandScore);
         button.setOnClickListener(
             new View.OnClickListener() {
                 @Override
