@@ -40,11 +40,11 @@
         android:text=""
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_y="370dp"
+        android:layout_y="110dp"
         android:id="@+id/score"
-        android:textSize="16dp"
-        android:visibility="gone"
-        android:textAlignment="center"/>
+        android:textSize="18dp"
+        android:layout_x="0dp"
+        android:visibility="gone"/>
 
 
 </AbsoluteLayout>

@@ -38,7 +38,7 @@ public class BalloonTest extends AppCompatActivity {
         t = (TextView) findViewById(R.id.test);
         sd = (TextView) findViewById(R.id.scoreDescribe);
         score = (TextView) findViewById(R.id.score);
-        averages = new double[6];
+        averages = new double[2];
         startTime = null;
     }
 
@@ -97,15 +97,9 @@ public class BalloonTest extends AppCompatActivity {
     public void complete() {
         averages[trialNumber] = totalTime / 10000000000.0;
         totalTime = 0;
-
         trialNumber++;
-
-        if (trialNumber < 3) {
-            t.setText("Perform the test again with your right hand!");
-        } else if (trialNumber == 3) {
+        if (trialNumber == 1) {
             t.setText("Now use your left hand!");
-        } else if (trialNumber < 6) {
-            t.setText("Perform the test again with your left hand!");
         } else {
             t.setText("You're done! Go back to the menu.");
             completeAll();
@@ -129,21 +123,13 @@ public class BalloonTest extends AppCompatActivity {
 
     public void completeAll() {
         NumberFormat formatter = new DecimalFormat("#0.00");
-        double rightHand = (averages[0] + averages[1] + averages[2])/3;
-        double leftHand = (averages[3] + averages[4] + averages[5])/3;
 
         t.setVisibility(View.VISIBLE);
         t.setText("Test Completed!");
 
-        score.setText("Right Hand Score: " + rightHand  + "\nLeft Hand Score: " + leftHand
-                + "\r\n" + "Right Trials: " + "\r\n" + "R1: " + averages[0]
-                + "\r\n" + "R2: " + averages[1]
-                + "\r\n" + "R3: " + averages[2]
-                + "\r\n" + "Left Trials: " + "\r\n" + "L1: " + averages[3]
-                + "\r\n" + "L2: " + averages[4]
-                + "\r\n" + "L3: " + averages[5]);
-//        score.setText("Left hand score: " + formatter.format(leftHand) +
-//                " seconds \n Right hand score: " + formatter.format(rightHand) + " seconds");
+        score.setText("Right Hand Score: " + formatter.format(averages[0] + "seconds")
+                + "\nLeft Hand Score: " + formatter.format(averages[1]) + "seconds");
+
         score.setVisibility(View.VISIBLE);
     }
 }
