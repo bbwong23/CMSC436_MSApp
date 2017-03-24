@@ -33,7 +33,13 @@ public class SpiralScoreFragment extends Fragment {
         int[] allScores = getArguments().getIntArray(SCORE_KEY);
         int rHandScore = (allScores[0] + allScores[1] + allScores[2]) / 3;
         int lHandScore = (allScores[3] + allScores[4] + allScores[5]) / 3;
-        scores.setText("Right Hand Score: " + rHandScore + "\nLeft Hand Score: " + lHandScore);
+        scores.setText("Right Hand Score: " + rHandScore + "\nLeft Hand Score: " + lHandScore
+                + "\r\n" + "Right Trials: " + "\r\n" + "R1: " + allScores[0]
+                + "\r\n" + "R2: " + allScores[1]
+                + "\r\n" + "R3: " + allScores[2]
+                + "\r\n" + "Left Trials: " + "\r\n" + "L1: " + allScores[3]
+                + "\r\n" + "L2: " + allScores[4]
+                + "\r\n" + "L3: " + allScores[5]);
         button.setOnClickListener(
             new View.OnClickListener() {
                 @Override

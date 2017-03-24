@@ -134,7 +134,13 @@ public class LevelTest extends Activity{
         instructions.setText("Test Completed!");
         int rScore = (results[0] + results[1] + results[2]) / 3;
         int lScore = (results[3] + results[4] + results[5]) / 3;
-        timeTextView.setText("Right Hand Score: " + rScore + "\r\n" + "Left Hand Score: " + lScore);
+        timeTextView.setText("Right Hand Score: " + rScore + "\r\n" + "Left Hand Score: " + lScore
+                + "\r\n" + "Right Trials: " + "\r\n" + "R1: " + results[0]
+                + "\r\n" + "R2: " + results[1]
+                + "\r\n" + "R3: " + results[2]
+                + "\r\n" + "Left Trials: " + "\r\n" + "L1: " + results[3]
+                + "\r\n" + "L2: " + results[4]
+                + "\r\n" + "L3: " + results[5]);
     }
 
     private final SensorEventListener sensorGyroListener = new SensorEventListener() {

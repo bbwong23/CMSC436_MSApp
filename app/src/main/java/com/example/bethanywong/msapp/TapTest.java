@@ -149,9 +149,14 @@ public class TapTest extends AppCompatActivity {
         instructions.setVisibility(View.GONE);
         tap.setVisibility(View.GONE);
         roundView.setText("Test Completed!");
-        txtCount.setText("Right hand results: " + ((countHistory[0] + countHistory[1]+ countHistory[2]) / 3) +
-                "\r\nLeft hand results: " + ((countHistory[3] + countHistory[4] + countHistory[5]) / 3) +
-                "\r\nRight Foot results: " + ((countHistory[6] + countHistory[7] + countHistory[8]) / 3) +
-                "\r\nLeft Foot results: " + ((countHistory[9] + countHistory[10] + countHistory[11]) / 3));
+
+        txtCount.setText("Right hand results: " + countHistory[0] + " || " + countHistory[1]+ " || " + countHistory[2] +
+                "\r\nLeft hand results: " + countHistory[3] + " || " + countHistory[4]+ " || " + countHistory[5] +
+                "\r\nRight Foot results: " + countHistory[6] + " || " + countHistory[7]+ " || " + countHistory[8] +
+                "\r\nLeft Foot results: " + countHistory[9] + " || " + countHistory[10]+ " || " + countHistory[11]);
+//        txtCount.setText("Right hand results: " + ((countHistory[0] + countHistory[1]+ countHistory[2]) / 3) +
+//                "\r\nLeft hand results: " + ((countHistory[3] + countHistory[4] + countHistory[5]) / 3) +
+//                "\r\nRight Foot results: " + ((countHistory[6] + countHistory[7] + countHistory[8]) / 3) +
+//                "\r\nLeft Foot results: " + ((countHistory[9] + countHistory[10] + countHistory[11]) / 3));
     }
 }
