@@ -17,6 +17,7 @@ import android.os.CountDownTimer;
 import android.provider.MediaStore;
 import android.support.v4.app.ActivityCompat;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -27,8 +28,10 @@ public class LevelTest extends Activity{
     LevelTestView gyroscopeView;
     SensorManager sensorManager;
     TextView timeTextView;
+    Button start;
     boolean isCountingDown;
-    private String[] results = new String[2];
+    private String hand;
+    private int[] results = new int[6];
     int round;
 
     private static final int PERMISSION_REQUEST_CODE = 1;
@@ -44,17 +47,18 @@ public class LevelTest extends Activity{
 
         public void onFinish() {
             isCountingDown = false;
-            round++;
             saveDrawing();
-
-            if (round == 1) {
-                results[0] = "Right hand result: " + computeResult();
-                instructions.setText("Hold your phone level to the ground in your left hand and press start.");
-                timeTextView.setText("Time's up!");
+            results[round] = computeResult();
+            round++;
+            start.setVisibility(View.VISIBLE);
+            if (round == 3) {
+                hand = "left";
             }
+            instructions.setText("Hold your phone level to the ground in your " + hand + " hand and press start.");
+            timeTextView.setText("Time's up!");
 
-            else {
-                results[1] = "Left hand result: " + computeResult();
+            if (round == 6) {
+                start.setVisibility(View.INVISIBLE);
                 displayResults();
             }
 
@@ -98,7 +102,10 @@ public class LevelTest extends Activity{
         timeTextView = (TextView) findViewById(R.id.timeTextView);
         instructions = (TextView) findViewById(R.id.instructions);
         gyroscopeView = (LevelTestView) findViewById(R.id.gyroscope_view);
+        start = (Button) findViewById(R.id.save);
         initSensor();
+        hand = "right";
+        round = 0;
     }
 
     void initSensor() {
@@ -125,7 +132,9 @@ public class LevelTest extends Activity{
 
     public void displayResults() {
         instructions.setText("Test Completed!");
-        timeTextView.setText(results[0] + "\r\n" + results[1]);
+        int rScore = (results[0] + results[1] + results[2]) / 3;
+        int lScore = (results[3] + results[4] + results[5]) / 3;
+        timeTextView.setText("Right Hand Score: " + rScore + "\r\n" + "Left Hand Score: " + lScore);
     }
 
     private final SensorEventListener sensorGyroListener = new SensorEventListener() {
@@ -159,6 +168,7 @@ public class LevelTest extends Activity{
             };
             timeTextView.setText("10");
             gyroscopeView.startTrace();
+            start.setVisibility(View.INVISIBLE);
             warmUp.start();
         }
         isCountingDown = true;

@@ -60,15 +60,6 @@ public class MainActivity extends AppCompatActivity {
                     }
                 }
         );
-        test4_button.setOnClickListener(
-                new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Intent intent = new Intent("com.example.bethanywong.msapp.BalloonTest");
-                        startActivity(intent);
-                    }
-                }
-        );
         devinfo_button.setOnClickListener(
                 new View.OnClickListener() {
                     @Override
