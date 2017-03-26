@@ -1,6 +1,9 @@
 package com.example.bethanywong.msapp;
 
 import android.graphics.PorterDuff;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.os.CountDownTimer;
@@ -13,49 +16,14 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.graphics.Color;
 
-public class TapTest extends AppCompatActivity {
-    CountDownTimer timer = new CountDownTimer(10000, 1000) {
-        public void onTick(long millisUntilFinished) {
-            timeTextView.setText(millisUntilFinished / 1000 + "");
-        }
+public class TapTest extends FragmentActivity implements TapTestInstructionFragment.StartTestListener, TapTestFragment.OnTapTestFinishListener {
 
-        public void onFinish() {
-            isCountingDown = false;
-            countHistory[round-1] = count;
-            count=0;
-            round++;
-
-            switch (round) {
-                case 4:
-                    side = "left";
-                    break;
-                case 7:
-                    side = "right";
-                    body = "big toe";
-                    break;
-                case 10:
-                    side = "left";
-                    break;
-                default:
-                    break;
-
-            }
-
-            if (round <= 12) {
-                setNewRound();
-            } else {
-                displayResults();
-            }
-
-            tap.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    runTimer(v);
-                }
-            });
-        }
-    };
-
+    public static final String ROUND_NUMBER_KEY = "ROUND_NUMBER_KEY";
+    public static final String BODY_PART_KEY = "BODY_PART_KEY";
+    public static final String[] TRIAL_ORDER = {"right index finger", "left index finger", "right index finger",
+            "left index finger", "right index finger", "left index finger", "right big toe", "left big toe",
+            "right big toe", "left big toe", "right big toe", "left big toe"};
+    private int roundNumber = 0;
     private int count;
     ImageView tap;
     TextView txtCount;
@@ -68,6 +36,17 @@ public class TapTest extends AppCompatActivity {
     private int[] countHistory = new int[12];
     Animation shrink;
     boolean isCountingDown;
+    private FragmentManager fragmentManager;
+    private FragmentTransaction transaction;
+
+    public static TapTestFragment newInstance(String bodyPart, int roundNumber) {
+        TapTestFragment fragment = new TapTestFragment();
+        Bundle args = new Bundle();
+        args.putString(BODY_PART_KEY, bodyPart);
+        args.putInt(ROUND_NUMBER_KEY, roundNumber);
+        fragment.setArguments(args);
+        return fragment;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,47 +59,14 @@ public class TapTest extends AppCompatActivity {
         body = "index finger";
         shrink = AnimationUtils.loadAnimation(this, R.anim.shrink);
         isCountingDown = false;
+        fragmentManager = getSupportFragmentManager();
+        transaction = fragmentManager.beginTransaction();
+        TapTestInstructionFragment fragment = new TapTestInstructionFragment();
+
+        // place instructions in view automatically
+        transaction.add(R.id.fragmentContainer, fragment).addToBackStack(null).commit();
     }
 
-    public void runTimer(View view) {
-        tap = (ImageView)findViewById(R.id.tapCount);
-        instructions = (TextView) findViewById(R.id.instructions);
-        txtCount = (TextView) findViewById(R.id.tapBegin);
-        tap.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                count++;
-                //Log.d("runTimer",String.valueOf(count));
-                v.startAnimation(shrink);
-            }
-        });
-        if (!isCountingDown){
-            tap.setEnabled(false);
-            tap.setColorFilter(Color.rgb(123,123,123), PorterDuff.Mode.MULTIPLY);
-            CountDownTimer warmUp = new CountDownTimer(3000,1000) {
-                @Override
-                public void onTick(long millisUntilFinished) {
-                    if (millisUntilFinished/1000 == 2){
-                        txtCount.setText("Ready!");
-                    } else if (millisUntilFinished/1000 == 1){
-                        txtCount.setText("Set!");
-                    }
-                }
-                @Override
-                public void onFinish() {
-                    tap.clearColorFilter();
-                    txtCount.setText("Tap!");
-                    tap.setEnabled(true);
-                    timer.start();
-                }
-            };
-            timeTextView.setText("10");
-            warmUp.start();
-        }
-        isCountingDown = true;
-        count = 0;
-        instructions.setText("Keep your " + body + " in place!");
-    }
     public void coolDown(){
         tap.setEnabled(false);
         CountDownTimer coolDown = new CountDownTimer(2000,1000) {
@@ -158,5 +104,18 @@ public class TapTest extends AppCompatActivity {
 //                "\r\nLeft hand results: " + ((countHistory[3] + countHistory[4] + countHistory[5]) / 3) +
 //                "\r\nRight Foot results: " + ((countHistory[6] + countHistory[7] + countHistory[8]) / 3) +
 //                "\r\nLeft Foot results: " + ((countHistory[9] + countHistory[10] + countHistory[11]) / 3));
+    }
+
+    public void startTest() {
+        TapTestFragment fragment = newInstance(TRIAL_ORDER[roundNumber], roundNumber+1);
+        roundNumber++;
+        transaction = fragmentManager.beginTransaction();
+        transaction.replace(R.id.fragmentContainer, fragment);
+        transaction.addToBackStack(null);
+        transaction.commit();
+    }
+
+    public void goToNext() {
+        // set up for next trial
     }
 }

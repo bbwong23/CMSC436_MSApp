@@ -8,57 +8,12 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="com.example.bethanywong.msapp.test">
+    tools:context="com.example.bethanywong.msapp.TapTest">
 
-    <ImageView
-        android:layout_width="200dp"
-        android:layout_height="200dp"
-        android:src="@drawable/ic_green_button"
-        android:text="Tap"
-        android:id = "@+id/tapCount"
-        android:onClick="runTimer"
-        android:layout_centerVertical="true"
-        android:layout_centerHorizontal="true"
-        android:layout_below="@+id/instructions"/>
-
-    <TextView
-        android:text="Tap to begin!"
+    <FrameLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/tapBegin"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="50px"
-        android:textSize="12pt"
-        android:layout_below="@id/tapCount"/>
-
-    <TextView
-        android:text="Round 1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/roundNumber"
-        android:layout_centerHorizontal="true"
-        android:textSize="12pt"
-        android:layout_alignParentTop="true"/>
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Place right hand on phone with index finger on the green circle!"
-        android:textSize="16pt"
-        android:textAlignment="center"
-        android:id="@+id/instructions"
-        android:layout_below="@id/roundNumber"/>
-
-
-    <TextView
-        android:id="@+id/timeTextView"
-        android:text="10"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/textView6"
-        android:layout_centerHorizontal="true"
-        android:layout_alignParentBottom="true"
-        android:layout_marginTop="20dp"/>
+        android:id="@+id/fragmentContainer" />
 
 </RelativeLayout>
 

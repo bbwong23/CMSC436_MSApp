@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_test"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    tools:context="com.example.bethanywong.msapp.TapTestInstructionFragment">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Instructions: "
+        android:textSize="30dp"
+        android:id="@+id/titleText"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/titleText"
+        android:layout_marginTop="15dp"
+        android:text="Tap the green circle to begin the test. When the test begins, tap the green circle as many times as you can with the specified body part. Each trial will run for 10 seconds. The total test is composed of 12 trials - 3 trials each using your right hand, left hand, right foot, and left foot. Your score will be shown at the end of the test as the average of your trials for each of the specified body parts."
+        android:textSize="22dp"
+        android:id="@+id/instructionText"/>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/instructionText"
+        android:layout_marginTop="10dp"
+        android:text="Start Test"
+        android:textSize="22dp"
+        android:layout_centerHorizontal="true"
+        android:id="@+id/startButton"/>
+</RelativeLayout>
