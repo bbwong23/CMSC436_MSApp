@@ -3,20 +3,14 @@ package com.example.bethanywong.msapp;
 import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.os.CountDownTimer;
 import android.provider.MediaStore;
-import android.content.pm.PackageManager;
-import android.provider.MediaStore;
-import android.support.v4.app.ActivityCompat;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -26,18 +20,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import org.w3c.dom.Text;
-
-import java.util.Timer;
 import java.util.UUID;
 
-import static com.example.bethanywong.msapp.SpiralTest.HAND_KEY;
-import static com.example.bethanywong.msapp.SpiralTest.R_HAND;
-
-
-/**
- * Created by Samantha on 3/11/17.
- */
+import static com.example.bethanywong.msapp.SpiralTest.ROUND_KEY;
+import static com.example.bethanywong.msapp.SpiralTest.TRIAL_ORDER;
 
 public class SpiralTestFragment extends Fragment {
     private OnFinishListener callback;
@@ -48,13 +34,21 @@ public class SpiralTestFragment extends Fragment {
     private ImageView original;
     private TextView instructions;
     private View view;
-    private String hand;
     private CountDownTimer timer;
+    private int roundNumber;
     private long duration;
     private boolean started;
 
     public interface OnFinishListener {
-        public void onFinish(String hand, int score, long time);
+        public void onFinish(int score, long time);
+    }
+
+    public static SpiralTestFragment newInstance(int roundNumber) {
+        SpiralTestFragment fragment = new SpiralTestFragment();
+        Bundle args = new Bundle();
+        args.putInt(ROUND_KEY, roundNumber);
+        fragment.setArguments(args);
+        return fragment;
     }
 
     @Override
@@ -83,11 +77,6 @@ public class SpiralTestFragment extends Fragment {
             }
         };
 
-        // set text for appropriate hand
-        hand = getArguments().getString(HAND_KEY);
-        instructions.setText("Trace the spiral with your " + hand + " hand");
-        button.setText("Next");
-
         // starts timer when user begins drawing
         drawView.setOnTouchListener(new View.OnTouchListener() {
             @Override
@@ -107,9 +96,16 @@ public class SpiralTestFragment extends Fragment {
                 saveDrawing(v);
                 drawView.setEnabled(true);
                 started = false;
-                callback.onFinish(hand, score, 10000-duration);
+                callback.onFinish(score, 10000-duration);
             }
         });
+
+        // set text for appropriate hand
+        roundNumber = getArguments().getInt(ROUND_KEY);
+        String hand = TRIAL_ORDER[roundNumber];
+        instructions.setText("Trace the spiral with your " + hand);
+        button.setText("Next");
+
         return view;
     }
 
@@ -122,6 +118,7 @@ public class SpiralTestFragment extends Fragment {
             e.printStackTrace();
         }
     }
+
     public int computeScore() {
 
         // convert original ImageView into a Bitmap
