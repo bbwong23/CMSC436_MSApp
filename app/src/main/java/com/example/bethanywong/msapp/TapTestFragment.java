@@ -4,10 +4,9 @@ import android.content.Context;
 import android.graphics.Color;
 import android.os.CountDownTimer;
 import android.graphics.PorterDuff;
-import android.net.Uri;
 import android.os.Bundle;
-import android.os.CountDownTimer;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,8 +15,8 @@ import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import static com.example.bethanywong.msapp.TapTest.BODY_PART_KEY;
 import static com.example.bethanywong.msapp.TapTest.ROUND_NUMBER_KEY;
+import static com.example.bethanywong.msapp.TapTest.TRIAL_ORDER;
 
 public class TapTestFragment extends Fragment {
     private OnTapTestFinishListener callback;
@@ -31,9 +30,18 @@ public class TapTestFragment extends Fragment {
     private TextView roundNumberView;
     private String bodyPart;
     private int count;
+    private int roundNumber;
 
     public interface OnTapTestFinishListener {
         public void goToNext(int trialResult);
+    }
+
+    public static TapTestFragment newInstance(int roundNumber) {
+        TapTestFragment fragment = new TapTestFragment();
+        Bundle args = new Bundle();
+        args.putInt(ROUND_NUMBER_KEY, roundNumber);
+        fragment.setArguments(args);
+        return fragment;
     }
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -46,16 +54,16 @@ public class TapTestFragment extends Fragment {
         tapButton = (ImageView)view.findViewById(R.id.tapButton);
         instructions = (TextView)view.findViewById(R.id.instructions);
         subtext = (TextView)view.findViewById(R.id.subtext);
-        bodyPart = getArguments().getString(BODY_PART_KEY);
         roundNumberView = (TextView)view.findViewById(R.id.roundNumber);
+        roundNumber = getArguments().getInt(ROUND_NUMBER_KEY);
+        bodyPart = TRIAL_ORDER[roundNumber];
 
         // Set proper round number and body part instruction
-        int roundNumber = getArguments().getInt(ROUND_NUMBER_KEY);
-        roundNumberView.setText("Round " + roundNumber);
+        roundNumberView.setText("Round " + (roundNumber+1));
         instructions.setText("Trial: " + bodyPart);
 
-        timer = new CountDownTimer(10000, 1000) {
-        //timer = new CountDownTimer(1000, 1000) {
+         timer = new CountDownTimer(10000, 1000) {
+//        timer = new CountDownTimer(1000, 1000) {
             public void onTick(long millisUntilFinished) {
                 timeTextView.setText(millisUntilFinished / 1000 + "");
             }
@@ -116,6 +124,13 @@ public class TapTestFragment extends Fragment {
         tapButton.setColorFilter(Color.rgb(123,123,123), PorterDuff.Mode.MULTIPLY);
         timeTextView.setText("10");
         warmUpTimer.start();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        warmUpTimer.cancel();
+        timer.cancel();
     }
 
 }

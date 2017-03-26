@@ -5,6 +5,9 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.os.Bundle;
 
+import static com.example.bethanywong.msapp.TapScoreFragment.newInstance;
+import static com.example.bethanywong.msapp.TapTestFragment.newInstance;
+
 public class TapTest extends FragmentActivity implements TapTestInstructionFragment.StartTestListener,
         TapTestFragment.OnTapTestFinishListener, TapScoreFragment.FinishTapTestListener {
 
@@ -21,26 +24,10 @@ public class TapTest extends FragmentActivity implements TapTestInstructionFragm
     public static final int[] LEFT_FOOT_TRIALS = {7, 9, 11};
     private int[] allResults = new int[TRIAL_ORDER.length];
     // *************************** END ***************************************
-    private int roundNumber = 0;
+    private int roundNumber;
     private FragmentManager fragmentManager;
     private FragmentTransaction transaction;
-
-    public static TapTestFragment newInstance(String bodyPart, int roundNumber) {
-        TapTestFragment fragment = new TapTestFragment();
-        Bundle args = new Bundle();
-        args.putString(BODY_PART_KEY, bodyPart);
-        args.putInt(ROUND_NUMBER_KEY, roundNumber);
-        fragment.setArguments(args);
-        return fragment;
-    }
-
-    public static TapScoreFragment newInstance(int[] results) {
-        TapScoreFragment fragment = new TapScoreFragment();
-        Bundle args = new Bundle();
-        args.putIntArray(RESULTS_KEY, results);
-        fragment.setArguments(args);
-        return fragment;
-    }
+    private boolean hasBeenResumed;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,6 +35,8 @@ public class TapTest extends FragmentActivity implements TapTestInstructionFragm
         setContentView(R.layout.activity_test);
         fragmentManager = getSupportFragmentManager();
         transaction = fragmentManager.beginTransaction();
+        roundNumber = -1;
+        hasBeenResumed = false;
         TapTestInstructionFragment fragment = new TapTestInstructionFragment();
 
         // place instructions in view automatically
@@ -59,8 +48,22 @@ public class TapTest extends FragmentActivity implements TapTestInstructionFragm
         // disable back button
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        // reset trial
+        if (roundNumber >= 0 && roundNumber < TRIAL_ORDER.length-1 && hasBeenResumed) {
+            TapTestFragment fragment = newInstance(roundNumber);
+            transaction = fragmentManager.beginTransaction();
+            transaction.replace(R.id.fragmentContainer, fragment);
+            transaction.addToBackStack(null);
+            transaction.commit();
+        }
+        hasBeenResumed = true;
+    }
+
     public void startTest() {
-        TapTestFragment fragment = newInstance(TRIAL_ORDER[roundNumber], roundNumber+1);
+        TapTestFragment fragment = newInstance(++roundNumber);
         transaction = fragmentManager.beginTransaction();
         transaction.replace(R.id.fragmentContainer, fragment);
         transaction.addToBackStack(null);
@@ -68,10 +71,11 @@ public class TapTest extends FragmentActivity implements TapTestInstructionFragm
     }
 
     public void goToNext(int trialResult) {
-        allResults[roundNumber] = trialResult;
-        // set up for next trial
-        roundNumber++;
-        if (roundNumber < TRIAL_ORDER.length) {
+        if (roundNumber >= 0 && roundNumber < TRIAL_ORDER.length) {
+            allResults[roundNumber] = trialResult;
+        }
+
+        if (roundNumber < TRIAL_ORDER.length-1) {
             startTest();
         } else {
             // trials are complete - display score fragment

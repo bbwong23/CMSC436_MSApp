@@ -26,6 +26,14 @@ public class TapScoreFragment extends Fragment {
         public void goHome();
     }
 
+    public static TapScoreFragment newInstance(int[] results) {
+        TapScoreFragment fragment = new TapScoreFragment();
+        Bundle args = new Bundle();
+        args.putIntArray(RESULTS_KEY, results);
+        fragment.setArguments(args);
+        return fragment;
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {

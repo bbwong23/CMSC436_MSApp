@@ -8,8 +8,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
-import static android.R.attr.button;
-
 
 public class TapTestInstructionFragment extends Fragment {
     private Button startButton;
