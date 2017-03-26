@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_spiral_test"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    android:screenOrientation="portrait"
+    tools:context="com.example.bethanywong.msapp.LevelTestInstructionFragment"
+    android:background="@color/white">
+
+    <!--<com.example.bethanywong.msapp.LevelTestView-->
+        <!--android:id="@+id/gyroscope_view"-->
+        <!--android:alpha = "0.7"-->
+        <!--android:layout_width="1000px"-->
+        <!--android:layout_height="1000px"-->
+        <!--android:layout_below="@+id/instructions" />-->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/title"
+        android:text="Quick Instructions:"
+        android:textSize="26dp"/>
+
+    <TextView
+        android:text="\tAfter you start the test press the start button to begin each trial. Hold your phone parallel to the ground with the specified hand and try to keep the phone level."
+        android:textSize="20dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/instructionText"
+        android:layout_marginTop="10dp"
+        android:layout_below="@+id/title"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/instructionText"
+        android:textSize="26dp"
+        android:layout_marginTop="15dp"
+        android:text="More About the Test:"
+        android:id="@+id/title2"/>
+    
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/aboutText"
+        android:textSize="20dp"
+        android:layout_below="@+id/title2"
+        android:layout_marginTop="10dp"
+        android:text="\tThe test consists of 6 trials - 3 on your right hand, and 3 on your left hand. Each trial will run for 10 seconds. Your average score and scores for each trial will be displayed at the end of the test."/>
+
+    <Button
+        android:text="Begin Test"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/aboutText"
+        android:layout_centerHorizontal="true"
+        android:id="@+id/startButton"
+        android:layout_marginTop="15dp"
+        android:textSize="20dp"/>
+
+</RelativeLayout>
