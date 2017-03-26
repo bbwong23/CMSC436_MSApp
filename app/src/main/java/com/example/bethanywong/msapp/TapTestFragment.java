@@ -13,16 +13,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import static com.example.bethanywong.msapp.R.id.instructions;
-import static com.example.bethanywong.msapp.R.id.timeTextView;
-import static com.example.bethanywong.msapp.SpiralTest.HAND_KEY;
 import static com.example.bethanywong.msapp.TapTest.BODY_PART_KEY;
 import static com.example.bethanywong.msapp.TapTest.ROUND_NUMBER_KEY;
-
 
 public class TapTestFragment extends Fragment {
     private OnTapTestFinishListener callback;
