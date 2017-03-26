@@ -35,6 +35,7 @@ public class SpiralTestFragment extends Fragment {
     private TextView instructions;
     private View view;
     private CountDownTimer timer;
+    private TextView roundText;
     private int roundNumber;
     private long duration;
     private boolean started;
@@ -60,6 +61,7 @@ public class SpiralTestFragment extends Fragment {
         drawView = (DrawingView)view.findViewById(R.id.drawing);
         original = (ImageView)view.findViewById(R.id.spiral);
         instructions = (TextView)view.findViewById(R.id.instructions);
+        roundText = (TextView)view.findViewById(R.id.roundText);
         started = false;
         duration = 0;
         timer = new CountDownTimer(10000,1000) {
@@ -72,7 +74,7 @@ public class SpiralTestFragment extends Fragment {
             // once timer is completed, user should not be able to draw anymore
             @Override
             public void onFinish() {
-                instructions.setText("Times up! Please click Next.");
+                instructions.setText("Time's up! Please click Next.");
                 drawView.pause();
             }
         };
@@ -105,6 +107,7 @@ public class SpiralTestFragment extends Fragment {
         String hand = TRIAL_ORDER[roundNumber];
         instructions.setText("Trace the spiral with your " + hand);
         button.setText("Next");
+        roundText.setText("Round " + (roundNumber+1) + ":");
 
         return view;
     }
@@ -118,6 +121,7 @@ public class SpiralTestFragment extends Fragment {
             e.printStackTrace();
         }
     }
+
 
     public int computeScore() {
 
@@ -198,5 +202,4 @@ public class SpiralTestFragment extends Fragment {
         return bitmap;
     }
 
-
-    }
+}
