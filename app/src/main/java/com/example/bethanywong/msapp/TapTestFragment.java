@@ -54,8 +54,8 @@ public class TapTestFragment extends Fragment {
         roundNumberView.setText("Round " + roundNumber);
         instructions.setText("Trial: " + bodyPart);
 
-        //timer = new CountDownTimer(10000, 1000) {
-        timer = new CountDownTimer(1000, 1000) {
+        timer = new CountDownTimer(10000, 1000) {
+        //timer = new CountDownTimer(1000, 1000) {
             public void onTick(long millisUntilFinished) {
                 timeTextView.setText(millisUntilFinished / 1000 + "");
             }
