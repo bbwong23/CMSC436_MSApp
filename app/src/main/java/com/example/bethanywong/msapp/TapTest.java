@@ -54,6 +54,11 @@ public class TapTest extends FragmentActivity implements TapTestInstructionFragm
         transaction.add(R.id.fragmentContainer, fragment).addToBackStack(null).commit();
     }
 
+    @Override
+    public void onBackPressed(){
+        // disable back button
+    }
+
     public void startTest() {
         TapTestFragment fragment = newInstance(TRIAL_ORDER[roundNumber], roundNumber+1);
         transaction = fragmentManager.beginTransaction();
