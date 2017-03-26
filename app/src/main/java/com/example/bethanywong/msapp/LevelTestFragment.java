@@ -148,4 +148,11 @@ public class LevelTestFragment extends Fragment {
         }
     }
 
+    @Override
+    public void onPause() {
+        super.onPause();
+        timer.cancel();
+        warmUpTimer.cancel();
+    }
+
 }

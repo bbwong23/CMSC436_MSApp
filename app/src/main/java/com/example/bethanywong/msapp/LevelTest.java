@@ -29,6 +29,7 @@ public class LevelTest extends FragmentActivity implements LevelTestInstructionF
     private int roundNumber;
     private FragmentManager fragmentManager;
     private FragmentTransaction transaction;
+    private boolean hasBeenResumed;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -36,7 +37,8 @@ public class LevelTest extends FragmentActivity implements LevelTestInstructionF
         setContentView(R.layout.activity_level_test);
         fragmentManager = getSupportFragmentManager();
         transaction = fragmentManager.beginTransaction();
-        roundNumber = 0;
+        roundNumber = -1;
+        hasBeenResumed = false;
         LevelTestInstructionFragment fragment = new LevelTestInstructionFragment();
 
         // place instruction fragment in view
@@ -48,7 +50,22 @@ public class LevelTest extends FragmentActivity implements LevelTestInstructionF
         // disable back button
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        if (roundNumber >= 0 && roundNumber < TRIAL_ORDER.length-1 && hasBeenResumed) {
+            LevelTestFragment fragment = newInstance(TRIAL_ORDER[roundNumber], roundNumber+1);
+            transaction = fragmentManager.beginTransaction();
+            transaction.replace(R.id.fragmentContainer, fragment);
+            transaction.addToBackStack(null);
+            transaction.commit();
+        }
+        hasBeenResumed = true;
+    }
+
     public void startLevelTest() {
+        roundNumber++;
         LevelTestFragment fragment = newInstance(TRIAL_ORDER[roundNumber], roundNumber+1);
         transaction = fragmentManager.beginTransaction();
         transaction.replace(R.id.fragmentContainer, fragment);
@@ -57,9 +74,11 @@ public class LevelTest extends FragmentActivity implements LevelTestInstructionF
     }
 
     public void goToNext(int score) {
-        results[roundNumber] = score;
-        roundNumber++;
-        if (roundNumber < TRIAL_ORDER.length) {
+        if (roundNumber >= 0 && roundNumber < TRIAL_ORDER.length) {
+            results[roundNumber] = score;
+        }
+
+        if (roundNumber < TRIAL_ORDER.length-1) {
             startLevelTest();
         } else {
             // display score fragment
