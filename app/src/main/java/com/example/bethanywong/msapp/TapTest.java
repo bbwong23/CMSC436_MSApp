@@ -12,7 +12,6 @@ public class TapTest extends FragmentActivity implements TapTestInstructionFragm
         TapTestFragment.OnTapTestFinishListener, TapScoreFragment.FinishTapTestListener {
 
     public static final String ROUND_NUMBER_KEY = "ROUND_NUMBER_KEY";
-    public static final String BODY_PART_KEY = "BODY_PART_KEY";
     public static final String RESULTS_KEY = "RESULTS_KEY";
     // ********* TO CHANGE ORDER OF TEST, CHANGE TRIAL_ORDER, THEN CHANGE THE OTHER FOUR FOLLOWING VARIABLES TO REFLECT THE NEW INDICES IN TRIAL_ORDER **************
     public static final String[] TRIAL_ORDER = {"Right index finger", "Left index finger", "Right index finger",

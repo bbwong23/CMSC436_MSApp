@@ -102,6 +102,12 @@ public class TapTestFragment extends Fragment {
     }
 
     @Override
+    public void onStart() {
+        super.onStart();
+        coolDown();
+    }
+
+    @Override
     public void onAttach(Context activity) {
         super.onAttach(activity);
         try {
@@ -132,5 +138,20 @@ public class TapTestFragment extends Fragment {
         warmUpTimer.cancel();
         timer.cancel();
     }
+
+    public void coolDown(){
+        tapButton.setEnabled(false);
+        CountDownTimer coolDown = new CountDownTimer(2000,1000) {
+            @Override
+            public void onTick(long millisUntilFinished) {
+            }
+            @Override
+            public void onFinish() {
+                tapButton.setEnabled(true);
+            }
+        };
+        coolDown.start();
+    }
+
 
 }
