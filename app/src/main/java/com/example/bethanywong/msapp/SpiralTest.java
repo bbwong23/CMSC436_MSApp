@@ -1,7 +1,5 @@
 package com.example.bethanywong.msapp;
 
-import android.content.Context;
-import android.content.SharedPreferences;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -14,7 +12,6 @@ public class SpiralTest extends FragmentActivity implements SpiralTestFragment.O
     public static final String[] TRIAL_ORDER = {"right hand", "left hand", "right hand", "left hand", "right hand", "left hand"};
     public static final int[] RIGHT_HAND_TRIALS = {0, 2, 4};
     public static final int[] LEFT_HAND_TRIALS = {1, 3, 5};
-    public static final int DEFAULT_ROUND_NUMBER = 0;
     protected static final String RESULT_KEY = "RESULT_KEY";
     protected static final String ROUND_KEY = "ROUND_KEY";
 //    private static final int PERMISSION_REQUEST_CODE = 1;
@@ -47,26 +44,11 @@ public class SpiralTest extends FragmentActivity implements SpiralTestFragment.O
     }
 
     @Override
-    public void onPause() {
-        super.onPause();
-        // Save round number to re-do round
-        SharedPreferences sharedPref = getPreferences(Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPref.edit();
-        editor.putInt(ROUND_KEY, roundNumber);
-        editor.commit();
-    }
-
-    @Override
     public void onResume() {
         super.onResume();
 
-        // get round number and re-do from beginning of that round
-        SharedPreferences sharedPref = getPreferences(Context.MODE_PRIVATE);
-        int prevRoundNumber = sharedPref.getInt(ROUND_KEY, DEFAULT_ROUND_NUMBER);
-
-        if (hasBeenResumed) {
+        if (roundNumber < TRIAL_ORDER.length && hasBeenResumed) {
             // replace old fragment for new fragment
-            roundNumber = prevRoundNumber;
             SpiralTestFragment fragment = newInstance(roundNumber);
             transaction = fragmentManager.beginTransaction();
             transaction.replace(R.id.fragmentContainer, fragment);

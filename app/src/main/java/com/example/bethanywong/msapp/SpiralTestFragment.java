@@ -122,7 +122,11 @@ public class SpiralTestFragment extends Fragment {
         }
     }
 
-
+    @Override
+    public void onPause() {
+        super.onPause();
+        timer.cancel();
+    }
     public int computeScore() {
 
         // convert original ImageView into a Bitmap
