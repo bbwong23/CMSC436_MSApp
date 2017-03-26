@@ -101,6 +101,12 @@ public class SpiralTest extends FragmentActivity implements SpiralTestFragment.O
     public void goHome() {
         finish();
     }
+
+    @Override
+    public void onBackPressed() {
+        // disable back button
+    }
+
 //    @Override
 //    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
 //      if (requestCode == PERMISSION_REQUEST_CODE){
