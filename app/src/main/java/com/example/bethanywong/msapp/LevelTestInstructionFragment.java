@@ -9,8 +9,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
-import static com.example.bethanywong.msapp.SpiralTest.HAND_KEY;
-
 
 public class LevelTestInstructionFragment extends Fragment {
 
