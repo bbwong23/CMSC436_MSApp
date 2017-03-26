@@ -43,6 +43,11 @@ public class LevelTest extends FragmentActivity implements LevelTestInstructionF
         transaction.add(R.id.fragmentContainer, fragment).addToBackStack(null).commit();
     }
 
+    @Override
+    public void onBackPressed(){
+        // disable back button
+    }
+
     public void startLevelTest() {
         LevelTestFragment fragment = newInstance(TRIAL_ORDER[roundNumber], roundNumber+1);
         transaction = fragmentManager.beginTransaction();
