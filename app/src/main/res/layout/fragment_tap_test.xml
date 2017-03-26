@@ -1,16 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent" android:layout_height="match_parent">
-'<ImageView
-    android:layout_width="200dp"
-    android:layout_height="200dp"
-    android:src="@drawable/ic_green_button"
-    android:text="Tap"
-    android:id = "@+id/tapButton"
-    android:onClick="runTimer"
-    android:layout_centerVertical="true"
-    android:layout_centerHorizontal="true"
-    android:layout_below="@+id/instructions"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/roundNumber"
+        android:layout_centerHorizontal="true"
+        android:textSize="12pt" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="16pt"
+        android:textAlignment="center"
+        android:id="@+id/instructions"
+        android:layout_below="@id/roundNumber"/>
+
+    <ImageView
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        android:src="@drawable/ic_green_button"
+        android:text="Tap"
+        android:id = "@+id/tapButton"
+        android:onClick="runTimer"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@+id/instructions"/>
 
     <TextView
         android:text="Tap to begin!"
@@ -22,33 +37,14 @@
         android:textSize="12pt"
         android:layout_below="@id/tapButton"/>
 
-    <TextView
-        android:text="Round 1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/roundNumber"
-        android:layout_centerHorizontal="true"
-        android:textSize="12pt"
-        android:layout_alignParentTop="true"/>
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Place right hand on phone with index finger on the green circle!"
-        android:textSize="16pt"
-        android:textAlignment="center"
-        android:id="@+id/instructions"
-        android:layout_below="@id/roundNumber"/>
-
 
     <TextView
         android:id="@+id/timeTextView"
-        android:text=""
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/textView6"
+        android:layout_below="@+id/subtext"
         android:layout_centerHorizontal="true"
-        android:layout_alignParentBottom="true"
+        android:textSize="18dp"
         android:layout_marginTop="20dp"/>
 
 </RelativeLayout>

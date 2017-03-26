@@ -10,6 +10,8 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import static com.example.bethanywong.msapp.SpiralTest.RESULT_KEY;
+import static com.example.bethanywong.msapp.SpiralTest.SCORE_KEY;
+
 
 
 public class SpiralScoreFragment extends Fragment {

@@ -13,7 +13,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Instructions: "
+        android:text="Quick Instructions: "
         android:textSize="30dp"
         android:id="@+id/titleText"/>
 
@@ -21,15 +21,33 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/titleText"
-        android:layout_marginTop="15dp"
-        android:text="Tap the green circle to begin the test. When the test begins, tap the green circle as many times as you can with the specified body part. Each trial will run for 10 seconds. The total test is composed of 12 trials - 3 trials each using your right hand, left hand, right foot, and left foot. Your score will be shown at the end of the test as the average of your trials for each of the specified body parts."
+        android:layout_marginTop="10dp"
+        android:text="\tAfter you start the test, tap the green circle to begin each trial. When the trial begins, tap the green circle as many times as you can with the specified body part."
         android:textSize="22dp"
         android:id="@+id/instructionText"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="More About the Test: "
+        android:layout_marginTop="15dp"
+        android:textSize="26dp"
+        android:layout_below="@+id/instructionText"
+        android:id="@+id/titleText2"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/aboutText"
+        android:layout_marginTop="10dp"
+        android:textSize="20dp"
+        android:layout_below="@+id/titleText2"
+        android:text="\tEach trial will run for 10 seconds. The total test is composed of 12 trials - 3 trials each using your right hand, left hand, right foot, and left foot. Your scores will be shown at the end of the test for each of the tested body parts."/>
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/instructionText"
+        android:layout_below="@+id/aboutText"
         android:layout_marginTop="10dp"
         android:text="Start Test"
         android:textSize="22dp"

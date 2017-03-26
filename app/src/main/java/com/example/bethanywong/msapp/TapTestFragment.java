@@ -38,7 +38,7 @@ public class TapTestFragment extends Fragment {
     private int count;
 
     public interface OnTapTestFinishListener {
-        public void goToNext();
+        public void goToNext(int trialResult);
     }
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -54,17 +54,19 @@ public class TapTestFragment extends Fragment {
         bodyPart = getArguments().getString(BODY_PART_KEY);
         roundNumberView = (TextView)view.findViewById(R.id.roundNumber);
 
-        // Set proper round number
+        // Set proper round number and body part instruction
         int roundNumber = getArguments().getInt(ROUND_NUMBER_KEY);
         roundNumberView.setText("Round " + roundNumber);
+        instructions.setText("Trial: " + bodyPart);
 
-        timer = new CountDownTimer(10000, 1000) {
+        //timer = new CountDownTimer(10000, 1000) {
+        timer = new CountDownTimer(1000, 1000) {
             public void onTick(long millisUntilFinished) {
                 timeTextView.setText(millisUntilFinished / 1000 + "");
             }
 
             public void onFinish() {
-                callback.goToNext();
+                callback.goToNext(count);
             }
         };
 
@@ -96,6 +98,16 @@ public class TapTestFragment extends Fragment {
         return view;
     }
 
+    @Override
+    public void onAttach(Context activity) {
+        super.onAttach(activity);
+        try {
+            callback = (OnTapTestFinishListener) activity;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     public void runTimer(View view) {
         tapButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -109,7 +121,6 @@ public class TapTestFragment extends Fragment {
         tapButton.setColorFilter(Color.rgb(123,123,123), PorterDuff.Mode.MULTIPLY);
         timeTextView.setText("10");
         warmUpTimer.start();
-        instructions.setText("Trial: " + bodyPart);
     }
 
 }
