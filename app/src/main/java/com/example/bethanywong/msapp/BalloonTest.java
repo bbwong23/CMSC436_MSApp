@@ -127,8 +127,8 @@ public class BalloonTest extends AppCompatActivity {
         t.setVisibility(View.VISIBLE);
         t.setText("Test Completed!");
 
-        score.setText("Right Hand Score: " + formatter.format(averages[0] + "seconds")
-                + "\nLeft Hand Score: " + formatter.format(averages[1]) + "seconds");
+        score.setText("Right Hand Score: " + formatter.format(averages[0]) + " seconds"
+                + "\nLeft Hand Score: " + formatter.format(averages[1]) + " seconds");
 
         score.setVisibility(View.VISIBLE);
     }
