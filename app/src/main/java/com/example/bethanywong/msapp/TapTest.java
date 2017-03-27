@@ -6,13 +6,10 @@ import android.graphics.PorterDuff;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.os.CountDownTimer;
-import android.text.format.DateFormat;
 import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.text.format.Time;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.graphics.Color;
@@ -21,8 +18,6 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 public class TapTest extends AppCompatActivity {
