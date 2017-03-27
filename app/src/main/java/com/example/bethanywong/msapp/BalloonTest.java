@@ -1,9 +1,12 @@
 package com.example.bethanywong.msapp;
 
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.CountDownTimer;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.AbsoluteLayout;
@@ -13,8 +16,13 @@ import android.widget.TextView;
 import org.w3c.dom.Text;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.Random;
 import java.util.Timer;
+import java.util.concurrent.TimeUnit;
 
 
 public class BalloonTest extends AppCompatActivity {
@@ -127,9 +135,77 @@ public class BalloonTest extends AppCompatActivity {
         t.setVisibility(View.VISIBLE);
         t.setText("Test Completed!");
 
-        score.setText("Right Hand Score: " + formatter.format(averages[0] + "seconds")
-                + "\nLeft Hand Score: " + formatter.format(averages[1]) + "seconds");
+        score.setText("Right Hand Score: " + formatter.format(averages[0]) + " seconds"
+                + "\nLeft Hand Score: " + formatter.format(averages[1]) + " seconds");
 
         score.setVisibility(View.VISIBLE);
+        sendResponse(formatter.format(averages[0]),formatter.format(averages[1]));
+    }
+    public void sendResponse(String rightAvg, String leftAvg){
+        SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy, HH:mm:ss");
+        String currentDateandTime = sdf.format(new Date());
+        //send data to sheets
+        SharedPreferences prefs = getSharedPreferences("PrefsFile", MODE_PRIVATE);
+        int userID = prefs.getInt("user",0);
+        if (userID == 0) {
+            Log.d("Tag","Missing userID!");
+        }
+
+        //determine test day
+        String day = prefs.getString("balloonDay","");
+        //uncomment to reset day
+//        SharedPreferences.Editor editor1 = getSharedPreferences("PrefsFile", MODE_PRIVATE).edit();
+//        editor1.remove("balloonDay");
+//        editor1.commit();
+        if (day.isEmpty()){
+            Log.d("Tag","First Day");
+            SharedPreferences.Editor editor = getSharedPreferences("PrefsFile", MODE_PRIVATE).edit();
+            editor.putString("balloonDay", currentDateandTime + "#1");
+            editor.commit();
+            day = "1";
+        } else {
+            Log.d("Tag","Already has day: " + day);
+            //structure is: MM/DD/YYYY, HH:mm:ss#<day>
+            String metaDay = day.substring(day.length() - 1);
+            SimpleDateFormat diffsdf = new SimpleDateFormat("MM/dd/yyyy");
+            try{
+                Date date1 = diffsdf.parse(day);
+                Date date2 = diffsdf.parse(currentDateandTime);
+                long diff = TimeUnit.DAYS.convert((date1.getTime() - date2.getTime())
+                        , TimeUnit.MILLISECONDS);
+                if (diff == 0){
+                    //same day
+                    day = "1";
+                } else if (diff <= -1) {
+                    //in the future
+                    //increment metaDay and store to day
+                    day = String.valueOf(Integer.parseInt(metaDay) + 1);
+                    SharedPreferences.Editor editor = getSharedPreferences("PrefsFile", MODE_PRIVATE).edit();
+                    editor.putString("balloonDay", currentDateandTime + "#" + day);
+                    editor.commit();
+                } else {
+                    //shouldn't go into past
+                    day = "-1";
+                }
+            } catch (ParseException e){
+                Log.d("Tag","date is screwed up: " + day);
+                e.printStackTrace();
+            }
+
+        }
+        Intent sheets = new Intent(this, Sheets.class);
+        ArrayList<String> row = new ArrayList<>();
+
+        row.add("T8P" + userID);//Name
+        row.add(currentDateandTime);//datetime
+        row.add("Balloon");//mode
+        row.add(day);//day
+        //right hand
+        row.add(rightAvg);
+        //left hand
+        row.add(leftAvg);
+
+        sheets.putStringArrayListExtra(Sheets.EXTRA_SHEETS, row);
+        startActivity(sheets);
     }
 }

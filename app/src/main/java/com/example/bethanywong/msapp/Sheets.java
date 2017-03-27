@@ -60,7 +60,7 @@ public class Sheets extends Activity
     static final int REQUEST_GOOGLE_PLAY_SERVICES = 1002;
     static final int REQUEST_PERMISSION_GET_ACCOUNTS = 1003;
 
-    private static final String BUTTON_TEXT = "Call Google Sheets API";
+    private static final String BUTTON_TEXT = "Submit Results";
     private static final String PREF_ACCOUNT_NAME = "accountName";
     private static final String[] SCOPES = { SheetsScopes.SPREADSHEETS };
 
@@ -409,6 +409,20 @@ public class Sheets extends Activity
                     break;
                 case "Level":
                     //not implemented yet
+                    break;
+                case "Balloon":
+                    leftHandSheetId = "Balloon Test (LH)!A2:F";
+                    rightHandSheetId = "Balloon Test (RH)!A2:F";
+                    rightHandVals = new ArrayList<>(Arrays.asList(rowToAdd.get(0),rowToAdd.get(1),rowToAdd.get(2),rowToAdd.get(3)));
+                    leftHandVals = new ArrayList<>(Arrays.asList(rowToAdd.get(0), rowToAdd.get(1),rowToAdd.get(2),rowToAdd.get(4)));
+                    leftHandRow = new ArrayList<>();
+                    rightHandRow = new ArrayList<>();
+                    leftHandRow.add(leftHandVals);
+                    rightHandRow.add(rightHandVals);
+                    valueRange.setValues(leftHandRow);
+                    this.mService.spreadsheets().values().append(spreadsheetId, leftHandSheetId, valueRange).setValueInputOption("RAW").execute();
+                    valueRange.setValues(rightHandRow);
+                    this.mService.spreadsheets().values().append(spreadsheetId, rightHandSheetId, valueRange).setValueInputOption("RAW").execute();
                     break;
             }
 
