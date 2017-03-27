@@ -15,6 +15,7 @@ public class DrawingView extends View {
     private Paint drawPaint, canvasPaint;
     private Canvas drawCanvas;
     private Bitmap canvasBitmap;
+    private boolean pause;
 
     public DrawingView(Context context, AttributeSet attrs){
         super(context,attrs);
@@ -50,22 +51,31 @@ public class DrawingView extends View {
         float touchY = event.getY();
 
         //i know, switch cases lmao
-        switch (event.getAction()) {
-            case MotionEvent.ACTION_DOWN:
-                drawPath.moveTo(touchX, touchY);
-                break;
-            case MotionEvent.ACTION_MOVE:
-                drawPath.lineTo(touchX, touchY);
-                break;
-            case MotionEvent.ACTION_UP:
-                drawCanvas.drawPath(drawPath, drawPaint);
-                drawPath.reset();
-                break;
-            default:
-                return false;
+        if (!pause) {
+            switch (event.getAction()) {
+                case MotionEvent.ACTION_DOWN:
+                    drawPath.moveTo(touchX, touchY);
+                    break;
+                case MotionEvent.ACTION_MOVE:
+                    drawPath.lineTo(touchX, touchY);
+                    break;
+                case MotionEvent.ACTION_UP:
+                    drawCanvas.drawPath(drawPath, drawPaint);
+                    drawPath.reset();
+                    break;
+                default:
+                    return false;
+            }
+
+            invalidate();
         }
-        invalidate();
+
         return true;
+    }
+
+    // for when the timer goes up on the spiral test
+    public void pause() {
+        pause = true;
     }
 
     public void clear() {

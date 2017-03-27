@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/activity_main"
     android:layout_width="match_parent"
@@ -8,50 +8,50 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="com.example.bethanywong.msapp.MainActivity">
+    android:orientation="vertical"
+    tools:context="com.example.bethanywong.msapp.MainActivity"
+    android:weightSum="1">
 
     <Button
         android:text="Tap Test"
+        android:textSize="10pt"
         android:layout_height="wrap_content"
-        android:layout_marginTop="43dp"
         android:id="@+id/tap_button"
         android:layout_width="match_parent"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true" />
+        android:layout_weight="0.05"/>
     <Button
         android:text="Spiral Test"
+        android:textSize="10pt"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/spiral_button"
-        android:layout_marginTop="23dp"
-        android:layout_below="@+id/tap_button"
-        android:layout_centerHorizontal="true" />
+        android:layout_weight="0.05"/>
     <Button
         android:text="Level Test"
+        android:textSize="10pt"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/level_button"
-        android:layout_marginTop="23dp"
-        android:layout_below="@+id/spiral_button"
-        android:layout_centerHorizontal="true" />
-
+        android:layout_weight="0.05" />
+    <Button
+        android:text="Balloon Test"
+        android:textSize="10pt"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/balloon_button"
+        android:layout_weight="0.05" />
     <Button
         android:text="View Past Results"
+        android:textSize="10pt"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/results_button"
-        android:layout_marginTop="23dp"
-        android:layout_below="@+id/level_button"
-        android:layout_centerHorizontal="true" />
-
+        android:layout_weight="0.05" />
     <Button
         android:text="Developers Info"
+        android:textSize="10pt"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/devinfo_button"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
-
-
-</RelativeLayout>
+        android:layout_weight="0.05" />
+</LinearLayout>

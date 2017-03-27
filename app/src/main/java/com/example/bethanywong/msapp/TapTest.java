@@ -17,12 +17,16 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.graphics.Color;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.concurrent.TimeUnit;
 
 public class TapTest extends AppCompatActivity {
-    CountDownTimer timer = new CountDownTimer(3000, 1000) {
+    CountDownTimer timer = new CountDownTimer(10000, 1000) {
         public void onTick(long millisUntilFinished) {
             timeTextView.setText(millisUntilFinished / 1000 + "");
         }
@@ -33,11 +37,23 @@ public class TapTest extends AppCompatActivity {
             count=0;
             round++;
 
-            if (round > 3) {
-                hand = "left";
+            switch (round) {
+                case 4:
+                    side = "left";
+                    break;
+                case 7:
+                    side = "right";
+                    body = "big toe";
+                    break;
+                case 10:
+                    side = "left";
+                    break;
+                default:
+                    break;
+
             }
 
-            if (round <= 6) {
+            if (round <= 12) {
                 setNewRound();
             } else {
                 displayResults();
@@ -59,8 +75,9 @@ public class TapTest extends AppCompatActivity {
     TextView roundView;
     TextView timeTextView;
     int round;
-    String hand;
-    private int[] countHistory = new int[6];
+    String side;
+    String body;
+    private int[] countHistory = new int[12];
     Animation shrink;
     boolean isCountingDown;
 
@@ -71,35 +88,10 @@ public class TapTest extends AppCompatActivity {
         timeTextView = (TextView) findViewById(R.id.timeTextView);
         roundView = (TextView) findViewById(R.id.roundNumber);
         round = 1;
-        hand = "right";
+        side = "right";
+        body = "index finger";
         shrink = AnimationUtils.loadAnimation(this, R.anim.shrink);
         isCountingDown = false;
-
-
-        //just for now to get response
-        SimpleDateFormat sdf = new SimpleDateFormat(" dd/MM/yyyy, HH:mm:ss");
-        String currentDateandTime = sdf.format(new Date());
-        //send data to sheets
-        SharedPreferences prefs = getSharedPreferences("PrefsFile", MODE_PRIVATE);
-        int userID = prefs.getInt("user",0);
-        if (userID == 0) {
-            Log.d("Tag","Missing userID!");
-        }
-        Intent sheets = new Intent(this, Sheets.class);
-        ArrayList<String> row = new ArrayList<>();
-
-        row.add("T8P" + userID);//Name
-        row.add(currentDateandTime);//datetime
-        row.add("Tap");//mode
-        row.add("1");//day??
-        row.add(String.valueOf(20));
-        row.add(String.valueOf(20));
-        row.add(String.valueOf(20));
-        row.add(String.valueOf(30));
-        row.add(String.valueOf(30));
-        row.add(String.valueOf(30));
-        sheets.putStringArrayListExtra(Sheets.EXTRA_SHEETS, row);
-        startActivity(sheets);
     }
 
     public void runTimer(View view) {
@@ -117,7 +109,7 @@ public class TapTest extends AppCompatActivity {
         if (!isCountingDown){
             tap.setEnabled(false);
             tap.setColorFilter(Color.rgb(123,123,123), PorterDuff.Mode.MULTIPLY);
-            CountDownTimer warmUp = new CountDownTimer(10000,1000) {
+            CountDownTimer warmUp = new CountDownTimer(3000,1000) {
                 @Override
                 public void onTick(long millisUntilFinished) {
                     if (millisUntilFinished/1000 == 2){
@@ -139,7 +131,7 @@ public class TapTest extends AppCompatActivity {
         }
         isCountingDown = true;
         count = 0;
-        instructions.setText("Keep your hand in place!");
+        instructions.setText("Keep your " + body + " in place!");
     }
     public void coolDown(){
         tap.setEnabled(false);
@@ -159,20 +151,19 @@ public class TapTest extends AppCompatActivity {
         coolDown();
         timeTextView.setText("TIME'S UP");
         txtCount.setText("Tap to begin!");
-        instructions.setText("Place " + hand + " hand on phone with index finger on the green circle!");
+        instructions.setText("Tap the green circle as many times as you can with your " + side + " " + body);
         roundView.setText("Round " + round);
     }
 
     public void displayResults() {
         coolDown();
-        hand = "right";
-        round = 1;
-        timeTextView.setText("TIME'S UP");
-        instructions.setText("Tap the circle to restart!");
+        timeTextView.setVisibility(View.GONE);
+        instructions.setVisibility(View.GONE);
+        tap.setVisibility(View.GONE);
         roundView.setText("Test Completed!");
         txtCount.setText("Right hand results: " + ((countHistory[0] + countHistory[1] + countHistory[2]) / 3) +
                 "\r\nLeft hand results: " + ((countHistory[3] + countHistory[4] + countHistory[5]) / 3));
-        SimpleDateFormat sdf = new SimpleDateFormat(" dd/MM/yyyy, HH:mm:ss");
+        SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy, HH:mm:ss");
         String currentDateandTime = sdf.format(new Date());
         //send data to sheets
         SharedPreferences prefs = getSharedPreferences("PrefsFile", MODE_PRIVATE);
@@ -180,20 +171,82 @@ public class TapTest extends AppCompatActivity {
         if (userID == 0) {
             Log.d("Tag","Missing userID!");
         }
+
+        //determine test day
+        String day = prefs.getString("tapDay","");
+        //uncomment to reset day
+//        SharedPreferences.Editor editor1 = getSharedPreferences("PrefsFile", MODE_PRIVATE).edit();
+//        editor1.remove("tapDay");
+//        editor1.commit();
+        if (day.isEmpty()){
+            Log.d("Tag","First Day");
+            SharedPreferences.Editor editor = getSharedPreferences("PrefsFile", MODE_PRIVATE).edit();
+            editor.putString("tapDay", currentDateandTime + "#1");
+            editor.commit();
+            day = "1";
+        } else {
+            Log.d("Tag","Already has day: " + day);
+            //structure is: MM/DD/YYYY, HH:mm:ss#<day>
+            String metaDay = day.substring(day.length() - 1);
+            SimpleDateFormat diffsdf = new SimpleDateFormat("MM/dd/yyyy");
+            try{
+                Date date1 = diffsdf.parse(day);
+                Date date2 = diffsdf.parse(currentDateandTime);
+                long diff = TimeUnit.DAYS.convert((date1.getTime() - date2.getTime())
+                        , TimeUnit.MILLISECONDS);
+                if (diff == 0){
+                    //same day
+                    day = "1";
+                } else if (diff <= -1) {
+                    //in the future
+                    //increment metaDay and store to day
+                    day = String.valueOf(Integer.parseInt(metaDay) + 1);
+                    SharedPreferences.Editor editor = getSharedPreferences("PrefsFile", MODE_PRIVATE).edit();
+                    editor.putString("tapDay", currentDateandTime + "#" + day);
+                    editor.commit();
+                } else {
+                    //shouldn't go into past
+                    day = "-1";
+                }
+            } catch (ParseException e){
+                Log.d("Tag","date is screwed up: " + day);
+                e.printStackTrace();
+            }
+
+        }
+
         Intent sheets = new Intent(this, Sheets.class);
         ArrayList<String> row = new ArrayList<>();
 
         row.add("T8P" + userID);//Name
         row.add(currentDateandTime);//datetime
         row.add("Tap");//mode
-        row.add("1");//day??
+        row.add(day);//day
+        //right hand
         row.add(String.valueOf(countHistory[0]));
         row.add(String.valueOf(countHistory[1]));
         row.add(String.valueOf(countHistory[2]));
+        //left hand
         row.add(String.valueOf(countHistory[3]));
         row.add(String.valueOf(countHistory[4]));
         row.add(String.valueOf(countHistory[5]));
+        //right foot
+        row.add(String.valueOf(countHistory[6]));
+        row.add(String.valueOf(countHistory[7]));
+        row.add(String.valueOf(countHistory[8]));
+        //left foot
+        row.add(String.valueOf(countHistory[9]));
+        row.add(String.valueOf(countHistory[10]));
+        row.add(String.valueOf(countHistory[11]));
         sheets.putStringArrayListExtra(Sheets.EXTRA_SHEETS, row);
         startActivity(sheets);
+        txtCount.setText("Right hand results: " + countHistory[0] + " || " + countHistory[1]+ " || " + countHistory[2] +
+                "\r\nLeft hand results: " + countHistory[3] + " || " + countHistory[4]+ " || " + countHistory[5] +
+                "\r\nRight Foot results: " + countHistory[6] + " || " + countHistory[7]+ " || " + countHistory[8] +
+                "\r\nLeft Foot results: " + countHistory[9] + " || " + countHistory[10]+ " || " + countHistory[11]);
+//        txtCount.setText("Right hand results: " + ((countHistory[0] + countHistory[1]+ countHistory[2]) / 3) +
+//                "\r\nLeft hand results: " + ((countHistory[3] + countHistory[4] + countHistory[5]) / 3) +
+//                "\r\nRight Foot results: " + ((countHistory[6] + countHistory[7] + countHistory[8]) / 3) +
+//                "\r\nLeft Foot results: " + ((countHistory[9] + countHistory[10] + countHistory[11]) / 3));
     }
 }

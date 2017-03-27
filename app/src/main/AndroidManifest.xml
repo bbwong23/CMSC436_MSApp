@@ -7,7 +7,6 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
 
-    <uses-sdk android:minSdkVersion="19"/>
 
     <application
         android:allowBackup="true"
@@ -43,23 +42,25 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
-
+        <activity android:name=".SpiralScore">
+            <intent-filter>
+                <action android:name="com.example.bethanywong.msapp.SpiralScore" />
+              <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
         <activity android:name=".LevelTest">
             <intent-filter>
                 <action android:name="com.example.bethanywong.msapp.LevelTest" />
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
-        
-        <activity android:name=".SpiralScore">
+        <activity android:name=".BalloonTest">
             <intent-filter>
-                <action android:name="com.example.bethanywong.msapp.SpiralScore" />
-
+                <action android:name="com.example.bethanywong.msapp.BalloonTest" />
                 <category android:name="android.intent.category.DEFAULT" />
-            </intent-filter>
+             </intent-filter>
         </activity>
         <activity android:name=".Sheets">
         </activity>
     </application>
-
 </manifest>

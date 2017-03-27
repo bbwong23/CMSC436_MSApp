@@ -374,27 +374,44 @@ public class Sheets extends Activity
         private List<String> getDataFromApi() throws IOException {
             String spreadsheetId = "15e8fzzCQcYV3WxwV79g_CSyg-yeTyCrA1Z2e0uwpAiw";
             String range = "!A2:F";
+            ValueRange valueRange = new ValueRange();
 
             switch(mode){
                 case "Tap":
-                    String leftSheetId = "";
+                    String leftHandSheetId = "Tapping Test (LH)!A2:F";
+                    String rightHandSheetId = "Tapping Test (RH)!A2:F";
+                    String leftFootSheetId = "Tapping Test (LF)!A2:F";
+                    String rightFootSheetId = "Tapping Test (RF)!A2:F";
+                    //fucking lol, maybe figure out a way to not be so ugly
+                    ArrayList<Object> rightHandVals = new ArrayList<>(Arrays.asList(rowToAdd.get(0),rowToAdd.get(1),rowToAdd.get(2),rowToAdd.get(3),rowToAdd.get(4),rowToAdd.get(5)));
+                    ArrayList<Object> leftHandVals = new ArrayList<>(Arrays.asList(rowToAdd.get(0), rowToAdd.get(1),rowToAdd.get(2),rowToAdd.get(6),rowToAdd.get(7),rowToAdd.get(8)));
+                    ArrayList<Object> rightFootVals = new ArrayList<>(Arrays.asList(rowToAdd.get(0),rowToAdd.get(1),rowToAdd.get(2),rowToAdd.get(9),rowToAdd.get(10),rowToAdd.get(11)));
+                    ArrayList<Object> leftFootVals = new ArrayList<>(Arrays.asList(rowToAdd.get(0), rowToAdd.get(1),rowToAdd.get(2),rowToAdd.get(12),rowToAdd.get(13),rowToAdd.get(14)));
+                    List<List<Object>> leftHandRow = new ArrayList<>();
+                    List<List<Object>> rightHandRow = new ArrayList<>();
+                    List<List<Object>> leftFootRow = new ArrayList<>();
+                    List<List<Object>> rightFootRow = new ArrayList<>();
+                    leftHandRow.add(leftHandVals);
+                    rightHandRow.add(rightHandVals);
+                    leftFootRow.add(leftFootVals);
+                    rightFootRow.add(rightFootVals);
 
-                    String rightSheetId = "";
+                    //might want to use batch update
+                    valueRange.setValues(leftHandRow);
+                    this.mService.spreadsheets().values().append(spreadsheetId, leftHandSheetId, valueRange).setValueInputOption("RAW").execute();
+                    valueRange.setValues(rightHandRow);
+                    this.mService.spreadsheets().values().append(spreadsheetId, rightHandSheetId, valueRange).setValueInputOption("RAW").execute();
+                    valueRange.setValues(leftFootRow);
+                    this.mService.spreadsheets().values().append(spreadsheetId, leftFootSheetId, valueRange).setValueInputOption("RAW").execute();
+                    valueRange.setValues(rightFootRow);
+                    this.mService.spreadsheets().values().append(spreadsheetId, rightFootSheetId, valueRange).setValueInputOption("RAW").execute();
+
                     break;
                 case "Level":
                     //not implemented yet
                     break;
             }
-            List<List<Object>> values = new ArrayList<>();
-            values.add(rowToAdd);
 
-            ValueRange valueRange = new ValueRange();
-            valueRange.setValues(values);
-
-            AppendValuesResponse response = this.mService.spreadsheets().values()
-                    .append(spreadsheetId, range, valueRange)
-                    .setValueInputOption("RAW")
-                    .execute();
 
             return null;
         }
