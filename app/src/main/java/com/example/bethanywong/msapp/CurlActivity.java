@@ -25,8 +25,13 @@ public class CurlActivity extends AppCompatActivity {
     TextView instruction;
     long startTime;
     boolean isCountingDown;
+
     Vibrator vibrator;
     ToneGenerator toneG;
+
+    int round;
+    double leftSum;
+    double rightSum;
 
     boolean curledUpwards = false;
     int curlsDone = 0;
@@ -50,8 +55,18 @@ public class CurlActivity extends AppCompatActivity {
             }
         });
 
+//        Button skipBtn = (Button) findViewById(R.id.skip_button);
+//        skipBtn.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                finishTest();
+//            }
+//        });
+
         vibrator = (Vibrator) this.getSystemService(Context.VIBRATOR_SERVICE);
         toneG = new ToneGenerator(AudioManager.STREAM_ALARM, 100);
+
+        round = 0;
 
         initSensor();
     }
@@ -133,7 +148,25 @@ public class CurlActivity extends AppCompatActivity {
         double score = (endTime - startTime) / 1000000000.0;
         NumberFormat formatter = new DecimalFormat("#0.00");
 
-        instruction.setText("You finished in " + formatter.format(score) + " seconds");
+        round++;
+        if (round < 3) {
+            instruction.setText("Hold your right arm out flat and press start to begin.");
+            leftSum += score;
+            startBtn.setVisibility(View.VISIBLE);
+        } else {
+            rightSum += score;
+            if (round == 6) {
+                rightSum /= 3;
+                leftSum /= 3;
+
+                instruction.setText("Left hand average: " + formatter.format(leftSum) +
+                        "\n Right hand average: " + formatter.format(rightSum));
+                startBtn.setVisibility(View.INVISIBLE);
+            } else {
+                startBtn.setVisibility(View.VISIBLE);
+                instruction.setText("Hold your left arm out flat and press start to begin.");
+            }
+        }
     }
 
     public void startTest() {
@@ -151,6 +184,7 @@ public class CurlActivity extends AppCompatActivity {
                 public void onFinish() {
                     instruction.setText("Curl upwards!");
                     startBtn.setVisibility(View.INVISIBLE);
+                    isCountingDown = false;
 
                     Sensor sensorAccel = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
                     Sensor sensorMagnetic = sensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD);

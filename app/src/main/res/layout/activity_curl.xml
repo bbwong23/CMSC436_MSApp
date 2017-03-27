@@ -11,7 +11,7 @@
     tools:context="com.example.bethanywong.msapp.CurlActivity">
 
     <TextView
-        android:text="Hold your arm out flat and press start to begin."
+        android:text="Hold your right arm out flat and press start to begin."
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/curlInstruction"
@@ -26,4 +26,12 @@
         android:layout_centerVertical="true"
         android:layout_centerHorizontal="true"
         android:id="@+id/curlStart" />
+
+    <!--<Button-->
+        <!--android:text="skip"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_below="@+id/curlStart"-->
+        <!--android:layout_alignStart="@+id/curlStart"-->
+        <!--android:id="@+id/skip_button" />-->
 </RelativeLayout>
