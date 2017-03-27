@@ -42,23 +42,15 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
-        <activity android:name=".SpiralScore">
+        <activity android:name=".LevelTest">
             <intent-filter>
-                <action android:name="com.example.bethanywong.msapp.SpiralScore" />
-
+                <action android:name="com.example.bethanywong.msapp.LevelTest" />
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
         <activity android:name=".BalloonTest">
             <intent-filter>
                 <action android:name="com.example.bethanywong.msapp.BalloonTest" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-            </intent-filter>
-        </activity>
-        <activity android:name=".LevelTestNew">
-            <intent-filter>
-                <action android:name="com.example.bethanywong.msapp.LevelTestNew" />
 
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
@@ -72,5 +64,4 @@
             </intent-filter>
         </activity>
     </application>
-
 </manifest>
