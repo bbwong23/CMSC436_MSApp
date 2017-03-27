@@ -21,9 +21,9 @@ import static com.example.bethanywong.msapp.LevelScoreFragment.newInstance;
 public class LevelTest extends FragmentActivity implements LevelTestInstructionFragment.StartLevelTestListener,
         LevelTestFragment.OnFinishLevelTestListener, LevelScoreFragment.FinishLevelTestListener {
 
-    public static final String[] TRIAL_ORDER = {"Right hand", "Left hand", "Right hand", "Left hand", "Right hand", "Left hand",};
-    public static final int [] RIGHT_HAND_TRIALS = {0, 2, 4};
-    public static final int[] LEFT_HAND_TRIALS = {1, 3, 5};
+    private static final String[] TRIAL_ORDER = {"Right hand", "Left hand", "Right hand", "Left hand", "Right hand", "Left hand",};
+    private static final int [] RIGHT_HAND_TRIALS = {0, 2, 4};
+    private static final int[] LEFT_HAND_TRIALS = {1, 3, 5};
     private int[] results = new int[TRIAL_ORDER.length];
     private static final int PERMISSION_REQUEST_CODE = 1;
     private int roundNumber;

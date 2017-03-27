@@ -23,9 +23,10 @@ public class LevelScoreFragment extends Fragment {
     public interface FinishLevelTestListener {
         public void goHome();
     }
-    public static LevelScoreFragment newInstance(int[] results) {
+    public static LevelScoreFragment newInstance(String[] trialOrder, int[] rTrials, int[] lTrials, int[] results) {
         LevelScoreFragment fragment = new LevelScoreFragment();
         Bundle args = new Bundle();
+        
         args.putIntArray(RESULTS_KEY, results);
         fragment.setArguments(args);
         return fragment;
