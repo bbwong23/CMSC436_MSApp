@@ -9,25 +9,32 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
-import static com.example.bethanywong.msapp.SpiralTest.LEFT_HAND_TRIALS;
 import static com.example.bethanywong.msapp.SpiralTest.RESULT_KEY;
-import static com.example.bethanywong.msapp.SpiralTest.RIGHT_HAND_TRIALS;
 
 
 public class SpiralScoreFragment extends Fragment {
+    public static final String TRIAL_KEY = "TRIAL_KEY";
+    public static final String RIGHT_KEY = "RIGHT_KEY";
+    public static final String LEFT_KEY = "LEFT_KEY";
     private Button button;
     private FinishSpiralTestListener callBack;
     private TextView scoresText;
     private int[] scores;
+    private String[] trialOrder;
+    private int[] rTrials;
+    private int[] lTrials;
 
     public interface FinishSpiralTestListener {
         public void goHome();
     }
 
-    public static SpiralScoreFragment newInstance(int[] result) {
+    public static SpiralScoreFragment newInstance(String[] trialOrder, int[] rTrials, int[] lTrials, int[] result) {
         SpiralScoreFragment fragment = new SpiralScoreFragment();
         Bundle args = new Bundle();
         args.putIntArray(RESULT_KEY, result);
+        args.putStringArray(TRIAL_KEY, trialOrder);
+        args.putIntArray(RIGHT_KEY, rTrials);
+        args.putIntArray(LEFT_KEY, lTrials);
         fragment.setArguments(args);
         return fragment;
     }
@@ -39,6 +46,9 @@ public class SpiralScoreFragment extends Fragment {
         button = (Button)view.findViewById(R.id.homeButton);
         scoresText = (TextView)view.findViewById(R.id.finalScore);
         scores = getArguments().getIntArray(RESULT_KEY);
+        trialOrder = getArguments().getStringArray(TRIAL_KEY);
+        rTrials = getArguments().getIntArray(RIGHT_KEY);
+        lTrials = getArguments().getIntArray(LEFT_KEY);
         button.setOnClickListener(
             new View.OnClickListener() {
                 @Override
@@ -85,12 +95,12 @@ public class SpiralScoreFragment extends Fragment {
 
     public String getResultString() {
         StringBuffer resultStr = new StringBuffer();
-        double rAvg = getAvgScore(RIGHT_HAND_TRIALS);
-        double lAvg = getAvgScore(LEFT_HAND_TRIALS);
+        double rAvg = getAvgScore(rTrials);
+        double lAvg = getAvgScore(lTrials);
         resultStr.append("Right hand score: " + rAvg);
-        resultStr.append(getResultStringHelper(RIGHT_HAND_TRIALS));
+        resultStr.append(getResultStringHelper(rTrials));
         resultStr.append("\nLeft hand score: " + lAvg);
-        resultStr.append(getResultStringHelper(LEFT_HAND_TRIALS));
+        resultStr.append(getResultStringHelper(lTrials));
         return resultStr.toString();
 
     }

@@ -9,9 +9,9 @@ import static com.example.bethanywong.msapp.SpiralScoreFragment.newInstance;
 import static com.example.bethanywong.msapp.SpiralTestFragment.newInstance;
 
 public class SpiralTest extends FragmentActivity implements SpiralTestFragment.OnFinishListener, SpiralScoreFragment.FinishSpiralTestListener {
-    public static final String[] TRIAL_ORDER = {"right hand", "left hand", "right hand", "left hand", "right hand", "left hand"};
-    public static final int[] RIGHT_HAND_TRIALS = {0, 2, 4};
-    public static final int[] LEFT_HAND_TRIALS = {1, 3, 5};
+    private static final String[] TRIAL_ORDER = {"right hand", "left hand", "right hand", "left hand", "right hand", "left hand"};
+    private static final int[] RIGHT_HAND_TRIALS = {0, 2, 4};
+    private static final int[] LEFT_HAND_TRIALS = {1, 3, 5};
     protected static final String RESULT_KEY = "RESULT_KEY";
     protected static final String ROUND_KEY = "ROUND_KEY";
 //    private static final int PERMISSION_REQUEST_CODE = 1;
@@ -34,7 +34,7 @@ public class SpiralTest extends FragmentActivity implements SpiralTestFragment.O
         hasBeenResumed = false;
 
         // place initial test in view automatically
-        SpiralTestFragment fragment = newInstance(roundNumber);
+        SpiralTestFragment fragment = newInstance(TRIAL_ORDER[roundNumber], roundNumber+1);
         transaction.add(R.id.fragmentContainer, fragment).addToBackStack(null).commit();
     }
 
@@ -49,7 +49,7 @@ public class SpiralTest extends FragmentActivity implements SpiralTestFragment.O
 
         if (roundNumber < TRIAL_ORDER.length && hasBeenResumed) {
             // replace old fragment for new fragment
-            SpiralTestFragment fragment = newInstance(roundNumber);
+            SpiralTestFragment fragment = newInstance(TRIAL_ORDER[roundNumber], roundNumber+1);
             transaction = fragmentManager.beginTransaction();
             transaction.replace(R.id.fragmentContainer, fragment);
             transaction.addToBackStack(null);
@@ -64,14 +64,14 @@ public class SpiralTest extends FragmentActivity implements SpiralTestFragment.O
 
         if (roundNumber < TRIAL_ORDER.length) {
             // show next trial
-            SpiralTestFragment fragment = newInstance(roundNumber);
+            SpiralTestFragment fragment = newInstance(TRIAL_ORDER[roundNumber], roundNumber+1);
             transaction = fragmentManager.beginTransaction();
             transaction.replace(R.id.fragmentContainer, fragment);
             transaction.addToBackStack(null);
             transaction.commit();
         } else {
             // show score fragment
-            SpiralScoreFragment fragment = newInstance(scores);
+            SpiralScoreFragment fragment = newInstance(TRIAL_ORDER, RIGHT_HAND_TRIALS, LEFT_HAND_TRIALS, scores);
             transaction = fragmentManager.beginTransaction();
             transaction.replace(R.id.fragmentContainer, fragment);
             transaction.addToBackStack(null);

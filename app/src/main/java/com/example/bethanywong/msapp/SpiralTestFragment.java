@@ -23,9 +23,9 @@ import android.widget.Toast;
 import java.util.UUID;
 
 import static com.example.bethanywong.msapp.SpiralTest.ROUND_KEY;
-import static com.example.bethanywong.msapp.SpiralTest.TRIAL_ORDER;
 
 public class SpiralTestFragment extends Fragment {
+    public static final String HAND_KEY = "HAND_KEY";
     private OnFinishListener callback;
     private static final int PERMISSION_REQUEST_CODE = 1;
     private Activity activity;
@@ -39,15 +39,17 @@ public class SpiralTestFragment extends Fragment {
     private int roundNumber;
     private long duration;
     private boolean started;
+    private String hand;
 
     public interface OnFinishListener {
         public void onFinish(int score, long time);
     }
 
-    public static SpiralTestFragment newInstance(int roundNumber) {
+    public static SpiralTestFragment newInstance(String hand, int roundNumber) {
         SpiralTestFragment fragment = new SpiralTestFragment();
         Bundle args = new Bundle();
         args.putInt(ROUND_KEY, roundNumber);
+        args.putString(HAND_KEY, hand);
         fragment.setArguments(args);
         return fragment;
     }
@@ -64,6 +66,8 @@ public class SpiralTestFragment extends Fragment {
         roundText = (TextView)view.findViewById(R.id.roundText);
         started = false;
         duration = 0;
+        hand = getArguments().getString(HAND_KEY);
+        roundNumber = getArguments().getInt(ROUND_KEY);
         timer = new CountDownTimer(10000,1000) {
             @Override
             public void onTick(long millisUntilFinished) {
@@ -103,11 +107,9 @@ public class SpiralTestFragment extends Fragment {
         });
 
         // set text for appropriate hand
-        roundNumber = getArguments().getInt(ROUND_KEY);
-        String hand = TRIAL_ORDER[roundNumber];
         instructions.setText("Trace the spiral with your " + hand);
         button.setText("Next");
-        roundText.setText("Round " + (roundNumber+1) + ":");
+        roundText.setText("Round " + roundNumber + ":");
 
         return view;
     }
