@@ -14,13 +14,13 @@ public class TapTest extends FragmentActivity implements TapTestInstructionFragm
     public static final String ROUND_NUMBER_KEY = "ROUND_NUMBER_KEY";
     public static final String RESULTS_KEY = "RESULTS_KEY";
     // ********* TO CHANGE ORDER OF TEST, CHANGE TRIAL_ORDER, THEN CHANGE THE OTHER FOUR FOLLOWING VARIABLES TO REFLECT THE NEW INDICES IN TRIAL_ORDER **************
-    public static final String[] TRIAL_ORDER = {"Right index finger", "Left index finger", "Right index finger",
+    private static final String[] TRIAL_ORDER = {"Right index finger", "Left index finger", "Right index finger",
             "Left index finger", "Right index finger", "Left index finger", "Right big toe", "Left big toe",
             "Right big toe", "Left big toe", "Right big toe", "Left big toe"};
-    public static final int[] RIGHT_HAND_TRIALS = {0, 2, 4};
-    public static final int[] LEFT_HAND_TRIALS = {1, 3, 5};
-    public static final int[] RIGHT_FOOT_TRIALS = {6, 8, 10};
-    public static final int[] LEFT_FOOT_TRIALS = {7, 9, 11};
+    private static final int[] RIGHT_HAND_TRIALS = {0, 2, 4};
+    private static final int[] LEFT_HAND_TRIALS = {1, 3, 5};
+    private static final int[] RIGHT_FOOT_TRIALS = {6, 8, 10};
+    private static final int[] LEFT_FOOT_TRIALS = {7, 9, 11};
     private int[] allResults = new int[TRIAL_ORDER.length];
     // *************************** END ***************************************
     private int roundNumber;
@@ -52,7 +52,7 @@ public class TapTest extends FragmentActivity implements TapTestInstructionFragm
         super.onResume();
         // reset trial
         if (roundNumber >= 0 && roundNumber < TRIAL_ORDER.length-1 && hasBeenResumed) {
-            TapTestFragment fragment = newInstance(roundNumber);
+            TapTestFragment fragment = newInstance(TRIAL_ORDER[roundNumber], roundNumber+1);
             transaction = fragmentManager.beginTransaction();
             transaction.replace(R.id.fragmentContainer, fragment);
             transaction.addToBackStack(null);
@@ -62,7 +62,7 @@ public class TapTest extends FragmentActivity implements TapTestInstructionFragm
     }
 
     public void startTest() {
-        TapTestFragment fragment = newInstance(++roundNumber);
+        TapTestFragment fragment = newInstance(TRIAL_ORDER[++roundNumber], roundNumber+1);
         transaction = fragmentManager.beginTransaction();
         transaction.replace(R.id.fragmentContainer, fragment);
         transaction.addToBackStack(null);
@@ -78,7 +78,7 @@ public class TapTest extends FragmentActivity implements TapTestInstructionFragm
             startTest();
         } else {
             // trials are complete - display score fragment
-            TapScoreFragment fragment = newInstance(allResults);
+            TapScoreFragment fragment = newInstance(TRIAL_ORDER, RIGHT_HAND_TRIALS, LEFT_HAND_TRIALS, RIGHT_FOOT_TRIALS, LEFT_FOOT_TRIALS, allResults);
             transaction = fragmentManager.beginTransaction();
             transaction.replace(R.id.fragmentContainer, fragment);
             transaction.addToBackStack(null);

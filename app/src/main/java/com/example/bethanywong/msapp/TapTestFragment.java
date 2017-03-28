@@ -6,7 +6,6 @@ import android.os.CountDownTimer;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,9 +15,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import static com.example.bethanywong.msapp.TapTest.ROUND_NUMBER_KEY;
-import static com.example.bethanywong.msapp.TapTest.TRIAL_ORDER;
 
 public class TapTestFragment extends Fragment {
+    public static final String BODY_PART_KEY = "BODY_PART_KEY";
     private OnTapTestFinishListener callback;
     private ImageView tapButton;
     private TextView timeTextView;
@@ -28,18 +27,19 @@ public class TapTestFragment extends Fragment {
     private TextView subtext;
     private Animation shrink;
     private TextView roundNumberView;
-    private String bodyPart;
     private int count;
     private int roundNumber;
+    private String bodyPart;
 
     public interface OnTapTestFinishListener {
         public void goToNext(int trialResult);
     }
 
-    public static TapTestFragment newInstance(int roundNumber) {
+    public static TapTestFragment newInstance(String bodyPart, int roundNumber) {
         TapTestFragment fragment = new TapTestFragment();
         Bundle args = new Bundle();
         args.putInt(ROUND_NUMBER_KEY, roundNumber);
+        args.putString(BODY_PART_KEY, bodyPart);
         fragment.setArguments(args);
         return fragment;
     }
@@ -56,10 +56,10 @@ public class TapTestFragment extends Fragment {
         subtext = (TextView)view.findViewById(R.id.subtext);
         roundNumberView = (TextView)view.findViewById(R.id.roundNumber);
         roundNumber = getArguments().getInt(ROUND_NUMBER_KEY);
-        bodyPart = TRIAL_ORDER[roundNumber];
+        bodyPart = getArguments().getString(BODY_PART_KEY);
 
         // Set proper round number and body part instruction
-        roundNumberView.setText("Round " + (roundNumber+1));
+        roundNumberView.setText("Round " + roundNumber);
         instructions.setText("Trial: " + bodyPart);
 
          timer = new CountDownTimer(10000, 1000) {
