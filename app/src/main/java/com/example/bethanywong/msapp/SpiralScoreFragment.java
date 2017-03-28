@@ -11,7 +11,6 @@ import android.widget.TextView;
 
 import static com.example.bethanywong.msapp.SpiralTest.RESULT_KEY;
 
-
 public class SpiralScoreFragment extends Fragment {
     public static final String TRIAL_KEY = "TRIAL_KEY";
     public static final String RIGHT_KEY = "RIGHT_KEY";

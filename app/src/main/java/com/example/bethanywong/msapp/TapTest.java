@@ -1,162 +1,92 @@
 package com.example.bethanywong.msapp;
 
-import android.graphics.PorterDuff;
-import android.support.v7.app.AppCompatActivity;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.os.Bundle;
-import android.os.CountDownTimer;
-import android.util.Log;
-import android.view.View;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
-import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.TextView;
-import android.graphics.Color;
 
-public class TapTest extends AppCompatActivity {
-    CountDownTimer timer = new CountDownTimer(10000, 1000) {
-        public void onTick(long millisUntilFinished) {
-            timeTextView.setText(millisUntilFinished / 1000 + "");
-        }
+import static com.example.bethanywong.msapp.TapScoreFragment.newInstance;
+import static com.example.bethanywong.msapp.TapTestFragment.newInstance;
 
-        public void onFinish() {
-            isCountingDown = false;
-            countHistory[round-1] = count;
-            count=0;
-            round++;
+public class TapTest extends FragmentActivity implements TapTestInstructionFragment.StartTestListener,
+        TapTestFragment.OnTapTestFinishListener, TapScoreFragment.FinishTapTestListener {
 
-            switch (round) {
-                case 4:
-                    side = "left";
-                    break;
-                case 7:
-                    side = "right";
-                    body = "big toe";
-                    break;
-                case 10:
-                    side = "left";
-                    break;
-                default:
-                    break;
-
-            }
-
-            if (round <= 12) {
-                setNewRound();
-            } else {
-                displayResults();
-            }
-
-            tap.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    runTimer(v);
-                }
-            });
-        }
-    };
-
-    private int count;
-    ImageView tap;
-    TextView txtCount;
-    TextView instructions;
-    TextView roundView;
-    TextView timeTextView;
-    int round;
-    String side;
-    String body;
-    private int[] countHistory = new int[12];
-    Animation shrink;
-    boolean isCountingDown;
+    public static final String ROUND_NUMBER_KEY = "ROUND_NUMBER_KEY";
+    public static final String RESULTS_KEY = "RESULTS_KEY";
+    // ********* TO CHANGE ORDER OF TEST, CHANGE TRIAL_ORDER, THEN CHANGE THE OTHER FOUR FOLLOWING VARIABLES TO REFLECT THE NEW INDICES IN TRIAL_ORDER **************
+    private static final String[] TRIAL_ORDER = {"Right index finger", "Left index finger", "Right index finger",
+            "Left index finger", "Right index finger", "Left index finger", "Right big toe", "Left big toe",
+            "Right big toe", "Left big toe", "Right big toe", "Left big toe"};
+    private static final int[] RIGHT_HAND_TRIALS = {0, 2, 4};
+    private static final int[] LEFT_HAND_TRIALS = {1, 3, 5};
+    private static final int[] RIGHT_FOOT_TRIALS = {6, 8, 10};
+    private static final int[] LEFT_FOOT_TRIALS = {7, 9, 11};
+    private int[] allResults = new int[TRIAL_ORDER.length];
+    // *************************** END ***************************************
+    private int roundNumber;
+    private FragmentManager fragmentManager;
+    private FragmentTransaction transaction;
+    private boolean hasBeenResumed;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_test);
-        timeTextView = (TextView) findViewById(R.id.timeTextView);
-        roundView = (TextView) findViewById(R.id.roundNumber);
-        round = 1;
-        side = "right";
-        body = "index finger";
-        shrink = AnimationUtils.loadAnimation(this, R.anim.shrink);
-        isCountingDown = false;
+        fragmentManager = getSupportFragmentManager();
+        transaction = fragmentManager.beginTransaction();
+        roundNumber = -1;
+        hasBeenResumed = false;
+        TapTestInstructionFragment fragment = new TapTestInstructionFragment();
+
+        // place instructions in view automatically
+        transaction.add(R.id.fragmentContainer, fragment).addToBackStack(null).commit();
     }
 
-    public void runTimer(View view) {
-        tap = (ImageView)findViewById(R.id.tapCount);
-        instructions = (TextView) findViewById(R.id.instructions);
-        txtCount = (TextView) findViewById(R.id.tapBegin);
-        tap.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                count++;
-                //Log.d("runTimer",String.valueOf(count));
-                v.startAnimation(shrink);
-            }
-        });
-        if (!isCountingDown){
-            tap.setEnabled(false);
-            tap.setColorFilter(Color.rgb(123,123,123), PorterDuff.Mode.MULTIPLY);
-            CountDownTimer warmUp = new CountDownTimer(3000,1000) {
-                @Override
-                public void onTick(long millisUntilFinished) {
-                    if (millisUntilFinished/1000 == 2){
-                        txtCount.setText("Ready!");
-                    } else if (millisUntilFinished/1000 == 1){
-                        txtCount.setText("Set!");
-                    }
-                }
-                @Override
-                public void onFinish() {
-                    tap.clearColorFilter();
-                    txtCount.setText("Tap!");
-                    tap.setEnabled(true);
-                    timer.start();
-                }
-            };
-            timeTextView.setText("10");
-            warmUp.start();
+    @Override
+    public void onBackPressed(){
+        // disable back button
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        // reset trial
+        if (roundNumber >= 0 && roundNumber < TRIAL_ORDER.length-1 && hasBeenResumed) {
+            TapTestFragment fragment = newInstance(TRIAL_ORDER[roundNumber], roundNumber+1);
+            transaction = fragmentManager.beginTransaction();
+            transaction.replace(R.id.fragmentContainer, fragment);
+            transaction.addToBackStack(null);
+            transaction.commit();
         }
-        isCountingDown = true;
-        count = 0;
-        instructions.setText("Keep your " + body + " in place!");
-    }
-    public void coolDown(){
-        tap.setEnabled(false);
-        CountDownTimer coolDown = new CountDownTimer(2000,1000) {
-            @Override
-            public void onTick(long millisUntilFinished) {
-            }
-            @Override
-            public void onFinish() {
-                tap.setEnabled(true);
-            }
-        };
-        coolDown.start();
+        hasBeenResumed = true;
     }
 
-    public void setNewRound() {
-        coolDown();
-        timeTextView.setText("TIME'S UP");
-        txtCount.setText("Tap to begin!");
-        instructions.setText("Tap the green circle as many times as you can with your " + side + " " + body);
-        roundView.setText("Round " + round);
+    public void startTest() {
+        TapTestFragment fragment = newInstance(TRIAL_ORDER[++roundNumber], roundNumber+1);
+        transaction = fragmentManager.beginTransaction();
+        transaction.replace(R.id.fragmentContainer, fragment);
+        transaction.addToBackStack(null);
+        transaction.commit();
     }
 
-    public void displayResults() {
-        coolDown();
-        timeTextView.setVisibility(View.GONE);
-        instructions.setVisibility(View.GONE);
-        tap.setVisibility(View.GONE);
-        roundView.setText("Test Completed!");
+    public void goToNext(int trialResult) {
+        if (roundNumber >= 0 && roundNumber < TRIAL_ORDER.length) {
+            allResults[roundNumber] = trialResult;
+        }
 
-        txtCount.setText("Right hand results: " + countHistory[0] + " || " + countHistory[1]+ " || " + countHistory[2] +
-                "\r\nLeft hand results: " + countHistory[3] + " || " + countHistory[4]+ " || " + countHistory[5] +
-                "\r\nRight Foot results: " + countHistory[6] + " || " + countHistory[7]+ " || " + countHistory[8] +
-                "\r\nLeft Foot results: " + countHistory[9] + " || " + countHistory[10]+ " || " + countHistory[11]);
-//        txtCount.setText("Right hand results: " + ((countHistory[0] + countHistory[1]+ countHistory[2]) / 3) +
-//                "\r\nLeft hand results: " + ((countHistory[3] + countHistory[4] + countHistory[5]) / 3) +
-//                "\r\nRight Foot results: " + ((countHistory[6] + countHistory[7] + countHistory[8]) / 3) +
-//                "\r\nLeft Foot results: " + ((countHistory[9] + countHistory[10] + countHistory[11]) / 3));
+        if (roundNumber < TRIAL_ORDER.length-1) {
+            startTest();
+        } else {
+            // trials are complete - display score fragment
+            TapScoreFragment fragment = newInstance(TRIAL_ORDER, RIGHT_HAND_TRIALS, LEFT_HAND_TRIALS, RIGHT_FOOT_TRIALS, LEFT_FOOT_TRIALS, allResults);
+            transaction = fragmentManager.beginTransaction();
+            transaction.replace(R.id.fragmentContainer, fragment);
+            transaction.addToBackStack(null);
+            transaction.commit();
+        }
+    }
+
+    public void goHome() {
+        finish();
     }
 }
