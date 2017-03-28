@@ -148,6 +148,7 @@ public class CurlActivity extends AppCompatActivity {
         double score = (endTime - startTime) / 1000000000.0;
         NumberFormat formatter = new DecimalFormat("#0.00");
 
+        curlsDone = 0;
         round++;
         if (round < 3) {
             instruction.setText("Hold your right arm out flat and press start to begin.");
