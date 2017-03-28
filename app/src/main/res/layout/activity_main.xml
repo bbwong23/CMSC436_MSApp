@@ -41,12 +41,15 @@
         android:id="@+id/balloon_button"
         android:layout_weight="0.05" />
     <Button
-        android:text="View Past Results"
+        android:text="Curl Test"
         android:textSize="10pt"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/results_button"
-        android:layout_weight="0.05" />
+        android:id="@+id/curl_button"
+        android:layout_marginTop="10dp"
+        android:layout_below="@+id/balloon_button"
+        android:layout_centerHorizontal="true" />
+
     <Button
         android:text="Developers Info"
         android:textSize="10pt"
@@ -54,4 +57,13 @@
         android:layout_height="wrap_content"
         android:id="@+id/devinfo_button"
         android:layout_weight="0.05" />
+    <Button
+        android:text="View Past Results"
+        android:textSize="10pt"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/results_button"
+        android:layout_marginTop="10dp"
+        android:layout_below="@+id/curl_button"
+        android:layout_alignParentStart="true" />
 </LinearLayout>
