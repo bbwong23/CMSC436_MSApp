@@ -10,8 +10,9 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
-import static com.example.bethanywong.msapp.LevelTest.LEFT_HAND_TRIALS;
-import static com.example.bethanywong.msapp.LevelTest.RIGHT_HAND_TRIALS;
+import static com.example.bethanywong.msapp.SpiralScoreFragment.TRIAL_KEY;
+import static com.example.bethanywong.msapp.TapScoreFragment.LEFT_HAND_KEY;
+import static com.example.bethanywong.msapp.TapScoreFragment.RIGHT_HAND_KEY;
 
 public class LevelScoreFragment extends Fragment {
     public static final String RESULTS_KEY = "RESULTS_KEY";
@@ -19,6 +20,9 @@ public class LevelScoreFragment extends Fragment {
     private TextView resultText;
     private Button homeButton;
     private FinishLevelTestListener callBack;
+    private String[] trialOrder;
+    private int[] rTrials;
+    private int[] lTrials;
 
     public interface FinishLevelTestListener {
         public void goHome();
@@ -28,6 +32,9 @@ public class LevelScoreFragment extends Fragment {
         LevelScoreFragment fragment = new LevelScoreFragment();
         Bundle args = new Bundle();
         args.putIntArray(RESULTS_KEY, results);
+        args.putStringArray(TRIAL_KEY, trialOrder);
+        args.putIntArray(RIGHT_HAND_KEY, rTrials);
+        args.putIntArray(LEFT_HAND_KEY, lTrials);
         fragment.setArguments(args);
         return fragment;
     }
@@ -40,6 +47,9 @@ public class LevelScoreFragment extends Fragment {
         resultText = (TextView)view.findViewById(R.id.results);
         homeButton = (Button)view.findViewById(R.id.homeButton);
         results = getArguments().getIntArray(RESULTS_KEY);
+        trialOrder = getArguments().getStringArray(TRIAL_KEY);
+        rTrials = getArguments().getIntArray(RIGHT_HAND_KEY);
+        lTrials = getArguments().getIntArray(LEFT_HAND_KEY);
 
         homeButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -55,13 +65,13 @@ public class LevelScoreFragment extends Fragment {
 
     public String getResultString() {
         StringBuffer resultString = new StringBuffer();
-        double rAvg = computeAverageScore(RIGHT_HAND_TRIALS);
-        double lAvg = computeAverageScore(LEFT_HAND_TRIALS);
+        double rAvg = computeAverageScore(rTrials);
+        double lAvg = computeAverageScore(lTrials);
         resultString.append("Right Hand Score: " + rAvg);
-        resultString.append(getResultStringHelper(RIGHT_HAND_TRIALS));
+        resultString.append(getResultStringHelper(rTrials));
         resultString.append("\n");
         resultString.append("Left Hand Score: " + lAvg);
-        resultString.append(getResultStringHelper(LEFT_HAND_TRIALS));
+        resultString.append(getResultStringHelper(lTrials));
         return resultString.toString();
     }
 

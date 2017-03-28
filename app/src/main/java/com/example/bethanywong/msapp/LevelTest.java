@@ -82,7 +82,7 @@ public class LevelTest extends FragmentActivity implements LevelTestInstructionF
             startLevelTest();
         } else {
             // display score fragment
-            LevelScoreFragment fragment = newInstance(results);
+            LevelScoreFragment fragment = newInstance(TRIAL_ORDER, RIGHT_HAND_TRIALS, LEFT_HAND_TRIALS, results);
             transaction = fragmentManager.beginTransaction();
             transaction.replace(R.id.fragmentContainer, fragment);
             transaction.addToBackStack(null);

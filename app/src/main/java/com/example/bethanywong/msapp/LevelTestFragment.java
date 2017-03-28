@@ -15,10 +15,10 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import static com.example.bethanywong.msapp.R.id.timeTextView;
-import static com.example.bethanywong.msapp.SpiralTest.HAND_KEY;
 
 public class LevelTestFragment extends Fragment {
     public static final String ROUND_KEY = "ROUND_KEY";
+    public static final String HAND_KEY = "HAND_KEY";
     private Button startButton;
     private TextView instructionText;
     private TextView timeText;
