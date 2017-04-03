@@ -152,7 +152,7 @@ public class Sheets extends Activity
         } else {
             new MakeRequestTask(mCredential).execute();
         }
-        finish();
+        //finish();
     }
 
     /**
@@ -378,10 +378,6 @@ public class Sheets extends Activity
 
             switch(mode){
                 case "Tap":
-                    String leftHandSheetId = "Tapping Test (LH)!A2:F";
-                    String rightHandSheetId = "Tapping Test (RH)!A2:F";
-                    String leftFootSheetId = "Tapping Test (LF)!A2:F";
-                    String rightFootSheetId = "Tapping Test (RF)!A2:F";
                     //fucking lol, maybe figure out a way to not be so ugly
                     ArrayList<Object> rightHandVals = new ArrayList<>(Arrays.asList(rowToAdd.get(0),rowToAdd.get(1),rowToAdd.get(2),rowToAdd.get(3),rowToAdd.get(4),rowToAdd.get(5)));
                     ArrayList<Object> leftHandVals = new ArrayList<>(Arrays.asList(rowToAdd.get(0), rowToAdd.get(1),rowToAdd.get(2),rowToAdd.get(6),rowToAdd.get(7),rowToAdd.get(8)));
@@ -398,21 +394,32 @@ public class Sheets extends Activity
 
                     //might want to use batch update
                     valueRange.setValues(leftHandRow);
-                    this.mService.spreadsheets().values().append(spreadsheetId, leftHandSheetId, valueRange).setValueInputOption("RAW").execute();
+                    this.mService.spreadsheets().values().append(spreadsheetId, "Tapping Test (LH)!A2:F", valueRange).setValueInputOption("RAW").execute();
                     valueRange.setValues(rightHandRow);
-                    this.mService.spreadsheets().values().append(spreadsheetId, rightHandSheetId, valueRange).setValueInputOption("RAW").execute();
+                    this.mService.spreadsheets().values().append(spreadsheetId, "Tapping Test (RH)!A2:F", valueRange).setValueInputOption("RAW").execute();
                     valueRange.setValues(leftFootRow);
-                    this.mService.spreadsheets().values().append(spreadsheetId, leftFootSheetId, valueRange).setValueInputOption("RAW").execute();
+                    this.mService.spreadsheets().values().append(spreadsheetId, "Tapping Test (LF)!A2:F", valueRange).setValueInputOption("RAW").execute();
                     valueRange.setValues(rightFootRow);
-                    this.mService.spreadsheets().values().append(spreadsheetId, rightFootSheetId, valueRange).setValueInputOption("RAW").execute();
+                    this.mService.spreadsheets().values().append(spreadsheetId, "Tapping Test (RF)!A2:F", valueRange).setValueInputOption("RAW").execute();
 
                     break;
                 case "Level":
                     //not implemented yet
                     break;
+                case "Spiral":
+                    rightHandVals = new ArrayList<>(Arrays.asList(rowToAdd.get(0),rowToAdd.get(1),rowToAdd.get(2),rowToAdd.get(3),rowToAdd.get(4),rowToAdd.get(5)));
+                    leftHandVals = new ArrayList<>(Arrays.asList(rowToAdd.get(0), rowToAdd.get(1),rowToAdd.get(2),rowToAdd.get(6),rowToAdd.get(7),rowToAdd.get(8)));
+                    leftHandRow = new ArrayList<>();
+                    rightHandRow = new ArrayList<>();
+                    leftHandRow.add(leftHandVals);
+                    rightHandRow.add(rightHandVals);
+                    valueRange.setValues(leftHandRow);
+                    this.mService.spreadsheets().values().append(spreadsheetId, "Spiral Test (LH)!A2:F", valueRange).setValueInputOption("RAW").execute();
+                    valueRange.setValues(rightHandRow);
+                    this.mService.spreadsheets().values().append(spreadsheetId, "Spiral Test (RH)!A2:F", valueRange).setValueInputOption("RAW").execute();
+                    break;
+
                 case "Balloon":
-                    leftHandSheetId = "Balloon Test (LH)!A2:F";
-                    rightHandSheetId = "Balloon Test (RH)!A2:F";
                     rightHandVals = new ArrayList<>(Arrays.asList(rowToAdd.get(0),rowToAdd.get(1),rowToAdd.get(2),rowToAdd.get(3)));
                     leftHandVals = new ArrayList<>(Arrays.asList(rowToAdd.get(0), rowToAdd.get(1),rowToAdd.get(2),rowToAdd.get(4)));
                     leftHandRow = new ArrayList<>();
@@ -420,9 +427,9 @@ public class Sheets extends Activity
                     leftHandRow.add(leftHandVals);
                     rightHandRow.add(rightHandVals);
                     valueRange.setValues(leftHandRow);
-                    this.mService.spreadsheets().values().append(spreadsheetId, leftHandSheetId, valueRange).setValueInputOption("RAW").execute();
+                    this.mService.spreadsheets().values().append(spreadsheetId, "Balloon Test (LH)!A2:F", valueRange).setValueInputOption("RAW").execute();
                     valueRange.setValues(rightHandRow);
-                    this.mService.spreadsheets().values().append(spreadsheetId, rightHandSheetId, valueRange).setValueInputOption("RAW").execute();
+                    this.mService.spreadsheets().values().append(spreadsheetId, "Balloon Test (RH)!A2:F", valueRange).setValueInputOption("RAW").execute();
                     break;
             }
 
