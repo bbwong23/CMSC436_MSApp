@@ -433,10 +433,99 @@ public class Sheets extends Activity
                     break;
             }
 
-
+            createClassResponse();
             return null;
         }
+        //sets up alley oop for updating to class sheet
+        private void createClassResponse() throws IOException{
+            int rightAvg = 0, leftAvg = 0;
+            String rightHandId = "", leftHandId = "";
+            switch (mode){
+                case "Spiral":
+                    rightHandId = "Spiral Test (RH)";
+                    leftHandId = "Spiral Test (LH)";
+                    //get right hand avg
+                    rightAvg = (Integer.parseInt((String)rowToAdd.get(3)) + Integer.parseInt((String)rowToAdd.get(4)) + Integer.parseInt((String)rowToAdd.get(5)))/3;
+                    //get left hand avg
+                    leftAvg = (Integer.parseInt((String)rowToAdd.get(6)) + Integer.parseInt((String)rowToAdd.get(7)) + Integer.parseInt((String)rowToAdd.get(8)))/3;
 
+
+                    break;
+                case "Tap":
+                    //not implemented yet
+//                    rightHandId = "Tapping Test (RH) ";
+//                    leftHandId = "Tapping Test (LH) ";
+//                    String rightFootId = "Tapping Test (RF) ";
+//                    String leftFootId = "Tapping Test (LF) ";
+//                    rightAvg = (Integer.parseInt((String)rowToAdd.get(3)) + Integer.parseInt((String)rowToAdd.get(4)) + Integer.parseInt((String)rowToAdd.get(5)))/3;
+//                    leftAvg =  (Integer.parseInt((String)rowToAdd.get(6)) + Integer.parseInt((String)rowToAdd.get(7)) + Integer.parseInt((String)rowToAdd.get(8)))/3;
+//                    int rightFAvg = (Integer.parseInt((String)rowToAdd.get(9)) + Integer.parseInt((String)rowToAdd.get(10)) + Integer.parseInt((String)rowToAdd.get(11)))/3;
+//                    int leftFAvg = (Integer.parseInt((String)rowToAdd.get(12)) + Integer.parseInt((String)rowToAdd.get(13)) + Integer.parseInt((String)rowToAdd.get(14)))/3;
+//                    sendToClassSheet(rightFootId,rightFAvg);
+//                    sendToClassSheet(leftFootId,leftFAvg);
+
+                    break;
+            }
+            sendToClassSheet(rightHandId, rightAvg);
+            sendToClassSheet(leftHandId, leftAvg);
+        }
+        //actually updates class page
+        private void sendToClassSheet(String sheetID, int updateValue) throws IOException{
+            String userID = (String)rowToAdd.get(0);
+            String spreadsheetId = "1YvI3CjS4ZlZQDYi5PaiA7WGGcoCsZfLoSFM0IdvdbDU";
+            ValueRange response = this.mService.spreadsheets().values()
+                    .get(spreadsheetId, sheetID + "!A2:A")
+                    .execute();
+            List<List<Object>> sheet = response.getValues();
+            int rowIdx = 2;
+            if (sheet != null) {
+                for (List row : sheet) {
+                    if (row.get(0).equals(userID)) {
+                        break;
+                    }
+                    rowIdx++;
+                }
+            }
+            response = this.mService.spreadsheets().values()
+                    .get(spreadsheetId, sheetID + "!" + rowIdx + ":" + rowIdx)
+                    .execute();
+            sheet = response.getValues();
+            String colIdx = "A";
+            if (sheet != null) {
+                colIdx = columnToLetter(sheet.get(0).size() + 1);
+            }
+            String updateCell = sheetID + "!" + colIdx + rowIdx;
+            List<List<Object>> values = new ArrayList<>();
+            List<Object> row = new ArrayList<>();
+
+            if (colIdx.equals("A")) {
+                row.add(userID);
+                updateCell += ":B" + rowIdx;
+            }
+
+            row.add(updateValue);
+            values.add(row);
+            ValueRange valueRange = new ValueRange();
+            valueRange.setValues(values);
+
+            // Call the API
+            this.mService.spreadsheets().values()
+                    .update(spreadsheetId, updateCell, valueRange)
+                    .setValueInputOption("RAW")
+                    .execute();
+        }
+        //given a column, what is the corresponding letter in the sheet?
+        private String columnToLetter(int column) {
+            int temp;
+            String letter = "";
+            while (column > 0)
+            {
+                temp = (column - 1) % 26;
+                letter = ((char)(temp + 65)) + letter;
+                column = (column - temp - 1) / 26;
+            }
+            return letter;
+        }
 
 
         @Override
@@ -455,6 +544,7 @@ public class Sheets extends Activity
                 mOutputText.setText(TextUtils.join("\n", output));
             }
         }
+
 
         @Override
         protected void onCancelled() {

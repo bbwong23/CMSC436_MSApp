@@ -213,7 +213,7 @@ public class TapTest extends AppCompatActivity {
         Intent sheets = new Intent(this, Sheets.class);
         ArrayList<String> row = new ArrayList<>();
 
-        row.add("T8P" + userID);//Name
+        row.add("t8p0" + userID);//Name
         row.add(currentDateandTime);//datetime
         row.add("Tap");//mode
         row.add(day);//day
