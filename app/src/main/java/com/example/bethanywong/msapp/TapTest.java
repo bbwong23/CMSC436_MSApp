@@ -1,6 +1,7 @@
 package com.example.bethanywong.msapp;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
@@ -135,8 +136,13 @@ public class TapTest extends FragmentActivity implements TapTestInstructionFragm
     }
 
     private void sendToSheets() {
-        String userId = "t8-testing";
+        SharedPreferences prefs = getSharedPreferences("PrefsFile", MODE_PRIVATE);
+        int userID = prefs.getInt("user",0);
+        if (userID == 0) {
+            Log.d("Tag","Missing userID!");
+        }
+//        String userId = "t8-testing";
         float data = 9.99f;
-        sheet.writeData(Sheets.TestType.RH_TAP, userId, data);
+        sheet.writeData(Sheets.TestType.RH_TAP, "t8p0" + userID, data);
     }
 }
