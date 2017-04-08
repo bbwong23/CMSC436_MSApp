@@ -135,7 +135,7 @@ public class TapTest extends FragmentActivity implements TapTestInstructionFragm
     }
 
     private void sendToSheets() {
-        String userId = "t8-testing";
+        String userId = "t8p3-test";
         float data = 9.99f;
         sheet.writeData(Sheets.TestType.RH_TAP, userId, data);
     }

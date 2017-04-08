@@ -10,16 +10,19 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
 import java.util.UUID;
 
+import edu.umd.cmsc436.sheets.Sheets;
+
 import static com.example.bethanywong.msapp.LevelTestFragment.newInstance;
 import static com.example.bethanywong.msapp.LevelScoreFragment.newInstance;
 
 public class LevelTest extends FragmentActivity implements LevelTestInstructionFragment.StartLevelTestListener,
-        LevelTestFragment.OnFinishLevelTestListener, LevelScoreFragment.FinishLevelTestListener {
+        LevelTestFragment.OnFinishLevelTestListener, LevelScoreFragment.FinishLevelTestListener, Sheets.Host {
 
     private static final String[] TRIAL_ORDER = {"Right hand", "Left hand", "Right hand", "Left hand", "Right hand", "Left hand",};
     private static final int [] RIGHT_HAND_TRIALS = {0, 2, 4};
@@ -30,6 +33,7 @@ public class LevelTest extends FragmentActivity implements LevelTestInstructionF
     private FragmentManager fragmentManager;
     private FragmentTransaction transaction;
     private boolean hasBeenResumed;
+    private Sheets sheet;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -41,6 +45,9 @@ public class LevelTest extends FragmentActivity implements LevelTestInstructionF
         hasBeenResumed = false;
         LevelTestInstructionFragment fragment = new LevelTestInstructionFragment();
 
+        String spreadsheetId = "1ASIF7kZHFFaUNiBndhPKTGYaQgTEbqPNfYO5DVb1Y9Y";
+        sheet = new Sheets(this, "MS App", spreadsheetId);
+        sendToSheets();
         // place instruction fragment in view
         transaction.add(R.id.fragmentContainer, fragment).addToBackStack(null).commit();
     }
@@ -119,5 +126,35 @@ public class LevelTest extends FragmentActivity implements LevelTestInstructionF
         Canvas canvas = new Canvas(bitmap);
         view.draw(canvas);
         return bitmap;
+    }
+
+    private void sendToSheets() {
+        String userId = "t8p3-test";
+        float data = 9.99f;
+        sheet.writeData(Sheets.TestType.RH_LEVEL, userId, data);
+    }
+
+    @Override
+    public int getRequestCode(Sheets.Action action) {
+        switch (action) {
+            case REQUEST_ACCOUNT_NAME:
+                return 1;
+            case REQUEST_AUTHORIZATION:
+                return 2;
+            case REQUEST_PERMISSIONS:
+                return 3;
+            case REQUEST_PLAY_SERVICES:
+                return 4;
+            default:
+                return -1;
+        }
+    }
+
+    @Override
+    public void notifyFinished(Exception e) {
+        if (e != null) {
+            throw new RuntimeException(e);
+        }
+        Log.i(getClass().getSimpleName(), "Done");
     }
 }

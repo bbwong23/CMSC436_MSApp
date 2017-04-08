@@ -163,9 +163,6 @@ public class LevelTestView extends View{
 
     protected int computeResults() {
 
-        double testedRed = 0;
-        double testedYellow = 0;
-        double testedGreen = 0;
         double totalDrawn = 0;
 
         int width = canvasBitmap.getWidth();
