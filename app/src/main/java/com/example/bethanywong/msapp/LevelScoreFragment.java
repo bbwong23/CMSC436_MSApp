@@ -4,11 +4,14 @@ package com.example.bethanywong.msapp;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+
+import edu.umd.cmsc436.sheets.Sheets;
 
 import static com.example.bethanywong.msapp.SpiralScoreFragment.TRIAL_KEY;
 import static com.example.bethanywong.msapp.TapScoreFragment.LEFT_HAND_KEY;
@@ -23,6 +26,8 @@ public class LevelScoreFragment extends Fragment {
     private String[] trialOrder;
     private int[] rTrials;
     private int[] lTrials;
+    private Sheets sheet;
+    private String spreadsheetId;
 
     public interface FinishLevelTestListener {
         public void goHome();
@@ -59,19 +64,20 @@ public class LevelScoreFragment extends Fragment {
         });
         String resultString = getResultString();
         resultText.setText(resultString);
-
         return view;
     }
 
     public String getResultString() {
         StringBuffer resultString = new StringBuffer();
-        double rAvg = computeAverageScore(rTrials);
-        double lAvg = computeAverageScore(lTrials);
+        float rAvg = computeAverageScore(rTrials);
+        float lAvg = computeAverageScore(lTrials);
         resultString.append("Right Hand Score: " + rAvg);
         resultString.append(getResultStringHelper(rTrials));
         resultString.append("\n");
         resultString.append("Left Hand Score: " + lAvg);
         resultString.append(getResultStringHelper(lTrials));
+
+        ((LevelTest)getActivity()).sendToSheets("t8p03",rAvg, lAvg);
         return resultString.toString();
     }
 
@@ -84,8 +90,8 @@ public class LevelScoreFragment extends Fragment {
         return str.toString();
     }
 
-    public double computeAverageScore(int[] indexArray) {
-        double score = 0.0;
+    public float computeAverageScore(int[] indexArray) {
+        float score = 0;
         for (int i = 0; i < indexArray.length; i++) {
             int index = indexArray[i];
             score = score + results[index];

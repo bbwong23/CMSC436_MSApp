@@ -47,7 +47,6 @@ public class LevelTest extends FragmentActivity implements LevelTestInstructionF
 
         String spreadsheetId = "1ASIF7kZHFFaUNiBndhPKTGYaQgTEbqPNfYO5DVb1Y9Y";
         sheet = new Sheets(this, "MS App", spreadsheetId);
-        sendToSheets();
         // place instruction fragment in view
         transaction.add(R.id.fragmentContainer, fragment).addToBackStack(null).commit();
     }
@@ -128,10 +127,9 @@ public class LevelTest extends FragmentActivity implements LevelTestInstructionF
         return bitmap;
     }
 
-    private void sendToSheets() {
-        String userId = "t8p3-test";
-        float data = 9.99f;
-        sheet.writeData(Sheets.TestType.RH_LEVEL, userId, data);
+    public void sendToSheets(String userId, float dataR, float dataL) {
+        sheet.writeData(Sheets.TestType.RH_LEVEL, userId, dataR);
+        sheet.writeData(Sheets.TestType.LH_LEVEL, userId, dataL);
     }
 
     @Override
