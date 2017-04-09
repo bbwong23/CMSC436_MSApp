@@ -60,8 +60,11 @@
                 <action android:name="com.example.bethanywong.msapp.CurlActivity" />
 
                 <category android:name="android.intent.category.DEFAULT" />
+
                 <uses-permission android:name="android.permission.VIBRATE" />
             </intent-filter>
         </activity>
+        <activity android:name=".SwayTest"></activity>
     </application>
+
 </manifest>
