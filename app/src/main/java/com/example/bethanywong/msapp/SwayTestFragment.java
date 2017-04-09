@@ -1,12 +1,19 @@
 package com.example.bethanywong.msapp;
 
+import android.Manifest;
+import android.app.Activity;
 import android.content.Context;
+import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.media.AudioManager;
 import android.media.ToneGenerator;
+import android.provider.MediaStore;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.os.CountDownTimer;
@@ -16,10 +23,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import java.util.UUID;
 
 public class SwayTestFragment extends Fragment {
     private static final String ROUND_NUMBER_KEY = "ROUND_NUMBER";
     private static final int TEST_TIME_LENGTH = 10;
+    private static final int PERMISSION_REQUEST_CODE = 1;
     private OnSwayRoundFinishListener callBack;
     private CountDownTimer warmUpTimer;
     private CountDownTimer testTimer;
@@ -36,6 +47,8 @@ public class SwayTestFragment extends Fragment {
     private TextView roundText;
     private int roundNumber;
     private TextView swayText;
+    private View view;
+    private Activity activity;
 
     public interface OnSwayRoundFinishListener {
         public void goToNext(double trialResult);
@@ -52,10 +65,11 @@ public class SwayTestFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_sway_test, container, false);
-        startButton = (Button)view.findViewById(R.id.startButton);
-        swayText = (TextView)view.findViewById(R.id.swayText);
-        roundText = (TextView)view.findViewById(R.id.roundText);
+        activity = getActivity();
+        view = inflater.inflate(R.layout.fragment_sway_test, container, false);
+        startButton = (Button) view.findViewById(R.id.startButton);
+        swayText = (TextView) view.findViewById(R.id.swayText);
+        roundText = (TextView) view.findViewById(R.id.roundText);
         rawData = new float[TEST_TIME_LENGTH][3];
         gValues = new float[3];
         avgData = new float[3];
@@ -88,12 +102,14 @@ public class SwayTestFragment extends Fragment {
             }
         };
 
-        testTimer = new CountDownTimer(TEST_TIME_LENGTH*1000, 1000) {
+        testTimer = new CountDownTimer(TEST_TIME_LENGTH * 1000, 1000) {
             public void onTick(long millisUntilFinished) {
                 // record current phone space data
                 rawData[secondsPassed] = gValues.clone();
                 secondsPassed++;
-            };
+            }
+
+            ;
 
             public void onFinish() {
                 // determine average x, y, and z positions
@@ -116,7 +132,7 @@ public class SwayTestFragment extends Fragment {
             }
         };
 
-        warmUpTimer = new CountDownTimer(3000,1000) {
+        warmUpTimer = new CountDownTimer(3000, 1000) {
             @Override
             public void onTick(long millisUntilFinished) {
                 generator.startTone(ToneGenerator.TONE_CDMA_PIP, 500);
@@ -163,8 +179,38 @@ public class SwayTestFragment extends Fragment {
     }
 
     public double calculateDistance() {
-        totalDistance = Math.sqrt(Math.pow(calibration[0]-avgData[0], 2) + Math.pow(calibration[1]-avgData[1], 2) + Math.pow(calibration[2]-avgData[2], 3));
+        totalDistance = Math.sqrt(Math.pow(calibration[0] - avgData[0], 2) + Math.pow(calibration[1] - avgData[1], 2) + Math.pow(calibration[2] - avgData[2], 3));
         return totalDistance;
     }
 
+//    public void saveDrawing(View v) {
+//        view = v;
+//        if (ActivityCompat.checkSelfPermission(activity.getApplicationContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+//            ActivityCompat.requestPermissions(activity, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, PERMISSION_REQUEST_CODE);
+//        } else {
+//            String imgSaved = MediaStore.Images.Media.insertImage(
+//                    activity.getContentResolver(), screenShot(view),
+//                    UUID.randomUUID().toString() + ".png", "drawing");
+//            if (imgSaved != null) {
+//                Toast savedToast = Toast.makeText(activity.getApplicationContext(),
+//                        "Drawing saved to Gallery!", Toast.LENGTH_SHORT);
+//                savedToast.show();
+//            } else {
+//                Toast unsavedToast = Toast.makeText(activity.getApplicationContext(),
+//                        "Oops! Image could not be saved.", Toast.LENGTH_SHORT);
+//                unsavedToast.show();
+//            }
+//            drawView.destroyDrawingCache();
+//        }
+//
+//        drawView.clear();
+//    }
+//
+//    public Bitmap screenShot(View view) {
+//        Bitmap bitmap = Bitmap.createBitmap(view.getWidth(),
+//                view.getHeight(), Bitmap.Config.ARGB_8888);
+//        Canvas canvas = new Canvas(bitmap);
+//        view.draw(canvas);
+//        return bitmap;
+//    }
 }
