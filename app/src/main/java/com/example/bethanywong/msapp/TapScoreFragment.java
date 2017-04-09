@@ -43,7 +43,7 @@ public class TapScoreFragment extends Fragment {
         args.putIntArray(LEFT_FOOT_KEY, lFoot);
         fragment.setArguments(args);
         return fragment;
-    }1
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,

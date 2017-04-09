@@ -47,7 +47,16 @@
         android:layout_height="wrap_content"
         android:id="@+id/curl_button"
         android:layout_marginTop="10dp"
-        android:layout_below="@+id/balloon_button"
+        android:layout_below="@+id/curl_button"
+        android:layout_centerHorizontal="true" />
+    <Button
+        android:text="Sway Test"
+        android:textSize="10pt"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/sway_button"
+        android:layout_marginTop="10dp"
+        android:layout_below="@+id/sway_button"
         android:layout_centerHorizontal="true" />
 
     <Button
