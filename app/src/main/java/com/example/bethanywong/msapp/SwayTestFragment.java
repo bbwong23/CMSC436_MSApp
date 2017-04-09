@@ -77,66 +77,59 @@ public class SwayTestFragment extends Fragment {
             }
         };
 
-        tapButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                runTimer(v);
-            }
-        });
-
         return view;
     }
 
-    @Override
-    public void onStart() {
-        super.onStart();
-        coolDown();
-    }
-
-    @Override
-    public void onAttach(Context activity) {
-        super.onAttach(activity);
-        try {
-            callback = (OnTapTestFinishListener) activity;
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    public void runTimer(View view) {
-        tapButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                count++;
-                v.startAnimation(shrink);
-            }
-        });
-
-        tapButton.setEnabled(false);
-        tapButton.setColorFilter(Color.rgb(123,123,123), PorterDuff.Mode.MULTIPLY);
-        timeTextView.setText("10");
-        warmUpTimer.start();
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        warmUpTimer.cancel();
-        timer.cancel();
-    }
-
-    public void coolDown(){
-        tapButton.setEnabled(false);
-        CountDownTimer coolDown = new CountDownTimer(2000,1000) {
-            @Override
-            public void onTick(long millisUntilFinished) {
-            }
-            @Override
-            public void onFinish() {
-                tapButton.setEnabled(true);
-            }
-        };
-        coolDown.start();
-    }
+//    @Override
+//    public void onStart() {
+//        super.onStart();
+//        coolDown();
+//    }
+//
+//    @Override
+//    public void onAttach(Context activity) {
+//        super.onAttach(activity);
+//        try {
+//            callback = (OnTapTestFinishListener) activity;
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//    }
+//
+//    public void runTimer(View view) {
+//        tapButton.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                count++;
+//                v.startAnimation(shrink);
+//            }
+//        });
+//
+//        tapButton.setEnabled(false);
+//        tapButton.setColorFilter(Color.rgb(123,123,123), PorterDuff.Mode.MULTIPLY);
+//        timeTextView.setText("10");
+//        warmUpTimer.start();
+//    }
+//
+//    @Override
+//    public void onPause() {
+//        super.onPause();
+//        warmUpTimer.cancel();
+//        timer.cancel();
+//    }
+//
+//    public void coolDown(){
+//        tapButton.setEnabled(false);
+//        CountDownTimer coolDown = new CountDownTimer(2000,1000) {
+//            @Override
+//            public void onTick(long millisUntilFinished) {
+//            }
+//            @Override
+//            public void onFinish() {
+//                tapButton.setEnabled(true);
+//            }
+//        };
+//        coolDown.start();
+//    }
 
 }
