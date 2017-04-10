@@ -15,11 +15,11 @@ public class DeveloperInfo extends AppCompatActivity {
         setContentView(R.layout.activity_developer_info);
     }
 
-    public void getUser(View v){
+    public void getUser(View v) {
         SharedPreferences pref = getApplicationContext().getSharedPreferences("PrefsFile", MODE_PRIVATE);
         SharedPreferences.Editor editor = pref.edit();
         int userId = 0;
-        switch(v.getId()){
+        switch (v.getId()) {
             case R.id.user_bethany:
                 userId = 1;
                 break;
@@ -37,7 +37,7 @@ public class DeveloperInfo extends AppCompatActivity {
                 break;
         }
 
-        editor.putInt("user",userId);
+        editor.putInt("user", userId);
         editor.commit();
         Toast userToast = Toast.makeText(getApplicationContext(),
                 "Hi " + ((TextView) v).getText().toString() + ", your id is: "
