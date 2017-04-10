@@ -10,42 +10,10 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.example.bethanywong.msapp.BalloonTest">
 
-    <TextView
-        android:text="Click each circular button as quickly as you can with your right hand when they appear!"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/test"
-        android:textSize="14pt"/>
-  
-    <Button
-        android:text="Tap to Start"
-        android:layout_width="0.75in"
-        android:layout_height="0.75in"
-        android:background="@drawable/ic_green_button"
-        android:layout_marginTop="128dp"
-        android:id="@+id/balloon"
-        android:layout_x="110dp"
-        android:layout_y="170dp"/>
-
-    <TextView
-        android:text="Average score: "
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="37dp"
-        android:layout_y="340dp"
-        android:id="@+id/scoreDescribe"
-        android:textAlignment="center"
-        android:visibility="gone"/>
-
-    <TextView
-        android:text=""
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_y="110dp"
-        android:id="@+id/score"
-        android:textSize="18dp"
-        android:layout_x="0dp"
-        android:visibility="gone"/>
-
+        android:layout_height="match_parent"
+        android:id="@+id/fragmentContainer" />
 
 </AbsoluteLayout>
 
