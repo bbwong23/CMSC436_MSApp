@@ -145,10 +145,14 @@ public class TapTest extends FragmentActivity implements TapTestInstructionFragm
     public void sendToTrialSheet(String userId, float[] dataRH, float[] dataLH, float[] RF, float[] LF){
         trialSheet.writeTrials(Sheets.TestType.RH_TAP, userId,dataRH);
         trialSheet.writeTrials(Sheets.TestType.LH_TAP, userId,dataLH);
+        //trialSheet.writeTrials(Sheets.TestType.RF_TAP, userId,dataRF);
+        //trialSheet.writeTrials(Sheets.TestType.LF_TAP, userId,dataLF);
     }
 
     public void sendToClassSheet(String userId, float dataRH, float dataLH, float dataRF, float dataLF){
-        classSheet.writeData(Sheets.TestType.RH_SPIRAL, userId,dataRH);
-        classSheet.writeData(Sheets.TestType.LH_SPIRAL, userId,dataLH);
+        classSheet.writeData(Sheets.TestType.RH_TAP, userId,dataRH);
+        classSheet.writeData(Sheets.TestType.LH_TAP, userId,dataLH);
+        //classSheet.writeData(Sheets.TestType.RF_TAP, userId,dataRF);
+        //classSheet.writeData(Sheets.TestType.LF_TAP, userId,dataLF);
     }
 }

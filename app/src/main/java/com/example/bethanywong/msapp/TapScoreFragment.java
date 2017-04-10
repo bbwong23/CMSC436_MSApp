@@ -64,6 +64,7 @@ public class TapScoreFragment extends Fragment {
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        beginSheetResponse();
                         callBack.goHome();
                     }
                 }
@@ -113,19 +114,19 @@ public class TapScoreFragment extends Fragment {
     }
 
     private float getAvgScore(int[] trials) {
-        int sum = 0;
+        float sum = 0;
 
-        for(int i : trials) {
-            sum += i;
+        for(int i = 0;i < trials.length;i++) {
+            sum += results[trials[i]];
         }
 
-        return sum/3;
+        return sum / 3.0f;
     }
 
     private float[] toFloatArray(int[] data) {
         float[] floatData = new float[data.length];
         for (int i = 0; i < data.length; i++) {
-            floatData[i] = (float)data[i];
+            floatData[i] = (float)results[data[i]];
         }
         return floatData;
     }
