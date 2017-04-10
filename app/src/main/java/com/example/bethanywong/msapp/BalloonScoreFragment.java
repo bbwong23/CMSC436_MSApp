@@ -60,6 +60,7 @@ public class BalloonScoreFragment extends Fragment {
         finishButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                beginSheetResponse();
                 callBack.goHome();
             }
         });
