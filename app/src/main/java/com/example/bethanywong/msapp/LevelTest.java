@@ -1,6 +1,7 @@
 package com.example.bethanywong.msapp;
 
 import android.Manifest;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -127,9 +128,15 @@ public class LevelTest extends FragmentActivity implements LevelTestInstructionF
         return bitmap;
     }
 
-    public void sendToSheets(String userId, float dataR, float dataL) {
-        sheet.writeData(Sheets.TestType.RH_LEVEL, userId, dataR);
-        sheet.writeData(Sheets.TestType.LH_LEVEL, userId, dataL);
+    public void sendToSheets(float dataR, float dataL) {
+        SharedPreferences prefs = getSharedPreferences("PrefsFile", MODE_PRIVATE);
+        int userID = prefs.getInt("user",0);
+        if (userID == 0) {
+            Log.d("Tag","Missing userID!");
+        }
+        String user = "t8p0" + userID;
+        sheet.writeData(Sheets.TestType.RH_LEVEL, user, dataR);
+        sheet.writeData(Sheets.TestType.LH_LEVEL, user, dataL);
     }
 
     @Override

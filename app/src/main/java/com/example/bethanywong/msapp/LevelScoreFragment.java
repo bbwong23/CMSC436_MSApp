@@ -77,7 +77,7 @@ public class LevelScoreFragment extends Fragment {
         resultString.append("Left Hand Score: " + lAvg);
         resultString.append(getResultStringHelper(lTrials));
 
-        ((LevelTest)getActivity()).sendToSheets("t8p03",rAvg, lAvg);
+        ((LevelTest)getActivity()).sendToSheets(rAvg, lAvg);
         return resultString.toString();
     }
 
