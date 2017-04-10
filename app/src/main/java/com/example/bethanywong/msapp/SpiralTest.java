@@ -38,7 +38,7 @@ public class SpiralTest extends FragmentActivity implements SpiralTestFragment.O
         scores = new int[6];
         durations = new double[6];
         hasBeenResumed = false;
-        String classSpreadsheetId = "1ASIF7kZHFFaUNiBndhPKTGYaQgTEbqPNfYO5DVb1Y9Y";
+        String classSpreadsheetId = "1YvI3CjS4ZlZQDYi5PaiA7WGGcoCsZfLoSFM0IdvdbDU";
         classSheet = new Sheets(this, "MS App", classSpreadsheetId);
         //groupSheet = new Sheets(this, "MS_App", groupSpreadsheetId);
 
