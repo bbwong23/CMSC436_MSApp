@@ -113,7 +113,20 @@ public class SpiralScoreFragment extends Fragment{
         if (userID == 0) {
             Log.d("Tag","Missing userID!");
         }
+        //"Do not call these two functions one after another" - Andrew Liu
+        //Fuck it lol.
         ((SpiralTest)getActivity()).sendToClassSheet("t8p0" + userID,(float)getAvgScore(rTrials),(float)getAvgScore(lTrials));
+        ((SpiralTest)getActivity()).sendToGroupSheet("t8p0" + userID, getTrials(rTrials), getTrials(lTrials));
+    }
+
+    //why is scores separate from rTrials and lTrials? rTrials should just be the trials,
+    //not index of the right hand trials in scores..?
+    private float[] getTrials(int[] input){
+        float[] output = new float[input.length];
+        for (int i = 0; i < input.length; i++){
+            output[i] = scores[input[i]];
+        }
+        return output;
     }
 
 

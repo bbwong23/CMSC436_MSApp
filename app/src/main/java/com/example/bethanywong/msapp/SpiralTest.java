@@ -25,8 +25,7 @@ public class SpiralTest extends FragmentActivity implements SpiralTestFragment.O
     private static int[] scores;
     private double[] durations;
     private boolean hasBeenResumed;
-    private Sheets classSheet;
-    private Sheets groupSheet;
+    private Sheets sheet;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,8 +38,8 @@ public class SpiralTest extends FragmentActivity implements SpiralTestFragment.O
         durations = new double[6];
         hasBeenResumed = false;
         String classSpreadsheetId = "1YvI3CjS4ZlZQDYi5PaiA7WGGcoCsZfLoSFM0IdvdbDU";
-        classSheet = new Sheets(this, "MS App", classSpreadsheetId);
-        //groupSheet = new Sheets(this, "MS_App", groupSpreadsheetId);
+        String groupSpreadsheetId = "15e8fzzCQcYV3WxwV79g_CSyg-yeTyCrA1Z2e0uwpAiw";
+        sheet = new Sheets(this, "MS App", classSpreadsheetId,groupSpreadsheetId);
 
         // place initial test in view automatically
         SpiralTestFragment fragment = newInstance(TRIAL_ORDER[roundNumber], roundNumber+1);
@@ -93,11 +92,12 @@ public class SpiralTest extends FragmentActivity implements SpiralTestFragment.O
     }
 
     public void sendToClassSheet(String userId, float dataR, float dataL){
-        classSheet.writeData(Sheets.TestType.RH_SPIRAL, userId,dataR);
-        classSheet.writeData(Sheets.TestType.LH_SPIRAL, userId,dataL);
+        sheet.writeData(Sheets.TestType.RH_SPIRAL, userId,dataR);
+        sheet.writeData(Sheets.TestType.LH_SPIRAL, userId,dataL);
     }
-    public void sendToGroupSheet(String userId, int[] right, int[] left){
-        //do nothing for now, but should implement how to append rows for us
+    public void sendToGroupSheet(String userId, float[] right, float[] left){
+        sheet.writeTrials(Sheets.TestType.RH_SPIRAL,userId,right);
+        sheet.writeTrials(Sheets.TestType.LH_SPIRAL,userId,left);
     }
 
     @Override
