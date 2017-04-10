@@ -1,15 +1,20 @@
 package com.example.bethanywong.msapp;
 
+import android.content.Intent;
+import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.os.Bundle;
+import android.util.Log;
+
+import edu.umd.cmsc436.sheets.Sheets;
 
 import static com.example.bethanywong.msapp.TapScoreFragment.newInstance;
 import static com.example.bethanywong.msapp.TapTestFragment.newInstance;
 
 public class TapTest extends FragmentActivity implements TapTestInstructionFragment.StartTestListener,
-        TapTestFragment.OnTapTestFinishListener, TapScoreFragment.FinishTapTestListener {
+        TapTestFragment.OnTapTestFinishListener, TapScoreFragment.FinishTapTestListener, Sheets.Host {
 
     public static final String ROUND_NUMBER_KEY = "ROUND_NUMBER_KEY";
     public static final String RESULTS_KEY = "RESULTS_KEY";
@@ -28,6 +33,9 @@ public class TapTest extends FragmentActivity implements TapTestInstructionFragm
     private FragmentTransaction transaction;
     private boolean hasBeenResumed;
 
+    private Sheets classSheet;
+    private Sheets trialSheet;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -37,6 +45,12 @@ public class TapTest extends FragmentActivity implements TapTestInstructionFragm
         roundNumber = -1;
         hasBeenResumed = false;
         TapTestInstructionFragment fragment = new TapTestInstructionFragment();
+
+        String classID = "1YvI3CjS4ZlZQDYi5PaiA7WGGcoCsZfLoSFM0IdvdbDU";
+        String trialID = "15e8fzzCQcYV3WxwV79g_CSyg-yeTyCrA1Z2e0uwpAiw";
+
+        classSheet = new Sheets(this, getString(R.string.app_name), classID);
+        trialSheet = new Sheets(this, getString(R.string.app_name), classID, trialID);
 
         // place instructions in view automatically
         transaction.add(R.id.fragmentContainer, fragment).addToBackStack(null).commit();
@@ -88,5 +102,53 @@ public class TapTest extends FragmentActivity implements TapTestInstructionFragm
 
     public void goHome() {
         finish();
+    }
+
+    @Override
+    public int getRequestCode(Sheets.Action action) {
+        switch (action) {
+            case REQUEST_ACCOUNT_NAME:
+                return 1;
+            case REQUEST_AUTHORIZATION:
+                return 2;
+            case REQUEST_PERMISSIONS:
+                return 3;
+            case REQUEST_PLAY_SERVICES:
+                return 4;
+            default:
+                return -1;
+        }
+    }
+
+    @Override
+    public void notifyFinished(Exception e) {
+        if (e != null) {
+            throw new RuntimeException(e);
+        }
+        Log.i(getClass().getSimpleName(), "Done");
+    }
+
+    @Override
+    public void onRequestPermissionsResult (int requestCode, @NonNull String permissions[], @NonNull int[] grantResults) {
+        this.classSheet.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        this.trialSheet.onRequestPermissionsResult(requestCode, permissions, grantResults);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        this.classSheet.onActivityResult(requestCode, resultCode, data);
+        this.trialSheet.onActivityResult(requestCode, resultCode, data);
+    }
+
+    // currently missing the foot trials. notified library admins for update.
+    public void sendToTrialSheet(String userId, float[] dataRH, float[] dataLH, float[] RF, float[] LF){
+        trialSheet.writeTrials(Sheets.TestType.RH_TAP, userId,dataRH);
+        trialSheet.writeTrials(Sheets.TestType.LH_TAP, userId,dataLH);
+    }
+
+    public void sendToClassSheet(String userId, float dataRH, float dataLH, float dataRF, float dataLF){
+        classSheet.writeData(Sheets.TestType.RH_SPIRAL, userId,dataRH);
+        classSheet.writeData(Sheets.TestType.LH_SPIRAL, userId,dataLH);
     }
 }
