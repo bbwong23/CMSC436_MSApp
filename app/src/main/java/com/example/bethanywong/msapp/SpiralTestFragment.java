@@ -42,7 +42,7 @@ public class SpiralTestFragment extends Fragment {
     private String hand;
 
     public interface OnFinishListener {
-        public void onFinish(int score, long time);
+        public void onFinish(float score, long time);
     }
 
     public static SpiralTestFragment newInstance(String hand, int roundNumber) {
@@ -98,7 +98,7 @@ public class SpiralTestFragment extends Fragment {
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                int score = computeScore();
+                float score = computeScore();
                 saveDrawing(v);
                 drawView.setEnabled(true);
                 started = false;
@@ -129,7 +129,7 @@ public class SpiralTestFragment extends Fragment {
         super.onPause();
         timer.cancel();
     }
-    public int computeScore() {
+    public float computeScore() {
 
         // convert original ImageView into a Bitmap
         original.setDrawingCacheEnabled(true);
@@ -149,7 +149,7 @@ public class SpiralTestFragment extends Fragment {
         int totalAccurate = 0;
         int missed = 0;
         int totalOrig = 0;
-        int score;
+        float score;
 
         // calculates accuracy and penalizes for any non-traced parts of original
         for(int i = 0; i < width*height; i++) {
@@ -171,7 +171,7 @@ public class SpiralTestFragment extends Fragment {
         } else {
             score = totalAccurate*100/totalDrawn;
             score -= missed*50/totalOrig;
-            score =(int)(score * .8 + (duration/10000)*.2);
+            score = (score * .8f + (duration/10000)*.2f);
         }
 
         return score < 0 ? 0:score;
