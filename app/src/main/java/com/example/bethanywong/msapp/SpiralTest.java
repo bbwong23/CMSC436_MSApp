@@ -39,7 +39,7 @@ public class SpiralTest extends FragmentActivity implements SpiralTestFragment.O
         hasBeenResumed = false;
         String classSpreadsheetId = "1YvI3CjS4ZlZQDYi5PaiA7WGGcoCsZfLoSFM0IdvdbDU";
         String groupSpreadsheetId = "15e8fzzCQcYV3WxwV79g_CSyg-yeTyCrA1Z2e0uwpAiw";
-        sheet = new Sheets(this, "MS App", classSpreadsheetId,groupSpreadsheetId);
+        sheet = new Sheets(this, this, getString(R.string.app_name), classSpreadsheetId,groupSpreadsheetId);
 
         // place initial test in view automatically
         SpiralTestFragment fragment = newInstance(TRIAL_ORDER[roundNumber], roundNumber+1);

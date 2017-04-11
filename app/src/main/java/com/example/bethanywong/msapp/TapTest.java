@@ -33,8 +33,8 @@ public class TapTest extends FragmentActivity implements TapTestInstructionFragm
     private FragmentTransaction transaction;
     private boolean hasBeenResumed;
 
-    private Sheets classSheet;
-    private Sheets trialSheet;
+    private Sheets sheet;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,8 +49,7 @@ public class TapTest extends FragmentActivity implements TapTestInstructionFragm
         String classID = "1YvI3CjS4ZlZQDYi5PaiA7WGGcoCsZfLoSFM0IdvdbDU";
         String trialID = "15e8fzzCQcYV3WxwV79g_CSyg-yeTyCrA1Z2e0uwpAiw";
 
-        classSheet = new Sheets(this, getString(R.string.app_name), classID);
-        trialSheet = new Sheets(this, getString(R.string.app_name), classID, trialID);
+        sheet = new Sheets(this, this,getString(R.string.app_name), classID, trialID);
 
         // place instructions in view automatically
         transaction.add(R.id.fragmentContainer, fragment).addToBackStack(null).commit();
@@ -130,29 +129,26 @@ public class TapTest extends FragmentActivity implements TapTestInstructionFragm
 
     @Override
     public void onRequestPermissionsResult (int requestCode, @NonNull String permissions[], @NonNull int[] grantResults) {
-        this.classSheet.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        this.trialSheet.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        this.sheet.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        this.classSheet.onActivityResult(requestCode, resultCode, data);
-        this.trialSheet.onActivityResult(requestCode, resultCode, data);
+        this.sheet.onActivityResult(requestCode, resultCode, data);
     }
 
-    // currently missing the foot trials. notified library admins for update.
-    public void sendToTrialSheet(String userId, float[] dataRH, float[] dataLH, float[] RF, float[] LF){
-        trialSheet.writeTrials(Sheets.TestType.RH_TAP, userId,dataRH);
-        trialSheet.writeTrials(Sheets.TestType.LH_TAP, userId,dataLH);
-        //trialSheet.writeTrials(Sheets.TestType.RF_TAP, userId,dataRF);
-        //trialSheet.writeTrials(Sheets.TestType.LF_TAP, userId,dataLF);
+    public void sendToTrialSheet(String userId, float[] dataRH, float[] dataLH, float[] dataRF, float[] dataLF){
+        sheet.writeTrials(Sheets.TestType.RH_TAP, userId,dataRH);
+        sheet.writeTrials(Sheets.TestType.LH_TAP, userId,dataLH);
+        sheet.writeTrials(Sheets.TestType.RF_TAP, userId,dataRF);
+        sheet.writeTrials(Sheets.TestType.LF_TAP, userId,dataLF);
     }
 
     public void sendToClassSheet(String userId, float dataRH, float dataLH, float dataRF, float dataLF){
-        classSheet.writeData(Sheets.TestType.RH_TAP, userId,dataRH);
-        classSheet.writeData(Sheets.TestType.LH_TAP, userId,dataLH);
-        //classSheet.writeData(Sheets.TestType.RF_TAP, userId,dataRF);
-        //classSheet.writeData(Sheets.TestType.LF_TAP, userId,dataLF);
+        sheet.writeData(Sheets.TestType.RH_TAP, userId,dataRH);
+        sheet.writeData(Sheets.TestType.LH_TAP, userId,dataLH);
+        sheet.writeData(Sheets.TestType.RF_TAP, userId,dataRF);
+        sheet.writeData(Sheets.TestType.LF_TAP, userId,dataLF);
     }
 }
