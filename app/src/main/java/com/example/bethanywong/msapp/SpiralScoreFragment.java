@@ -11,6 +11,9 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
+
 import static com.example.bethanywong.msapp.SpiralTest.RESULT_KEY;
 
 public class SpiralScoreFragment extends Fragment{
@@ -77,31 +80,33 @@ public class SpiralScoreFragment extends Fragment{
         }
     }
 
-    public double getAvgScore(int[] indexArray) {
-        int sum = 0;
+    public float getAvgScore(int[] indexArray) {
+        float sum = 0;
         for (int i = 0; i < indexArray.length; i++) {
             int index = indexArray[i];
             sum += scores[index];
         }
-        return sum / (double)indexArray.length;
+        return sum / (float)indexArray.length;
     }
 
     public String getResultStringHelper(int[] indexArray) {
         StringBuffer str = new StringBuffer();
+        NumberFormat formatter = new DecimalFormat("#0.00");
         for (int i = 0; i < indexArray.length; i++) {
             int index = indexArray[i];
-            str.append("\n\rTrial " + (i+1) + ": " + scores[index]);
+            str.append("\n\rTrial " + (i+1) + ": " + formatter.format(scores[index]));
         }
         return str.toString();
     }
 
     public String getResultString() {
         StringBuffer resultStr = new StringBuffer();
-        double rAvg = getAvgScore(rTrials);
-        double lAvg = getAvgScore(lTrials);
-        resultStr.append("Right hand score: " + rAvg);
+        NumberFormat formatter = new DecimalFormat("#0.00");
+        float rAvg = getAvgScore(rTrials);
+        float lAvg = getAvgScore(lTrials);
+        resultStr.append("Right hand score: " + formatter.format(rAvg));
         resultStr.append(getResultStringHelper(rTrials));
-        resultStr.append("\nLeft hand score: " + lAvg);
+        resultStr.append("\nLeft hand score: " + formatter.format(lAvg));
         resultStr.append(getResultStringHelper(lTrials));
         return resultStr.toString();
 
