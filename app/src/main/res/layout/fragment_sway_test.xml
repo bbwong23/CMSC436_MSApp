@@ -4,6 +4,11 @@
     android:layout_height="match_parent"
     tools:context="com.example.bethanywong.msapp.SwayTestFragment">
 
+    <com.example.bethanywong.msapp.LevelTestView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/sway_view"/>
+
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -30,6 +35,7 @@
         android:id="@+id/startButton"
         android:layout_below="@+id/swayText"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="100dp"/>
+        android:layout_marginTop="50dp"/>
+
 
 </RelativeLayout>

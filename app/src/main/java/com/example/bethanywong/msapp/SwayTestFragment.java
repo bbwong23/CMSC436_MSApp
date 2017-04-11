@@ -49,6 +49,7 @@ public class SwayTestFragment extends Fragment {
     private TextView swayText;
     private View view;
     private Activity activity;
+    private LevelTestView trace;
 
     public interface OnSwayRoundFinishListener {
         public void goToNext(double trialResult);
@@ -77,11 +78,13 @@ public class SwayTestFragment extends Fragment {
         sensorManager = (SensorManager) getContext().getSystemService(Context.SENSOR_SERVICE);
         generator = new ToneGenerator(AudioManager.STREAM_DTMF, 70);
         roundNumber = getArguments().getInt(ROUND_NUMBER_KEY);
+        trace = (LevelTestView) view.findViewById(R.id.sway_view);
 
         roundText.setText("Round " + roundNumber);
         startButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                trace.startTrace();
                 swayText.setVisibility(View.VISIBLE);
                 startButton.setVisibility(View.INVISIBLE);
                 warmUpTimer.start();
@@ -93,6 +96,7 @@ public class SwayTestFragment extends Fragment {
             public void onSensorChanged(SensorEvent event) {
                 if (event.sensor.getType() == Sensor.TYPE_GRAVITY) {
                     gValues = event.values;
+                    trace.update(gValues[0], gValues[1], gValues[2]);
                 }
             }
 
