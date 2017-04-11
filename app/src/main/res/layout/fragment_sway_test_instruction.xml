@@ -1,0 +1,51 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.bethanywong.msapp.SwayTestInstructionFragment">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Quick Instructions: "
+        android:textSize="26dp"
+        android:id="@+id/titleText"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/titleText"
+        android:layout_marginTop="10dp"
+        android:text="\tPress start, then place the phone on your head. Stay as still as possible when it beeps the first time to start calibrating. Close your eyes on the second beep to begin the test. "
+        android:textSize="20dp"
+        android:id="@+id/instructionText"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="More About the Test: "
+        android:layout_marginTop="15dp"
+        android:textSize="26dp"
+        android:layout_below="@+id/instructionText"
+        android:id="@+id/titleText2"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/aboutText"
+        android:layout_marginTop="10dp"
+        android:textSize="20dp"
+        android:layout_below="@+id/titleText2"
+        android:text="\tEach trial will run for 10 seconds. The total test is composed of 3 trials. Your scores will be shown at the end of the test."/>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/aboutText"
+        android:layout_marginTop="10dp"
+        android:text="Start Test"
+        android:textSize="22dp"
+        android:layout_centerHorizontal="true"
+        android:id="@+id/startButton"/>
+
+</RelativeLayout>
