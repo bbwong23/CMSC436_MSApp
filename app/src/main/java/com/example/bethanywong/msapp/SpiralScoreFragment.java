@@ -20,7 +20,7 @@ public class SpiralScoreFragment extends Fragment{
     private Button button;
     private FinishSpiralTestListener callBack;
     private TextView scoresText;
-    private int[] scores;
+    private float[] scores;
     private String[] trialOrder;
     private int[] rTrials;
     private int[] lTrials;
@@ -29,10 +29,10 @@ public class SpiralScoreFragment extends Fragment{
         public void goHome();
     }
 
-    public static SpiralScoreFragment newInstance(String[] trialOrder, int[] rTrials, int[] lTrials, int[] result) {
+    public static SpiralScoreFragment newInstance(String[] trialOrder, int[] rTrials, int[] lTrials, float[] result) {
         SpiralScoreFragment fragment = new SpiralScoreFragment();
         Bundle args = new Bundle();
-        args.putIntArray(RESULT_KEY, result);
+        args.putFloatArray(RESULT_KEY, result);
         args.putStringArray(TRIAL_KEY, trialOrder);
         args.putIntArray(RIGHT_KEY, rTrials);
         args.putIntArray(LEFT_KEY, lTrials);
@@ -46,7 +46,7 @@ public class SpiralScoreFragment extends Fragment{
         View view = inflater.inflate(R.layout.fragment_spiral_score, container, false);
         button = (Button)view.findViewById(R.id.homeButton);
         scoresText = (TextView)view.findViewById(R.id.finalScore);
-        scores = getArguments().getIntArray(RESULT_KEY);
+        scores = getArguments().getFloatArray(RESULT_KEY);
         trialOrder = getArguments().getStringArray(TRIAL_KEY);
         rTrials = getArguments().getIntArray(RIGHT_KEY);
         lTrials = getArguments().getIntArray(LEFT_KEY);

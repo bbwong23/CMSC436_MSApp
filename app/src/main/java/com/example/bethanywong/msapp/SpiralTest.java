@@ -22,7 +22,7 @@ public class SpiralTest extends FragmentActivity implements SpiralTestFragment.O
     private FragmentManager fragmentManager;
     private FragmentTransaction transaction;
     private int roundNumber;
-    private static int[] scores;
+    private static float[] scores;
     private double[] durations;
     private boolean hasBeenResumed;
     private Sheets sheet;
@@ -34,7 +34,7 @@ public class SpiralTest extends FragmentActivity implements SpiralTestFragment.O
         fragmentManager = getSupportFragmentManager();
         transaction = fragmentManager.beginTransaction();
         roundNumber = 0;
-        scores = new int[6];
+        scores = new float[6];
         durations = new double[6];
         hasBeenResumed = false;
         String classSpreadsheetId = "1YvI3CjS4ZlZQDYi5PaiA7WGGcoCsZfLoSFM0IdvdbDU";
@@ -66,7 +66,7 @@ public class SpiralTest extends FragmentActivity implements SpiralTestFragment.O
         hasBeenResumed = true;
     }
 
-    public void onFinish(int score, long duration) {
+    public void onFinish(float score, long duration) {
         durations[roundNumber] = duration;
         scores[roundNumber++] = score;
 
