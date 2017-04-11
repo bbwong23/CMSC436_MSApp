@@ -2,8 +2,10 @@ package com.example.bethanywong.msapp;
 
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,18 +25,18 @@ public class BalloonScoreFragment extends Fragment {
     private String[] trialOrder;
     private int[] rTrials;
     private int[] lTrials;
-    private double[] scores;
+    private float[] scores;
     private TextView resultsText;
     private FinishBalloonTestListener callBack;
     private Button finishButton;
 
-    public static BalloonScoreFragment newInstance(String[] trialOrder, int[] rTrials, int[] lTrials, double[] results) {
+    public static BalloonScoreFragment newInstance(String[] trialOrder, int[] rTrials, int[] lTrials, float[] results) {
         BalloonScoreFragment fragment = new BalloonScoreFragment();
         Bundle args = new Bundle();
         args.putStringArray(TRIAL_KEY, trialOrder);
         args.putIntArray(RIGHT_KEY, rTrials);
         args.putIntArray(LEFT_KEY, lTrials);
-        args.putDoubleArray(RESULT_KEY, results);
+        args.putFloatArray(RESULT_KEY, results);
         fragment.setArguments(args);
         return fragment;
     }
@@ -50,7 +52,7 @@ public class BalloonScoreFragment extends Fragment {
         trialOrder = getArguments().getStringArray(TRIAL_KEY);
         rTrials = getArguments().getIntArray(RIGHT_KEY);
         lTrials = getArguments().getIntArray(LEFT_KEY);
-        scores = getArguments().getDoubleArray(RESULT_KEY);
+        scores = getArguments().getFloatArray(RESULT_KEY);
         resultsText = (TextView)view.findViewById(R.id.resultsText);
         finishButton = (Button)view.findViewById(R.id.homeButton);
 
@@ -58,6 +60,7 @@ public class BalloonScoreFragment extends Fragment {
         finishButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                beginSheetResponse();
                 callBack.goHome();
             }
         });
@@ -108,6 +111,23 @@ public class BalloonScoreFragment extends Fragment {
 
     }
 
+    private void beginSheetResponse() {
+        SharedPreferences prefs = this.getActivity().getSharedPreferences("PrefsFile", Context.MODE_PRIVATE);
+        int userID = prefs.getInt("user",0);
+        if (userID == 0) {
+            Log.d("Tag","Missing userID!");
+        }
 
+        ((BalloonTest)getActivity()).sendToClassSheet("t8p0" + userID,(float)getAvgScore(rTrials),(float)getAvgScore(lTrials));
+        ((BalloonTest)getActivity()).sendToGroupSheet("t8p0" + userID, getTrials(rTrials), getTrials(lTrials));
+    }
+
+    private float[] getTrials(int[] input){
+        float[] output = new float[input.length];
+        for (int i = 0; i < input.length; i++){
+            output[i] = scores[input[i]];
+        }
+        return output;
+    }
 
 }
