@@ -76,7 +76,7 @@ public class SwayTestFragment extends Fragment {
         avgData = new float[3];
         secondsPassed = 0;
         sensorManager = (SensorManager) getContext().getSystemService(Context.SENSOR_SERVICE);
-        generator = new ToneGenerator(AudioManager.STREAM_DTMF, 70);
+        generator = new ToneGenerator(AudioManager.STREAM_DTMF, 80);
         roundNumber = getArguments().getInt(ROUND_NUMBER_KEY);
         trace = (LevelTestView) view.findViewById(R.id.sway_view);
 
