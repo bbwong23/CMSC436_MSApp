@@ -4,11 +4,15 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.os.Bundle;
+import android.util.Log;
+
+import edu.umd.cmsc436.sheets.Sheets;
 
 import static com.example.bethanywong.msapp.SpiralScoreFragment.newInstance;
 import static com.example.bethanywong.msapp.SpiralTestFragment.newInstance;
 
-public class SpiralTest extends FragmentActivity implements SpiralTestFragment.OnFinishListener, SpiralScoreFragment.FinishSpiralTestListener {
+public class SpiralTest extends FragmentActivity implements SpiralTestFragment.OnFinishListener,
+        SpiralScoreFragment.FinishSpiralTestListener, Sheets.Host {
     private static final String[] TRIAL_ORDER = {"right hand", "left hand", "right hand", "left hand", "right hand", "left hand"};
     private static final int[] RIGHT_HAND_TRIALS = {0, 2, 4};
     private static final int[] LEFT_HAND_TRIALS = {1, 3, 5};
@@ -21,6 +25,7 @@ public class SpiralTest extends FragmentActivity implements SpiralTestFragment.O
     private static int[] scores;
     private double[] durations;
     private boolean hasBeenResumed;
+    private Sheets sheet;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,6 +37,9 @@ public class SpiralTest extends FragmentActivity implements SpiralTestFragment.O
         scores = new int[6];
         durations = new double[6];
         hasBeenResumed = false;
+        String classSpreadsheetId = "1YvI3CjS4ZlZQDYi5PaiA7WGGcoCsZfLoSFM0IdvdbDU";
+        String groupSpreadsheetId = "15e8fzzCQcYV3WxwV79g_CSyg-yeTyCrA1Z2e0uwpAiw";
+        sheet = new Sheets(this, "MS App", classSpreadsheetId,groupSpreadsheetId);
 
         // place initial test in view automatically
         SpiralTestFragment fragment = newInstance(TRIAL_ORDER[roundNumber], roundNumber+1);
@@ -83,18 +91,36 @@ public class SpiralTest extends FragmentActivity implements SpiralTestFragment.O
         finish();
     }
 
-//    @Override
-//    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
-//      if (requestCode == PERMISSION_REQUEST_CODE){
-//            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-//                //if permission wasn't granted the first time, call save drawing again.
-//                //reason we call again is because the permission request is async, pls help with the callback pls
-//                saveDrawing(view);
-//            } else {
-//                //some error handling lolz
-//            }
-//        }
-//    }
-//
+    public void sendToClassSheet(String userId, float dataR, float dataL){
+        sheet.writeData(Sheets.TestType.RH_SPIRAL, userId,dataR);
+        sheet.writeData(Sheets.TestType.LH_SPIRAL, userId,dataL);
+    }
+    public void sendToGroupSheet(String userId, float[] right, float[] left){
+        sheet.writeTrials(Sheets.TestType.RH_SPIRAL,userId,right);
+        sheet.writeTrials(Sheets.TestType.LH_SPIRAL,userId,left);
+    }
 
+    @Override
+    public int getRequestCode(Sheets.Action action) {
+        switch (action) {
+            case REQUEST_ACCOUNT_NAME:
+                return 1;
+            case REQUEST_AUTHORIZATION:
+                return 2;
+            case REQUEST_PERMISSIONS:
+                return 3;
+            case REQUEST_PLAY_SERVICES:
+                return 4;
+            default:
+                return -1;
+        }
+    }
+
+    @Override
+    public void notifyFinished(Exception e) {
+        if (e != null) {
+            throw new RuntimeException(e);
+        }
+        Log.i(getClass().getSimpleName(), "Done");
+    }
 }

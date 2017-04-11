@@ -1,8 +1,10 @@
 package com.example.bethanywong.msapp;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,7 +13,7 @@ import android.widget.TextView;
 
 import static com.example.bethanywong.msapp.SpiralTest.RESULT_KEY;
 
-public class SpiralScoreFragment extends Fragment {
+public class SpiralScoreFragment extends Fragment{
     public static final String TRIAL_KEY = "TRIAL_KEY";
     public static final String RIGHT_KEY = "RIGHT_KEY";
     public static final String LEFT_KEY = "LEFT_KEY";
@@ -52,6 +54,7 @@ public class SpiralScoreFragment extends Fragment {
             new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    beginSheetResponse();
                     callBack.goHome();
                 }
             }
@@ -102,6 +105,28 @@ public class SpiralScoreFragment extends Fragment {
         resultStr.append(getResultStringHelper(lTrials));
         return resultStr.toString();
 
+    }
+
+    private void beginSheetResponse() {
+        SharedPreferences prefs = this.getActivity().getSharedPreferences("PrefsFile", Context.MODE_PRIVATE);
+        int userID = prefs.getInt("user",0);
+        if (userID == 0) {
+            Log.d("Tag","Missing userID!");
+        }
+        //"Do not call these two functions one after another" - Andrew Liu
+        //Fuck it lol.
+        ((SpiralTest)getActivity()).sendToClassSheet("t8p0" + userID,(float)getAvgScore(rTrials),(float)getAvgScore(lTrials));
+        ((SpiralTest)getActivity()).sendToGroupSheet("t8p0" + userID, getTrials(rTrials), getTrials(lTrials));
+    }
+
+    //why is scores separate from rTrials and lTrials? rTrials should just be the trials,
+    //not index of the right hand trials in scores..?
+    private float[] getTrials(int[] input){
+        float[] output = new float[input.length];
+        for (int i = 0; i < input.length; i++){
+            output[i] = scores[input[i]];
+        }
+        return output;
     }
 
 
