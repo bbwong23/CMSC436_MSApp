@@ -1,8 +1,10 @@
 package com.example.bethanywong.msapp;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -62,6 +64,7 @@ public class TapScoreFragment extends Fragment {
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        beginSheetResponse();
                         callBack.goHome();
                     }
                 }
@@ -108,6 +111,36 @@ public class TapScoreFragment extends Fragment {
             }
         }
         return str.toString();
+    }
+
+    private float getAvgScore(int[] trials) {
+        float sum = 0;
+
+        for(int i = 0;i < trials.length;i++) {
+            sum += results[trials[i]];
+        }
+
+        return sum / 3.0f;
+    }
+
+    private float[] toFloatArray(int[] data) {
+        float[] floatData = new float[data.length];
+        for (int i = 0; i < data.length; i++) {
+            floatData[i] = (float)results[data[i]];
+        }
+        return floatData;
+    }
+
+    private void beginSheetResponse() {
+        SharedPreferences prefs = this.getActivity().getSharedPreferences("PrefsFile", Context.MODE_PRIVATE);
+        int userID = prefs.getInt("user",0);
+        if (userID == 0) {
+            Log.d("Tag","Missing userID!");
+        }
+        ((TapTest)getActivity()).sendToClassSheet("t8p0" + userID, getAvgScore(rHandTrials),
+                getAvgScore(lHandTrials),getAvgScore(rFootTrials), getAvgScore(lFootTrials));
+        ((TapTest)getActivity()).sendToTrialSheet("t8p0" + userID, toFloatArray(rHandTrials),
+                toFloatArray(lHandTrials),toFloatArray(rFootTrials), toFloatArray(lFootTrials));
     }
 
 }
