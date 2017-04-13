@@ -40,7 +40,7 @@ public class BalloonTest extends FragmentActivity
 
         String classID = "1YvI3CjS4ZlZQDYi5PaiA7WGGcoCsZfLoSFM0IdvdbDU";
         String trialID = "15e8fzzCQcYV3WxwV79g_CSyg-yeTyCrA1Z2e0uwpAiw";
-        sheet = new Sheets(this, getString(R.string.app_name), classID, trialID);
+        sheet = new Sheets(this, this, getString(R.string.app_name), classID, trialID);
 
         // begin with an instruction fragment
         BalloonTestInstructionFragment fragment = new BalloonTestInstructionFragment();
