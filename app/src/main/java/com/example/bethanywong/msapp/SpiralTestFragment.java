@@ -99,7 +99,7 @@ public class SpiralTestFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 float score = computeScore();
-                saveDrawing(v);
+                saveDrawing();
                 drawView.setEnabled(true);
                 started = false;
                 callback.onFinish(score, 10000-duration);
@@ -177,8 +177,8 @@ public class SpiralTestFragment extends Fragment {
         return score < 0 ? 0:score;
     }
 
-    public void saveDrawing(View v){
-        view = v;
+    public void saveDrawing(){
+        view = this.getView();
         if (ActivityCompat.checkSelfPermission(activity.getApplicationContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED){
                 ActivityCompat.requestPermissions(activity,new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},PERMISSION_REQUEST_CODE);
         } else {
