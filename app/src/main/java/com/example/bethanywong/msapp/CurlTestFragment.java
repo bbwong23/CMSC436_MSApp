@@ -17,12 +17,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
-import android.os.CountDownTimer;
-
-
-import org.w3c.dom.Text;
-
-import static android.icu.lang.UCharacter.GraphemeClusterBreak.T;
 
 
 public class CurlTestFragment extends Fragment {

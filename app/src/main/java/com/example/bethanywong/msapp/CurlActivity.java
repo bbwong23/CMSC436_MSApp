@@ -35,6 +35,25 @@ public class CurlActivity extends FragmentActivity implements CurlTestInstructio
         transaction.add(R.id.fragmentContainer, fragment).addToBackStack(null).commit();
     }
 
+    @Override
+    public void onBackPressed(){
+        // disable back button
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        if (roundNumber >= 0 && roundNumber < TRIAL_ORDER.length-1 && hasBeenResumed) {
+            CurlTestFragment fragment = newInstance(TRIAL_ORDER[roundNumber], roundNumber+1);
+            transaction = fragmentManager.beginTransaction();
+            transaction.replace(R.id.fragmentContainer, fragment);
+            transaction.addToBackStack(null);
+            transaction.commit();
+        }
+        hasBeenResumed = true;
+    }
+
     public void startCurlTest() {
         roundNumber++;
         CurlTestFragment fragment = newInstance(TRIAL_ORDER[roundNumber], roundNumber+1);
