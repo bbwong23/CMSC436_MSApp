@@ -6,6 +6,7 @@
       <module fileurl="file://$PROJECT_DIR$/MSApp.iml" filepath="$PROJECT_DIR$/MSApp.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
       <module fileurl="file://$PROJECT_DIR$/sheets436-0.0.3-release/sheets436-0.0.3-release.iml" filepath="$PROJECT_DIR$/sheets436-0.0.3-release/sheets436-0.0.3-release.iml" />
+      <module fileurl="file://$PROJECT_DIR$/sheets436-0.0.3-release/sheets436-0.0.3-release.iml" filepath="$PROJECT_DIR$/sheets436-0.0.3-release/sheets436-0.0.3-release.iml" />
     </modules>
   </component>
 </project>
