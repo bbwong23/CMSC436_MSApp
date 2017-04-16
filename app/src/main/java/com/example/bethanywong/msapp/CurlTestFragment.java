@@ -106,6 +106,12 @@ public class CurlTestFragment extends Fragment {
     }
 
     @Override
+    public void onPause() {
+        super.onPause();
+        warmUpTimer.cancel(); 
+    }
+
+    @Override
     public void onAttach(Context activity) {
         super.onAttach(activity);
         try {
