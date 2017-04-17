@@ -35,6 +35,10 @@ public class StepTest extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_step_test);
 
+        distance = new float[3];
+        duration = new float[3];
+        scores = new float[3];
+
         mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
         sensor = mSensorManager.getDefaultSensor(Sensor.TYPE_STEP_DETECTOR);
 
@@ -67,7 +71,7 @@ public class StepTest extends AppCompatActivity {
         @Override
         public void onSensorChanged(SensorEvent event) {
             if (testStarted) {
-                distance[trialNum] += 2;
+                distance[trialNum] += 2.475; // Average height of 5'6" *.45 = typical stride length
                 steps++;
             }
         }
