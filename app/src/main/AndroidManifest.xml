@@ -74,7 +74,13 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
-        <activity android:name=".StepTest"></activity>
+        <activity android:name=".StepTest">
+            <intent-filter>
+                <action android:name="com.example.bethanywong.msapp.StepTest" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
     </application>
 
 </manifest>
