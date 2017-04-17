@@ -13,6 +13,16 @@
     android:weightSum="1">
 
     <Button
+        android:id="@+id/devinfo_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.05"
+        android:background="@android:color/holo_green_light"
+        android:text="Set User ID"
+        android:textSize="10pt"
+        android:layout_marginBottom="10pt"/>
+
+    <Button
         android:text="Tap Test"
         android:textSize="10pt"
         android:layout_height="wrap_content"
@@ -46,33 +56,21 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/curl_button"
-        android:layout_marginTop="10dp"
-        android:layout_below="@+id/curl_button"
-        android:layout_centerHorizontal="true" />
+        android:layout_weight="0.05" />
     <Button
         android:text="Sway Test"
         android:textSize="10pt"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/sway_button"
-        android:layout_marginTop="10dp"
-        android:layout_below="@+id/sway_button"
-        android:layout_centerHorizontal="true" />
-
-    <Button
-        android:text="Developers Info"
-        android:textSize="10pt"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/devinfo_button"
         android:layout_weight="0.05" />
     <Button
-        android:text="View Past Results"
+        android:text="Step Test"
         android:textSize="10pt"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/results_button"
-        android:layout_marginTop="10dp"
-        android:layout_below="@+id/curl_button"
-        android:layout_alignParentStart="true" />
+        android:id="@+id/step_button"
+        android:layout_weight="0.05" />
+
+
 </LinearLayout>
