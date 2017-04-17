@@ -23,6 +23,7 @@ public class MainActivity extends AppCompatActivity {
         Button test4_button = (Button)findViewById(R.id.balloon_button);
         Button test5_button = (Button)findViewById(R.id.curl_button);
         Button test6_button = (Button)findViewById(R.id.sway_button);
+        Button test7_button = (Button)findViewById(R.id.step_button);
         Button devinfo_button = (Button)findViewById(R.id.devinfo_button);
       
         test1_button.setOnClickListener(
@@ -79,6 +80,17 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onClick(View v) {
                         Intent intent = new Intent("com.example.bethanywong.msapp.SwayTest");
+
+                        startActivity(intent);
+                    }
+                }
+        );
+
+        test7_button.setOnClickListener(
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent intent = new Intent("com.example.bethanywong.msapp.StepTest");
 
                         startActivity(intent);
                     }
