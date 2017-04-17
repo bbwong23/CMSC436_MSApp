@@ -2,8 +2,11 @@ package com.example.bethanywong.msapp;
 
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.view.PagerAdapter;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -57,6 +60,7 @@ public class CurlScoreFragment extends Fragment {
         homeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                beginSheetResponse();
                 callBack.goHome();
             }
         });
@@ -108,4 +112,21 @@ public class CurlScoreFragment extends Fragment {
         }
     }
 
+    private void beginSheetResponse(){
+        SharedPreferences prefs= this.getActivity().getSharedPreferences("PrefsFile",Context.MODE_PRIVATE);
+        int userID = prefs.getInt("user",0);
+        if( userID == 0) {
+            Log.d("Tag","Missing userID!");
+        }
+        ((CurlActivity)getActivity()).sendToClassSheet("t8p0" + userID, computeAverageScore(rTrials),computeAverageScore(lTrials));
+        ((CurlActivity)getActivity()).sendToGroupSheet("t8p0" + userID, getTrials(rTrials), getTrials(lTrials));
+    }
+
+    private float[] getTrials(int[] input){
+        float[] output = new float[input.length];
+        for (int i = 0; i < input.length; i++){
+            output[i] = results[input[i]];
+        }
+        return output;
+    }
 }
