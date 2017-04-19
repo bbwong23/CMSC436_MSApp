@@ -9,29 +9,27 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
-
-public class LevelTestInstructionFragment extends Fragment {
+public class CurlTestInstructionFragment extends Fragment {
 
     private Button startButton;
-    private StartLevelTestListener callBack;
+    private StartCurlTestListener callBack;
 
-    public interface StartLevelTestListener {
-        public void startLevelTest();
+    public interface StartCurlTestListener {
+        public void startCurlTest();
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_level_test_instruction, container, false);
+        View view = inflater.inflate(R.layout.fragment_curl_test_instruction, container, false);
         startButton = (Button)view.findViewById(R.id.startButton);
         startButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                callBack.startLevelTest();
+                callBack.startCurlTest();
             }
         });
-
         return view;
     }
 
@@ -39,9 +37,10 @@ public class LevelTestInstructionFragment extends Fragment {
     public void onAttach(Context activity) {
         super.onAttach(activity);
         try {
-            callBack = (StartLevelTestListener) activity;
+            callBack = (StartCurlTestListener) activity;
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
+
 }

@@ -1,202 +1,143 @@
 package com.example.bethanywong.msapp;
 
-import android.content.Context;
-import android.hardware.Sensor;
-import android.hardware.SensorEvent;
-import android.hardware.SensorEventListener;
-import android.hardware.SensorManager;
-import android.media.AudioManager;
-import android.media.ToneGenerator;
-import android.os.CountDownTimer;
-import android.os.Vibrator;
-import android.support.v7.app.AppCompatActivity;
+import android.content.Intent;
+import android.support.annotation.NonNull;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.os.Bundle;
-import android.view.View;
-import android.widget.Button;
-import android.widget.TextView;
+import android.util.Log;
 
-import org.w3c.dom.Text;
+import edu.umd.cmsc436.sheets.Sheets;
 
-import java.text.DecimalFormat;
-import java.text.NumberFormat;
+import static com.example.bethanywong.msapp.CurlTestFragment.newInstance;
+import static com.example.bethanywong.msapp.CurlScoreFragment.newInstance;
 
-public class CurlActivity extends AppCompatActivity {
-    Button startBtn;
-    TextView instruction;
-    long startTime;
-    boolean isCountingDown;
+public class CurlActivity extends FragmentActivity
+        implements CurlTestInstructionFragment.StartCurlTestListener,
+        CurlTestFragment.FinishCurlTrialListener,
+        CurlScoreFragment.FinishCurlTestListener, Sheets.Host{
+    private static final String[] TRIAL_ORDER = {"Right Arm", "Left Arm", "Right Arm", "Left Arm", "Right Arm", "Left Arm"};
+    private static final int[] RIGHT_ARM_TRIALS = {0, 2, 4};
+    private static final int[] LEFT_ARM_TRIALS = {1, 3, 5};
+    private FragmentManager fragmentManager;
+    private FragmentTransaction transaction;
+    private int roundNumber;
+    private boolean hasBeenResumed;
+    private float[] results;
+    private Sheets sheet;
 
-    Vibrator vibrator;
-    ToneGenerator toneG;
 
-    int round;
-    double leftSum;
-    double rightSum;
-
-    boolean curledUpwards = false;
-    int curlsDone = 0;
-
-    SensorManager sensorManager;
-
-    float[] gValues = new float[3];
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_curl);
+        fragmentManager = getSupportFragmentManager();
+        transaction = fragmentManager.beginTransaction();
+        roundNumber = -1;
+        hasBeenResumed = false;
+        results = new float[TRIAL_ORDER.length];
+       String classID = "1YvI3CjS4ZlZQDYi5PaiA7WGGcoCsZfLoSFM0IdvdbDU";
+       String trialID = "15e8fzzCQcYV3WxwV79g_CSyg-yeTyCrA1Z2e0uwpAiw";
+       sheet = new Sheets(this, this, getString(R.string.app_name), classID, trialID);
 
-        startBtn = (Button) findViewById(R.id.curlStart);
-        instruction = (TextView) findViewById(R.id.curlInstruction);
+        CurlTestInstructionFragment fragment = new CurlTestInstructionFragment();
 
-        startBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                startTime = System.nanoTime();
-                startTest();
-            }
-        });
-
-//        Button skipBtn = (Button) findViewById(R.id.skip_button);
-//        skipBtn.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                finishTest();
-//            }
-//        });
-
-        vibrator = (Vibrator) this.getSystemService(Context.VIBRATOR_SERVICE);
-        toneG = new ToneGenerator(AudioManager.STREAM_ALARM, 100);
-
-        round = 0;
-
-        initSensor();
+        // place instruction fragment in view
+        transaction.add(R.id.fragmentContainer, fragment).addToBackStack(null).commit();
     }
 
     @Override
-    protected void onResume() {
+    public void onBackPressed(){
+        // disable back button
+    }
+
+    @Override
+    public void onResume() {
         super.onResume();
+
+        if (roundNumber >= 0 && roundNumber < TRIAL_ORDER.length-1 && hasBeenResumed) {
+            CurlTestFragment fragment = newInstance(TRIAL_ORDER[roundNumber], roundNumber+1);
+            transaction = fragmentManager.beginTransaction();
+            transaction.replace(R.id.fragmentContainer, fragment);
+            transaction.addToBackStack(null);
+            transaction.commit();
+        }
+        hasBeenResumed = true;
+    }
+
+    public void startCurlTest() {
+        roundNumber++;
+        CurlTestFragment fragment = newInstance(TRIAL_ORDER[roundNumber], roundNumber+1);
+        transaction = fragmentManager.beginTransaction();
+        transaction.replace(R.id.fragmentContainer, fragment);
+        transaction.addToBackStack(null);
+        transaction.commit();
+    }
+
+    public void goToNext(long score) {
+        if (roundNumber >= 0 && roundNumber < TRIAL_ORDER.length) {
+            results[roundNumber] = score;
+        }
+
+        if (roundNumber < TRIAL_ORDER.length-1) {
+            startCurlTest();
+        } else {
+            // display score fragment
+            CurlScoreFragment fragment = newInstance(TRIAL_ORDER, RIGHT_ARM_TRIALS, LEFT_ARM_TRIALS, results);
+            transaction = fragmentManager.beginTransaction();
+            transaction.replace(R.id.fragmentContainer, fragment);
+            transaction.addToBackStack(null);
+            transaction.commit();
+        }
+    }
+
+    public void goHome() {
+        finish();
+    }
+    @Override
+    public int getRequestCode(Sheets.Action action) {
+        switch (action) {
+            case REQUEST_ACCOUNT_NAME:
+                return 1;
+            case REQUEST_AUTHORIZATION:
+                return 2;
+            case REQUEST_PERMISSIONS:
+                return 3;
+            case REQUEST_PLAY_SERVICES:
+                return 4;
+            default:
+                return -1;
+        }
     }
 
     @Override
-    protected void onStop() {
-        super.onStop();
+    public void notifyFinished(Exception e) {
+        if (e != null) {
+            throw new RuntimeException(e);
+        }
+        Log.i(getClass().getSimpleName(), "Done");
     }
 
-    void initSensor() {
-        sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
+    @Override
+    public void onRequestPermissionsResult (int requestCode, @NonNull String permissions[], @NonNull int[] grantResults) {
+        this.sheet.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
 
-    private final SensorEventListener sensorGyroListener = new SensorEventListener() {
-        private final float[] mAccelerometerReading = new float[3];
-        private final float[] mMagnetometerReading = new float[3];
-
-        private final float[] mRotationMatrix = new float[9];
-        private final float[] mOrientationAngles = new float[3];
-
-        @Override
-        public void onSensorChanged(SensorEvent event) {
-            if (event.sensor.getType() == Sensor.TYPE_ACCELEROMETER) {
-                System.arraycopy(event.values, 0, mAccelerometerReading,
-                        0, mAccelerometerReading.length);
-            }
-            else if (event.sensor.getType() == Sensor.TYPE_MAGNETIC_FIELD) {
-                System.arraycopy(event.values, 0, mMagnetometerReading,
-                        0, mMagnetometerReading.length);
-            } else if (event.sensor.getType() == Sensor.TYPE_ROTATION_VECTOR) {
-                sensorManager.getRotationMatrix(mRotationMatrix, null,
-                        mAccelerometerReading, mMagnetometerReading);
-
-                sensorManager.getOrientation(mRotationMatrix, mOrientationAngles);
-                double pitch = Math.toDegrees( mOrientationAngles[1] );
-
-                if (pitch <= -80) { // 2 ~= 120 degrees in radians
-                    if (!curledUpwards) {
-                        curledUpwards = true;
-//                    vibrator.vibrate(500);
-                        toneG.startTone(ToneGenerator.TONE_CDMA_ALERT_CALL_GUARD, 200);
-                    }
-
-                    instruction.setText("Curl downwards!");
-                } else if (mOrientationAngles[1] >= 0) {
-                    if (curledUpwards) {
-                        curledUpwards = false;
-                        curlsDone++;
-
-                        instruction.setText("Curl upwards!");
-
-                        if (curlsDone >= 10) {
-                            finishTest();
-                        }
-                    }
-                }
-
-            }
-        }
-
-        @Override
-        public void onAccuracyChanged(Sensor sensor, int i) {
-
-        }
-    };
-
-    public void finishTest() {
-        sensorManager.unregisterListener(sensorGyroListener);
-
-        toneG.startTone(ToneGenerator.TONE_CDMA_ALERT_CALL_GUARD, 1000);
-
-        long endTime = System.nanoTime();
-
-        double score = (endTime - startTime) / 1000000000.0;
-        NumberFormat formatter = new DecimalFormat("#0.00");
-
-        curlsDone = 0;
-        round++;
-        if (round < 3) {
-            instruction.setText("Hold your right arm out flat and press start to begin.");
-            leftSum += score;
-            startBtn.setVisibility(View.VISIBLE);
-        } else {
-            rightSum += score;
-            if (round == 6) {
-                rightSum /= 3;
-                leftSum /= 3;
-
-                instruction.setText("Left hand average: " + formatter.format(leftSum) +
-                        "\n Right hand average: " + formatter.format(rightSum));
-                startBtn.setVisibility(View.INVISIBLE);
-            } else {
-                startBtn.setVisibility(View.VISIBLE);
-                instruction.setText("Hold your left arm out flat and press start to begin.");
-            }
-        }
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        this.sheet.onActivityResult(requestCode, resultCode, data);
     }
 
-    public void startTest() {
-        if (!isCountingDown){
-            CountDownTimer warmUp = new CountDownTimer(3000,1000) {
-                @Override
-                public void onTick(long millisUntilFinished) {
-                    if (millisUntilFinished/1000 == 2){
-                        instruction.setText("Ready!");
-                    } else if (millisUntilFinished/1000 == 1){
-                        instruction.setText("Set!");
-                    }
-                }
-                @Override
-                public void onFinish() {
-                    instruction.setText("Curl upwards!");
-                    startBtn.setVisibility(View.INVISIBLE);
-                    isCountingDown = false;
+    public void sendToGroupSheet(String userId, float[] right, float[] left){
+        sheet.writeTrials(Sheets.TestType.RH_CURL,userId,right);
+        sheet.writeTrials(Sheets.TestType.LH_CURL,userId,left);
+    }
 
-                    Sensor sensorAccel = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
-                    Sensor sensorMagnetic = sensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD);
-                    Sensor sensorRotate = sensorManager.getDefaultSensor(Sensor.TYPE_ROTATION_VECTOR);
-                    sensorManager.registerListener(sensorGyroListener, sensorAccel, SensorManager.SENSOR_DELAY_UI);
-                    sensorManager.registerListener(sensorGyroListener, sensorMagnetic, SensorManager.SENSOR_DELAY_UI);
-                    sensorManager.registerListener(sensorGyroListener, sensorRotate, SensorManager.SENSOR_DELAY_UI);
-                }
-            };
-            warmUp.start();
-        }
-        isCountingDown = true;
+    public void sendToClassSheet(String userId, float dataR, float dataL){
+        sheet.writeData(Sheets.TestType.RH_CURL, userId,dataR);
+        sheet.writeData(Sheets.TestType.LH_CURL, userId,dataL);
     }
 }
+

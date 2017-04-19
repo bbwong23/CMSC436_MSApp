@@ -1,0 +1,54 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    tools:context="com.example.bethanywong.msapp.CurlTestInstructionFragment">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/title"
+        android:text="Quick Instructions:"
+        android:textSize="26dp"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/instructionText"
+        android:layout_below="@+id/title"
+        android:text="\tPress the start button to begin the test. During each trial, hold the specified arm straight out in front of you with your phone in hand and follow the instructions on the screen to curl your arm upwards and downwards."
+        android:layout_marginTop="10dp"
+        android:textSize="20dp"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/title2"
+        android:layout_below="@+id/instructionText"
+        android:layout_marginTop="15dp"
+        android:text="More About the Test:"
+        android:textSize="26dp"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/aboutText"
+        android:layout_below="@+id/title2"
+        android:layout_marginTop="10dp"
+        android:textSize="20dp"
+        android:text="\tThis test consists of 6 trials - 3 on your right hand, and 3 on your left hand. Your score will be displayed at the end of the test."/>
+
+    <Button
+        android:id="@+id/startButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/aboutText"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="15dp"
+        android:text="Tap to Start" />
+
+</RelativeLayout>
